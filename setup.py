@@ -1,12 +1,16 @@
 from distutils.core import setup
-from distutils import dir_util
-from distutils import sysconfig
-import os
+import distutils
+from kervi_ui.version import VERSION
+
+try:
+    distutils.dir_util.remove_tree("dist")
+except:
+    pass
 
 setup(
     name='kervi-ui',
     packages=['kervi_ui'],
-    version='0.4.6',
+    version=VERSION,
     description='UI module for the kervi framework. It is included as dependency when kervi in installed.',
     author='Tim Wentzlau',
     author_email='tim.wentzlau@gmail.com',
