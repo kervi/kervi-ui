@@ -4,7 +4,7 @@
 import { Injectable , EventEmitter} from '@angular/core';
 import {KerviSpine} from "../kervi-spine";
 import {BehaviorSubject, Subject} from 'rxjs/Rx';
-
+declare var kerviSocketAddress : any;
 
 @Injectable()
 export class KerviService {
@@ -24,8 +24,9 @@ export class KerviService {
   }
 
   public connect(){
+    console.log("ks", kerviSocketAddress);
     this.spine = new KerviSpine({
-      address:"ws://"+window.location.hostname+":9000",
+      address:"ws://" + kerviSocketAddress,
       //address:"ws://192.168.0.144:9000",
       onOpen: this.onOpen,
       onClose:this.onClose,
