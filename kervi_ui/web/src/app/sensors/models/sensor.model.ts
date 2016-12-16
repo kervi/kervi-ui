@@ -2,8 +2,8 @@
 // Licensed under MIT
 
 import { BehaviorSubject } from 'rxjs/Rx';
-
-export class SensorModel {
+import { IComponent } from '../../models/IComponent.model'
+export class SensorModel implements IComponent {
     public id: string = null;
     public name: string = null;
     public type: string = null;
@@ -13,5 +13,4 @@ export class SensorModel {
     public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     public dashboards: string[] = [];
     public sparkline$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-
 }

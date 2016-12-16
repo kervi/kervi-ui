@@ -1,13 +1,10 @@
 // Copyright (c) 2016, Tim Wentzlau
 // Licensed under MIT
-
+import { IComponent } from "../../models/IComponent.model"
 import { BehaviorSubject } from 'rxjs/Rx';
 
 
-export interface IControllerComponent {
-    id: string;
-    type: string;
-}
+
 
 export class ControllerSelectOptionModel{
     public value:string;
@@ -21,9 +18,10 @@ export class ControllerSelectOptionModel{
     }
 }
 
-export class ControllerSelectModel implements IControllerComponent{
+export class ControllerSelectModel implements IComponent{
     public name: string;
     public id: string;
+    public dashboards: string[] = [];
     public type:string;
     public command:string;
     public options:ControllerSelectOptionModel[] = [];
@@ -57,9 +55,10 @@ export class ControllerSelectModel implements IControllerComponent{
     }
 }
 
-export class ControllerInputModel implements IControllerComponent {
+export class ControllerInputModel implements IComponent {
     public name: string;
     public type: string;
+    public dashboards: string[] = [];
     public orientation: string;
     public unit: string;
     public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -90,10 +89,11 @@ export class ControllerInputModel implements IControllerComponent {
     }
 }
 
-export class ControllerSwitchButtonModel implements IControllerComponent {
+export class ControllerSwitchButtonModel implements IComponent {
     public id: string;
     public name: string;
     public type: string;
+    public dashboards: string[] = [];
     public onCommand: string;
     public offCommand: string;
     public clickCommand: string;
@@ -110,9 +110,10 @@ export class ControllerSwitchButtonModel implements IControllerComponent {
     }
 }
 
-export class ControllerButtonModel implements IControllerComponent {
+export class ControllerButtonModel implements IComponent {
     public id: string;
     public name: string;
+    public dashboards: string[] = [];
     public type: string;
     public onCommand: string;
     public offCommand: string;
@@ -128,9 +129,10 @@ export class ControllerButtonModel implements IControllerComponent {
     }
 }
 
-export class ControllerDateTimeModel implements IControllerComponent {
+export class ControllerDateTimeModel implements IComponent {
     public id: string;
     public name: string;
+    public dashboards: string[] = [];
     public type: string;
     public subType: string;
     public changeCommand: string;
@@ -146,12 +148,12 @@ export class ControllerDateTimeModel implements IControllerComponent {
     }
 }
 
-export class ControllerModel {
+export class ControllerModel implements IComponent {
     public type: string;
     public name: string;
     public id: string;
     public parameters: any;
-    public components: IControllerComponent[] = [];
+    public components: IComponent[] = [];
     public dashboards: string[];
     public template:string;
     constructor(message: any) {

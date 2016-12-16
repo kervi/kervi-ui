@@ -2,7 +2,8 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
-import { ControllerModel, IControllerComponent } from '../models/controller.model'
+import { ControllerModel  } from '../models/controller.model'
+import { IComponent } from '../../models/IComponent.model'
 import { ControllersService } from '../controllers.service'
 declare var jQuery: any;
 
@@ -14,7 +15,7 @@ declare var jQuery: any;
 export class LayoutControllerComponent implements OnInit {
   @Input() id:string;
   @Input() dashboardType: string;
-  component:IControllerComponent;
+  component:IComponent;
   constructor(private controllersService:ControllersService) {
       console.log("lcc constructor",this.id);   
    }

@@ -32,7 +32,8 @@
         "../lib/bootstrap-toggle.js",
         "../lib/chart-bundle.js",
         "../node_modules/moment/min/moment-with-locales.js",
-        "../node_modules/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"  
+        "../node_modules/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js",
+        "../node_modules/canvas-gauges/gauge.min"  
       ],
       "environments": {
         "source": "environments/environment.ts",
