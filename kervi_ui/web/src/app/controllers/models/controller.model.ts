@@ -2,7 +2,7 @@
 // Licensed under MIT
 import { IComponent } from "../../models/IComponent.model"
 import { BehaviorSubject } from 'rxjs/Rx';
-
+import { ControllersFactory } from './factory' 
 
 
 
@@ -20,6 +20,7 @@ export class ControllerSelectOptionModel{
 
 export class ControllerSelectModel implements IComponent{
     public name: string;
+    public componentType = "controllerComponent"
     public id: string;
     public dashboards: string[] = [];
     public type:string;
@@ -57,6 +58,7 @@ export class ControllerSelectModel implements IComponent{
 
 export class ControllerInputModel implements IComponent {
     public name: string;
+    public componentType = "controllerComponent"
     public type: string;
     public dashboards: string[] = [];
     public orientation: string;
@@ -92,6 +94,7 @@ export class ControllerInputModel implements IComponent {
 export class ControllerSwitchButtonModel implements IComponent {
     public id: string;
     public name: string;
+    public componentType = "controllerComponent"
     public type: string;
     public dashboards: string[] = [];
     public onCommand: string;
@@ -113,6 +116,7 @@ export class ControllerSwitchButtonModel implements IComponent {
 export class ControllerButtonModel implements IComponent {
     public id: string;
     public name: string;
+    public componentType = "controllerComponent"
     public dashboards: string[] = [];
     public type: string;
     public onCommand: string;
@@ -132,6 +136,7 @@ export class ControllerButtonModel implements IComponent {
 export class ControllerDateTimeModel implements IComponent {
     public id: string;
     public name: string;
+    public componentType = "controllerComponent"
     public dashboards: string[] = [];
     public type: string;
     public subType: string;
@@ -150,6 +155,7 @@ export class ControllerDateTimeModel implements IComponent {
 
 export class ControllerModel implements IComponent {
     public type: string;
+    public componentType="Controller"
     public name: string;
     public id: string;
     public parameters: any;
@@ -163,22 +169,6 @@ export class ControllerModel implements IComponent {
         this.dashboards = message.dashboards;
         this.parameters = message.parameters;
         this.template=message.template;
-        for (let c of message.components) {
-            var component = null;
-            if (c.componentType == "button")
-                component = new ControllerButtonModel(c);
-            else if (c.componentType == "switchButton")
-                component = new ControllerSwitchButtonModel(c);
-            else if (c.componentType == "number-input")
-                component = new ControllerInputModel(c);
-            else if (c.componentType == "text-input")
-                component = new ControllerInputModel(c);
-            else if (c.componentType == "select")
-                component = new ControllerSelectModel(c);
-            else if (c.componentType == "datetime-input")
-                component = new ControllerDateTimeModel(c);
-            if (component)
-                this.components.push(component);
-        }
+        this.components = message.components
     }
 }

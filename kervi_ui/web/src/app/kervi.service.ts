@@ -4,14 +4,18 @@
 import { Injectable , EventEmitter} from '@angular/core';
 import {KerviSpine} from "../kervi-spine";
 import {BehaviorSubject, Subject} from 'rxjs/Rx';
+import {IComponent} from './models/IComponent.model'
+import { ComponentFactory } from './models/factory'
 declare var kerviSocketAddress : any;
 
 @Injectable()
 export class KerviService {
   spine: KerviSpine = null;
   public  application$: BehaviorSubject<any>;
+  private components : IComponent[] = [null];
+  private components$: BehaviorSubject<IComponent[]> = new  BehaviorSubject<IComponent[]>([]);
   
-  connected$: BehaviorSubject<Boolean> ;
+  connected$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   
 
   constructor() 
@@ -23,11 +27,14 @@ export class KerviService {
     
   }
 
+  public getComponents$(){
+    return this.components$.asObservable();
+  }
+
   public connect(){
     console.log("ks", kerviSocketAddress);
     this.spine = new KerviSpine({
       address:"ws://" + kerviSocketAddress,
-      //address:"ws://192.168.0.144:9000",
       onOpen: this.onOpen,
       onClose:this.onClose,
       targetScope:this,
@@ -43,6 +50,12 @@ export class KerviService {
 		  console.log("appinfo",message);
 		  self.application$.next(message);
       self.connected$.next(true);
+      this.spine.sendQuery("getComponentInfo",function(message){
+        console.log("component info",message);
+        self.components = ComponentFactory.createComponents(message);
+        self.components$.next(self.components);
+        console.log("components",self.components); 
+      });
 	  });
 
     

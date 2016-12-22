@@ -5,6 +5,7 @@ import { Injectable , EventEmitter} from '@angular/core';
 import {KerviService} from "../kervi.service";
 import {BehaviorSubject, Subject} from 'rxjs/Rx';
 import { SensorModel } from './models/sensor.model'
+import { SensorFactory } from './models/factory'
 
 @Injectable()
 export class SensorsService {
@@ -112,22 +113,9 @@ export class SensorsService {
     }
 
     private updateSensors=function(message){
-        if (Array.isArray(message)){
-            for (var i=0;(i<message.length);i++){
-                this.updateSensors(message[i]);
-            }	
-        } else {
-            var sensor=new SensorModel();
-            sensor.id=message.id;
-            sensor.name=message.name;
-            sensor.dashboards=message.dashboards;
-            sensor.max=message.max;
-            sensor.min=message.min;
-            sensor.type=message.type;
-            sensor.unit=message.unit;
-            sensor.value$.next(message.value);
-            sensor.sparkline$.next(message.sparkline);
-            this.sensors.push(sensor);
+        this.sensors=SensorFactory.createComponents(message);
+        this.sensorTypes = [];
+        for (let sensor of this.sensors){
             if (this.sensorTypes.indexOf(sensor.type)==-1)
                 this.sensorTypes.push(sensor.type);
         }

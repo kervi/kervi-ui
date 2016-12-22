@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { ControllerModel, ControllerButtonModel, ControllerSwitchButtonModel, ControllerInputModel, ControllerSelectModel } from './models/controller.model'
 import { KerviService } from "../kervi.service";
 import { BehaviorSubject, Subject } from 'rxjs/Rx';
-
+import { ControllersFactory } from "./models/factory"
 @Injectable()
 export class ControllersService {
     private controllers: ControllerModel[] = [];
@@ -191,13 +191,8 @@ export class ControllersService {
     }
 
     private updateControllers = function (message) {
-        if (Array.isArray(message)) {
-            for (var i = 0; (i < message.length); i++) {
-                this.updateControllers(message[i]);
-            }
-        } else {
-            var controller = new ControllerModel(message);
-            this.controllers.push(controller);
+        this.controllers=ControllersFactory.createComponents(message);
+        for (let controller of this.controllers){
             if (this.controllerTypes.indexOf(controller.type) == -1) {
                 this.controllerTypes.push(controller.type);
             }

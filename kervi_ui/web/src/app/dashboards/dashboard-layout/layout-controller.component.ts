@@ -2,7 +2,8 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
-import { ControllerModel, IControllerComponent } from '../../controllers/models/controller.model'
+import { ControllerModel } from '../../controllers/models/controller.model'
+import { IComponent } from '../../models/IComponent.model'
 import { ControllersService } from '../../controllers/controllers.service'
 declare var jQuery: any;
 

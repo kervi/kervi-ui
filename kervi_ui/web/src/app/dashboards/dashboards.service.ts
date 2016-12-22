@@ -3,14 +3,16 @@
 
 import { Injectable , EventEmitter} from '@angular/core';
 import {KerviService} from "../kervi.service";
+import { ControllersService } from "../controllers/controllers.service";
+import { SensorsService } from "../sensors/sensors.service";
 import {BehaviorSubject, Subject} from 'rxjs/Rx';
-import { DashboardModel } from './models/dashboard.model'
+import { DashboardModel, DashboardSectionModel } from './models/dashboard.model'
 @Injectable()
 export class DashboardsService {
     dashboards:DashboardModel[] = [];
     private _dashboards$: BehaviorSubject<DashboardModel[]> = new BehaviorSubject<DashboardModel[]>([]);
 
-    constructor(private kerviService:KerviService){
+    constructor(private kerviService:KerviService, private controllersService:ControllersService, private sensorsService:SensorsService){
         var self=this;
         
         var s=this.kerviService.connected$.subscribe(function(connectedValue){
@@ -28,7 +30,6 @@ export class DashboardsService {
                         self.refreshDashboards();
                     },3000);
                 })
-
             } else {
                 self.dashboards=[];
                 self._dashboards$.next(self.dashboards);
@@ -61,6 +62,16 @@ export class DashboardsService {
             dashboard.type=message.type;
             dashboard.isDefault=message.isDefault;
             dashboard.template=message.template;
+            dashboard.sections=[];
+            if (!dashboard.template){
+                var template=""
+                for (let messageSection of message.sections){
+                    var section=new DashboardSectionModel();
+                    section.id=messageSection.id;
+                    section.name=messageSection.name;
+                    
+                }
+            }
             this.dashboards.push(dashboard);
         }
     }
@@ -75,5 +86,12 @@ export class DashboardsService {
                 return dashboard
         }
         return null;
+    }
+
+    
+
+    public getDashboardComponents(dashboardId){
+        var result=[]
+
     }
 }
