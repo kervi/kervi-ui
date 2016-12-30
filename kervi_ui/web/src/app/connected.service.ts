@@ -23,11 +23,12 @@ export class ConnectedService {
           self.router.navigate([self.currentPage]);
         else {
           self.dashboardsService.getDashboards$().subscribe(function(v){
-            if (v.length){
+            console.log("sdb",v);
+            if (v && v.length){
               var defaultDashboard=v.filter(function(v){ return v.isDefault; });
               console.log("df",v,defaultDashboard);
               if (defaultDashboard.length>0){
-                self.router.navigate(['/'+defaultDashboard[0].type+'/'+defaultDashboard[0].id]);  
+                self.router.navigate(['/'+defaultDashboard[0].componentType+'/'+defaultDashboard[0].id]);  
               } 
             }
           });

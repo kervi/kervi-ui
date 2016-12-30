@@ -11,7 +11,7 @@ import { SensorModel } from '../models/sensor.model'
 })
 export class SensorComponent implements OnInit {
   @Input() sensor: SensorModel = null;
-  
+  @Input() parameters: any;
   @Input() style: string = "inline";
   constructor() { }
 

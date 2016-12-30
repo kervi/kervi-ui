@@ -20,27 +20,15 @@ export class ControllersService {
     constructor(private kerviService: KerviService) {
         var self = this;
 
-        var s = this.kerviService.connected$.subscribe(function (connectedValue) {
-            if (connectedValue) {
-                self.refreshControllers();
-                self.kerviService.spine.addEventHandler("moduleStarted", "", function (id, value) {
-                    console.log("controllers module started");
-                    self.refreshControllers()
-                });
+        var s=this.kerviService.getComponents$().subscribe(function(){
+            self.refreshControllers()
+        }); 
 
-                self.kerviService.spine.addEventHandler("moduleStopped", "", function (id, value) {
-                    console.log("module stopped");
-                    setTimeout(function () {
-                        self.refreshControllers();
-                    }, 3000);
-                })
-            } else {
-                self.controllers = [];
-                self.controllerTypes = [];
-                self._controllers$.next(self.controllers);
-                self._controllerTypes$.next(self.controllerTypes);
-            }
+        this.kerviService.connected$.subscribe(function(connected){
+            if (connected)
+                self.setEventHandlers();
         });
+            
     }
 
     private refreshControllers() {
@@ -50,15 +38,28 @@ export class ControllersService {
         self.currentCameraController = null;
         self.cameraControllers = [];
 
-        self.kerviService.spine.sendQuery("getControllerInfo", null, function (message) {
+        this.controllers= this.kerviService.getComponentsByType("controller");
+        self._controllers$.next(self.controllers);
+        for (let controller of this.controllers){
+            if (controller.components.length==0){
+                for(var ref of controller.componentReferences){
+                    controller.components.push(this.kerviService.getComponent(ref.id))
+                }
+            }
+            if (this.controllerTypes.indexOf(controller.type) == -1) {
+                this.controllerTypes.push(controller.type);
+            }
+        }    
+        this._controllerTypes$.next(self.controllerTypes);
+            
+        /*self.kerviService.spine.sendQuery("getControllerInfo", null, function (message) {
             console.log("controller info", message);
             self.updateControllers.call(self, message);
             self._controllers$.next(self.controllers);
             self._controllerTypes$.next(self.controllerTypes);
             self.updateCameraControllers();
-            self.setEventHandlers();
             //console.log("ciu",self.controllers);
-        });
+        });*/
     }
 
     public getControllers$() {
@@ -104,9 +105,7 @@ export class ControllersService {
         //console.log("gdc",dashboard,type,this.controllers.length);
 
         for (let controller of this.controllers) {
-            console.log("gccp",controller);
             for (let component of controller.components){
-                console.log("gccp b",component);
                 if (component.id==id)
                     return component
             }
@@ -139,7 +138,6 @@ export class ControllersService {
     private setEventHandlers() {
         var self = this;
         this.kerviService.spine.addEventHandler("controllerButtonStateChange", "", function (id, value) {
-            console.log("bsc", this, id, value);
             for (let controller of self.controllers) {
                 for (let component of controller.components) {
                     if (component.id == value.button) {
@@ -151,7 +149,6 @@ export class ControllersService {
         });
 
         this.kerviService.spine.addEventHandler("changeControllerInputValue", "", function (id, value) {
-            console.log("isc", this, id, value);
             for (let controller of self.controllers) {
                 for (let component of controller.components) {
                     if (component.id == value.input) {
@@ -163,7 +160,6 @@ export class ControllersService {
         });
 
         this.kerviService.spine.addEventHandler("controllerSelectChange", "", function (id, value) {
-            console.log("isc", this, id, value);
             for (let controller of self.controllers) {
                 for (let component of controller.components) {
                     if (component.id == value.select) {

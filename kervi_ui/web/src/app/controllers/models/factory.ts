@@ -2,7 +2,7 @@ import * as models from "./controller.model"
 export class ControllersFactory{
     public static createComponents = function (message: any) {
         var component = null;
-        console.log("cf",message.componentType,message);
+        //console.log("cf",message.componentType,message);
         if (message.componentType=="controller")
             component = new models.ControllerModel(message);
         else if (message.componentType == "button")

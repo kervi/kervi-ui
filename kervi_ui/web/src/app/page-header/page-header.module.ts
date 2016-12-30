@@ -10,7 +10,7 @@ import { SensorsModule } from '../sensors/sensors.module'
   imports: [
     CommonModule,
     RouterModule,
-    SensorsModule
+    SensorsModule,
   ],
   declarations: [
     PageHeaderComponent

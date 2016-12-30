@@ -1,0 +1,20 @@
+<div *ngIf="!inline && section.components.length>0" class="card">
+    <div class="card-block">
+        <div *ngFor="let sectionComponent of section.components">
+            
+            <controller [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='controller'" ></controller>
+            <controller-component [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component.componentType=='controllerComponent'" ></controller-component>
+            <sensor [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='sensor'" ></sensor>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="inline && section.components.length>0" >
+        <div *ngFor="let sectionComponent of section.components">
+            
+            <controller [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='controller'" ></controller>
+            <controller-component [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component.componentType=='controllerComponent'" ></controller-component>
+            <sensor [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='sensor'" ></sensor>
+        </div>
+    
+</div>

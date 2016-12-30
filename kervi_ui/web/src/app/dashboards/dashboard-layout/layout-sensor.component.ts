@@ -14,6 +14,7 @@ declare var jQuery: any;
 export class LayoutSensorComponent implements OnInit {
   @Input() id:string;
   @Input() dashboardType: string;
+  @Input() parameters:any = null;
   sensor:SensorModel;
   constructor(private sensorsService:SensorsService) {
       console.log("ls constructor",this.id);

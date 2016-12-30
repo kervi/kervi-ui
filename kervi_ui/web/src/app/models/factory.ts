@@ -1,7 +1,7 @@
 
 import { ControllersFactory } from '../controllers/models/factory'
 import { SensorFactory } from '../sensors/models/factory'
-
+import { DashboardFactory } from '../dashboards/models/factory'
 export class ComponentFactory{
 
     public static createComponents(message: any){
@@ -13,7 +13,10 @@ export class ComponentFactory{
         } else {
             var component=ControllersFactory.createComponents(message);
             if (!component)
-                component=SensorFactory.createComponents(message) 
+                component=SensorFactory.createComponents(message)
+
+            if (!component)
+                component=DashboardFactory.create(message)
             
             if (component)
                 result.push(component);

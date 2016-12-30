@@ -30,7 +30,7 @@ export class SensorsComponent implements OnInit {
     var self = this;
     this.sensorSubscription = this.sensorsService.getSensors$().subscribe(function (v) {
       console.log("core sensors ready", v);
-      self._sensors$.next(self.sensorsService.getDashboardSensors(self.dashboard));
+      //self._sensors$.next(self.sensorsService.getDashboardSensors(self.dashboard));
 
     });
 

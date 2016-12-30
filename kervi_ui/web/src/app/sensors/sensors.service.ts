@@ -16,51 +16,27 @@ export class SensorsService {
     constructor (private kerviService:KerviService){
         var self=this;
         
-            var s=this.kerviService.connected$.subscribe(function(connectedValue){
-                if (connectedValue){
-                    self.refreshSensors();
+        var s=this.kerviService.getComponents$().subscribe(function(){
+            self.refreshSensors()
+        });
 
-                    self.kerviService.spine.addEventHandler("NewSensorReading","",function(){
-                        for (let sensor of self.sensors){
-                            if (sensor.id==this.sensor){
-                                sensor.value$.next(this.value);
-                                var spl=sensor.sparkline$.value;
-                                spl.push(this.value);
-                                if (spl.length>10)
-                                    spl.shift();
-                                sensor.sparkline$.next(spl);
-                            }
+        var s1=this.kerviService.connected$.subscribe(function(connected){
+
+            if (connected){
+                self.kerviService.spine.addEventHandler("NewSensorReading","",function(){
+                    for (let sensor of self.sensors){
+                        if (sensor.id==this.sensor){
+                            sensor.value$.next(this.value);
+                            var spl=sensor.sparkline$.value;
+                            spl.push(this.value);
+                            if (spl.length>10)
+                                spl.shift();
+                            sensor.sparkline$.next(spl);
                         }
-                    });
-
-                    self.kerviService.spine.addEventHandler("moduleStarted","",function(id,value){
-                        console.log("module started");
-                        self.refreshSensors()
-                    });
-
-                    self.kerviService.spine.addEventHandler("moduleStopped","",function(id,value){
-                        console.log("module stopped");
-                        setTimeout(function(){
-                            self.refreshSensors();
-                        },3000);
-                    })
-
-
-
-
-
-                } else {
-                    self.sensors=[];
-                    self.sensorTypes=[];
-                    self._sensors$.next(self.sensors);
-                    self._sensorTypes$.next(self.sensorTypes);
-                }
-            });
-         
-            
-
-
-        
+                    }
+                });
+            }
+        });
     }
 
     private refreshSensors(){
@@ -68,20 +44,22 @@ export class SensorsService {
         this.sensors=[];
         this.sensorTypes=[];
         
-        self.kerviService.spine.sendQuery("getSensorInfo",function(message){
-            console.log("sensor info",message);
-            
-            self.updateSensors.call(self,message);
-            self._sensors$.next(self.sensors);
-            self._sensorTypes$.next(self.sensorTypes);
-            
-        });
+
+        this.sensors=self.kerviService.getComponentsByType("sensor");
+        self._sensors$.next(self.sensors);
+        this.sensorTypes = [];
+        for (let sensor of this.sensors){
+            if (this.sensorTypes.indexOf(sensor.type)==-1)
+                this.sensorTypes.push(sensor.type);
+        }
+        self._sensorTypes$.next(self.sensorTypes);
     }
 
     public getSensors$(){
         return this._sensors$.asObservable()
     }
 
+    /*
     public getDashboardSensors(dashboard:string){
         var result=[];
         for (let sensor of this.sensors){
@@ -89,7 +67,7 @@ export class SensorsService {
                 result.push(sensor);
         }
         return result;
-    }
+    }*/
 
     public getSensorTypes$(){
         return this._sensorTypes$.asObservable();
@@ -110,14 +88,5 @@ export class SensorsService {
                 return sensor;
         }
         return null;
-    }
-
-    private updateSensors=function(message){
-        this.sensors=SensorFactory.createComponents(message);
-        this.sensorTypes = [];
-        for (let sensor of this.sensors){
-            if (this.sensorTypes.indexOf(sensor.type)==-1)
-                this.sensorTypes.push(sensor.type);
-        }
     }
 }

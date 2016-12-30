@@ -15,16 +15,15 @@ declare var jQuery: any;
 export class LayoutControllerComponent implements OnInit {
   @Input() id:string;
   @Input() dashboardType: string;
+  @Input() parameters: any;
   component:IComponent;
   constructor(private controllersService:ControllersService) {
-      console.log("lcc constructor",this.id);   
+       
    }
 
   ngOnInit() {
-    console.log('lcc',this.id);
     if (this.id){
       this.component=this.controllersService.getControllerComponent(this.id);
-      console.log("lcc c",this.component);
     }
   }
 }

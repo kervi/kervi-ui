@@ -15,39 +15,18 @@ export class DashboardsService {
     constructor(private kerviService:KerviService, private controllersService:ControllersService, private sensorsService:SensorsService){
         var self=this;
         
-        var s=this.kerviService.connected$.subscribe(function(connectedValue){
-            if (connectedValue){
-                self.refreshDashboards();
-
-                self.kerviService.spine.addEventHandler("moduleStarted","",function(id,value){
-                    console.log("module started");
-                    self.refreshDashboards()
-                });
-
-                self.kerviService.spine.addEventHandler("moduleStopped","",function(id,value){
-                    console.log("module stopped");
-                    setTimeout(function(){
-                        self.refreshDashboards();
-                    },3000);
-                })
-            } else {
-                self.dashboards=[];
-                self._dashboards$.next(self.dashboards);
-            }
+        var s=this.kerviService.getComponents$().subscribe(function(){
+            self.dashboards=self.kerviService.getComponentsByType("dashboard");
+            self._dashboards$.next(self.dashboards);
+            console.log("db",self.dashboards);
         });
     }
 
+/*
     private refreshDashboards(){
         var self=this;
-        this.dashboards=[];
         
-        self.kerviService.spine.sendQuery("getDashboardInfo",function(message){
-            console.log("dashboard info",message);
-            
-            self.updateDashboards.call(self,message);
-            self._dashboards$.next(self.dashboards);
-            
-        });
+        self._dashboards$.next(this.dashboards);
     }
 
     private updateDashboards=function(message){
@@ -69,12 +48,12 @@ export class DashboardsService {
                     var section=new DashboardSectionModel();
                     section.id=messageSection.id;
                     section.name=messageSection.name;
-                    
+
                 }
             }
             this.dashboards.push(dashboard);
         }
-    }
+    }*/
 
     public getDashboards$(){
         return this._dashboards$.asObservable()

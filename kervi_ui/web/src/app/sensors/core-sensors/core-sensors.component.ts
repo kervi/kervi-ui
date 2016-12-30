@@ -28,7 +28,7 @@ export class CoreSensorsComponent implements OnInit, OnDestroy {
     var self = this;
     this.sensorSubscription = this.sensorsService.getSensors$().subscribe(function (v) {
       console.log("core sensors ready", v);
-      self._sensors$.next(self.sensorsService.getDashboardSensors("cpu"));
+      //self._sensors$.next(self.sensorsService.getDashboardSensors("cpu"));
 
     });
 

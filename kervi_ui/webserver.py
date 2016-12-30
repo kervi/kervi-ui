@@ -5,6 +5,7 @@
 import os
 import time
 import kervi.utility.nethelper as nethelper
+import kervi.spine as spine
 
 try:
     from SimpleHTTPServer import SimpleHTTPRequestHandler
@@ -20,6 +21,7 @@ import threading
 import kervi_ui
 
 SERVER = None
+ASSET_PATH = ""
 def start(ip_address, http_port, ws_port):
     global SERVER
     kervipath = os.path.dirname(kervi_ui.__file__)
@@ -31,7 +33,7 @@ def start(ip_address, http_port, ws_port):
 
     #cwd = os.getcwd()
     os.chdir(docpath)
-    SERVER = HTTPServer((ip_address,http_port), SimpleHTTPRequestHandler)
+    SERVER = HTTPServer((ip_address, http_port), SimpleHTTPRequestHandler)
     thread = threading.Thread(target=SERVER.serve_forever)
     thread.daemon = True
     thread.start()

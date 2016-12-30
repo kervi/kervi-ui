@@ -1,10 +1,30 @@
-<app-page-header>
-</app-page-header>
+<nav class="navbar navbar-fixed-to navbar-light bg-faded">
+	<ul class="nav navbar-nav">
+    <app-page-header></app-page-header>
+		<li class="nav-item">
+			<a class="btn btn-default" (click)="toggleControllers()"><i class="fa fa-slider fa-2x" aria-hidden="true"></i></a>
+		</li>
+		<li *ngIf="dashboard.sysSection" class="nav-item core-sensors">
+			<kervi-dashboard-section [inline]="true" [section]="dashboard.sysSection" ></kervi-dashboard-section>
+		</li>
+	</ul>
+</nav>
 
 <div *ngIf="dashboard && dashboard.template">
   <dashboard-layout [dashboard]="dashboard"></dashboard-layout>
 </div>
 <div *ngIf="dashboard && !dashboard.template">
-  
+  <div *ngFor="let row of sectionRows">
+    <div class="row">
+      <div *ngFor="let section of row">
+        <div class="col-md-4">
+          <kervi-dashboard-section [section]="section"></kervi-dashboard-section>
+        </div>
+      </div>
+    </div>  
+  </div>
 </div>
+<footer class="footer">
+	<kervi-dashboard-section *ngIf="dashboard.footerSection" [section]="dashboard.footerSection"></kervi-dashboard-section>
+</footer>
 <kervi-controllers [dashboardType]="'dashboard'" [dashboard]="dashboardId"></kervi-controllers>

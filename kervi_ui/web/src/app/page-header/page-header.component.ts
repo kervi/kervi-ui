@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tim Wentzlau
 // Licensed under MIT
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { KerviService } from '../kervi.service';
 import { BehaviorSubject, Subject, Observable } from 'rxjs/Rx';
 import { DashboardModel } from '../dashboards/models/dashboard.model'
@@ -16,6 +16,7 @@ declare var jQuery: any;
 })
 
 export class PageHeaderComponent implements OnInit, OnDestroy {
+  @Input() dashboard:DashboardModel = null;
   public dashboards$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private appSubscription: any;
   constructor(private dashboardsService: DashboardsService) {

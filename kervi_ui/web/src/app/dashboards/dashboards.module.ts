@@ -9,6 +9,7 @@ import { SensorsModule } from '../sensors/sensors.module';
 import { ControllersModule } from '../controllers/controllers.module';
 import { CamBoardComponent } from './cam-board/cam-board.component';
 import { DashboardComponent } from './dashboard/dashboard.component'; 
+import { DashboardSectionComponent } from './dashboard-section/dashboard-section.component'; 
 import { DashboardLayout } from './dashboard-layout/dashboard-layout.component'; 
 import { PageHeaderModule } from '../page-header/page-header.module';
 import { RouterModule } from '@angular/router';
@@ -26,6 +27,7 @@ import { LayoutSensorComponent } from './dashboard-layout/layout-sensor.componen
   exports:[
     CamBoardComponent,
     DashboardComponent,
+    DashboardSectionComponent,
     LayoutControllerComponent,
     LayoutSensorComponent
   ],
@@ -33,9 +35,10 @@ import { LayoutSensorComponent } from './dashboard-layout/layout-sensor.componen
   declarations: [
     CamBoardComponent,
     DashboardComponent,
+    DashboardSectionComponent,
     DashboardLayout,
     LayoutControllerComponent,
-    LayoutSensorComponent
+    LayoutSensorComponent,
     ]
 })
 export class DashboardsModule { }

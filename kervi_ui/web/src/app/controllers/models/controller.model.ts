@@ -1,6 +1,7 @@
 // Copyright (c) 2016, Tim Wentzlau
 // Licensed under MIT
 import { IComponent } from "../../models/IComponent.model"
+import { ComponentRef } from "../../models/ComponentRef"
 import { BehaviorSubject } from 'rxjs/Rx';
 import { ControllersFactory } from './factory' 
 
@@ -155,13 +156,15 @@ export class ControllerDateTimeModel implements IComponent {
 
 export class ControllerModel implements IComponent {
     public type: string;
-    public componentType="Controller"
+    public componentType="controller"
     public name: string;
     public id: string;
     public parameters: any;
     public components: IComponent[] = [];
+    public componentReferences: ComponentRef[] = [];
     public dashboards: string[];
     public template:string;
+
     constructor(message: any) {
         this.id = message.id;
         this.name = message.name;
@@ -169,6 +172,8 @@ export class ControllerModel implements IComponent {
         this.dashboards = message.dashboards;
         this.parameters = message.parameters;
         this.template=message.template;
-        this.components = message.components
+        for(var ref of message.components){
+            this.componentReferences.push( new ComponentRef(ref));
+        }
     }
 }
