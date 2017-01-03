@@ -8,6 +8,7 @@ export class SensorModel implements IComponent {
     public name: string = null;
     public componentType = "sensor";
     public type: string = null;
+    public visible: boolean = true;
     public max: number = null;
     public min: number = null;
     public unit: string = null;
@@ -16,9 +17,12 @@ export class SensorModel implements IComponent {
     public sparkline$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
 
 
+    updateReferences(){};
+    
     constructor(message: any){
         this.id=message.id;
         this.name=message.name;
+        this.visible=message.visible;
         this.dashboards=message.dashboards;
         this.max=message.max;
         this.min=message.min;

@@ -15,20 +15,50 @@ export class DashboardsService {
     constructor(private kerviService:KerviService, private controllersService:ControllersService, private sensorsService:SensorsService){
         var self=this;
         
-        var s=this.kerviService.getComponents$().subscribe(function(){
-            self.dashboards=self.kerviService.getComponentsByType("dashboard");
+        var s=this.kerviService.getComponents$().subscribe(function(v){
+            self.dashboards=self.kerviService.getComponentsByType("dashboard") ;
+            for(var dashboard of self.dashboards){
+                //var dashboard = dashboardComponent as DashboardModel;
+                for(var section of dashboard.sections){
+                    for (var sectionComponent of section.components ){
+                        if (!sectionComponent.component)
+                            sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                    }
+                }
+
+                for (var sectionComponent of dashboard.sysSection.components){
+                   if (!sectionComponent.component)
+                    sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+
+                for (var sectionComponent of dashboard.headerSection.components){
+                   if (!sectionComponent.component)
+                    sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+
+                for (var sectionComponent of dashboard.footerSection.components){
+                   if (!sectionComponent.component)
+                    sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+
+
+            }
+            
+            
+
             self._dashboards$.next(self.dashboards);
             console.log("db",self.dashboards);
         });
     }
 
-/*
+
     private refreshDashboards(){
         var self=this;
         
         self._dashboards$.next(this.dashboards);
     }
 
+/*
     private updateDashboards=function(message){
         if (Array.isArray(message)){
             for (var i=0;(i<message.length);i++){

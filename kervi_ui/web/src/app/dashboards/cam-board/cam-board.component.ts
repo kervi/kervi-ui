@@ -6,7 +6,7 @@ import { KerviService } from "../../kervi.service"
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-cam-board',
+  selector: 'app-cam-boardx',
   templateUrl: './cam-board.component.html',
   styleUrls: ['./cam-board.component.css']
 })

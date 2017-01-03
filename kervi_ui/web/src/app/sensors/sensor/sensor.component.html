@@ -1,9 +1,9 @@
-<div *ngIf="style=='inline'" class="sensor-inline sensor-type-{{sensor.type}}">
+<div *ngIf="type=='value'" class="sensor-inline sensor-type-value">
 	{{sensor.name}}:
-	<sensor-sparkline [sensor]="sensor"></sensor-sparkline>
+	<sensor-sparkline *ngIf="showSparkline" [sensor]="sensor"></sensor-sparkline>
 	<span class="sensor-value">{{(sensor.value$ | async)}}{{sensor.unit}}</span>
 </div>
 
-<div *ngIf="style=='full'" class="">
-	<canvas class="sensor-canvas" ></canvas>
+<div *ngIf="type=='gauge'" class="">
+	<canvas id="{{sensor.id}}" class="sensor-canvas" ></canvas>
 </div>

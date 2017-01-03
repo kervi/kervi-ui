@@ -19,8 +19,10 @@ export class DashboardSectionModel{
     public name:string;
     public parameters: any;
     public components: DashboardSectionComponentModel[]=[];
+    public dashboard: DashboardModel;
 
-    constructor (messageSection){
+    constructor (dashboard,messageSection){
+        this.dashboard=dashboard;
         this.id=messageSection.id;
         this.name=messageSection.name;
         this.parameters=messageSection.parameters;
@@ -28,7 +30,6 @@ export class DashboardSectionModel{
             this.components.push(new DashboardSectionComponentModel(componentRef))
         }
     }
-
 }
 
 export class DashboardBackgroundModel{
@@ -54,6 +55,8 @@ export class DashboardModel{
     public footerSection: DashboardSectionModel=null;
     public sysSection: DashboardSectionModel=null;
     public background: DashboardBackgroundModel=null;
+    public unitSize: number;
+    
 
     constructor(message){
         this.id=message.id;
@@ -62,11 +65,12 @@ export class DashboardModel{
         this.type=message.type;
         this.isDefault=message.isDefault;
         this.template=message.template;
+        this.unitSize=message.unitSize;
         this.background=new DashboardBackgroundModel(message.background);
         this.sections=[];
         if (!this.template){
             for (let messageSection of message.sections){
-                var section=new DashboardSectionModel(messageSection);
+                var section=new DashboardSectionModel(this, messageSection);
                 if (section.id=="header")
                     this.headerSection=section;
                 else if (section.id=="footer")
