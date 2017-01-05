@@ -2,9 +2,10 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
-import { ControllerModel  } from '../models/controller.model'
-import { IComponent } from '../../models/IComponent.model'
-import { ControllersService } from '../controllers.service'
+import { ControllerModel  } from '../models/controller.model';
+import { IComponent } from '../../models/IComponent.model';
+import { ControllersService } from '../controllers.service';
+import { DashboardSectionModel } from '../../dashboards/models/dashboard.model';
 declare var jQuery: any;
 
 @Component({
@@ -16,6 +17,7 @@ export class LayoutControllerComponent implements OnInit {
   @Input() id:string;
   @Input() dashboardType: string;
   @Input() parameters: any;
+  @Input() dashboardSection: DashboardSectionModel = null;
   component:IComponent;
   constructor(private controllersService:ControllersService) {
        

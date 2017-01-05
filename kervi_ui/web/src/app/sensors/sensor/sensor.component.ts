@@ -21,12 +21,24 @@ export class SensorComponent implements OnInit {
   @Input() showSparkline: boolean = true;
   @Input() size:number = 1;
   @Input() dashboardSection: DashboardSectionModel = null;
-
+  gaugeId:string="";
   private gauge:any=null;
+
   private unitSize:number=100;
 
   constructor() { 
     
+  }
+
+  makeId()
+  {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for( var i=0; i < 5; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
   }
 
   ngOnInit() {
@@ -45,6 +57,7 @@ export class SensorComponent implements OnInit {
     }
 
     if (this.type=="gauge"){
+      self.gaugeId=this.makeId();
       this.sensor.value$.subscribe(function(v){
         if (self.gauge)
           self.gauge.update({value:v});  
@@ -53,9 +66,9 @@ export class SensorComponent implements OnInit {
 
     if (this.type=="gauge"){
       setTimeout(function() {
-        console.log("ga");
+        console.log("ga",self);
         self.gauge = new RadialGauge({
-          renderTo: self.sensor.id,
+          renderTo: self.gaugeId,
           value:self.sensor.value$.value,
           width: self.unitSize*self.size,
           height: self.unitSize*self.size,

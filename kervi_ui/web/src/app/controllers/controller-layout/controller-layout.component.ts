@@ -4,7 +4,7 @@
 import { Input, Component, ComponentRef,ViewChild,ViewContainerRef}   from '@angular/core';
 import { AfterViewInit,OnInit,OnDestroy}          from '@angular/core';
 import { OnChanges,SimpleChange,ComponentFactory} from '@angular/core';
-
+import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 import { IHaveDynamicData, DynamicTypeBuilder } from './type.builder';
 import {ControllerModel} from '../models/controller.model'
 
@@ -17,6 +17,7 @@ import {ControllerModel} from '../models/controller.model'
 export class ControllerLayout implements AfterViewInit, OnChanges, OnDestroy
 { 
     @Input() controller:ControllerModel;
+    @Input() dashboardSection: DashboardSectionModel = null;
     @ViewChild('dynamicContentPlaceHolder', {read: ViewContainerRef}) 
     protected dynamicComponentTarget: ViewContainerRef;
     protected componentRef: ComponentRef<IHaveDynamicData>;

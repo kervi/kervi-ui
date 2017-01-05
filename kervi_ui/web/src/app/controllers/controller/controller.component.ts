@@ -3,6 +3,7 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 import { ControllerModel } from '../models/controller.model'
+import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 @Component({
   selector: 'kervi-controller',
   templateUrl: './controller.component.html',
@@ -11,7 +12,7 @@ import { ControllerModel } from '../models/controller.model'
 export class ControllerComponent implements OnInit {
   @Input() controller: ControllerModel;
   @Input() section: string = "left";
-  @Input() dashboardType: string;
+  @Input() dashboardSection: DashboardSectionModel;
   constructor() { }
 
   ngOnInit() {

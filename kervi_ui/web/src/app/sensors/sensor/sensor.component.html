@@ -4,6 +4,6 @@
 	<span class="sensor-value">{{(sensor.value$ | async)}}{{sensor.unit}}</span>
 </div>
 
-<div *ngIf="type=='gauge'" class="">
-	<canvas id="{{sensor.id}}" class="sensor-canvas" ></canvas>
-</div>
+<ng-container *ngIf="type=='gauge'" class="">
+	<canvas id="{{gaugeId}}" class="sensor-canvas" ></canvas>
+</ng-container>

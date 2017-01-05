@@ -4,6 +4,7 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { ControllerSelectModel } from '../models/controller.model'
 import { KerviService } from '../../kervi.service'
+import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 declare var jQuery: any;
 
 @Component({
@@ -13,7 +14,7 @@ declare var jQuery: any;
 })
 export class ControllerSelectComponent implements OnInit {
   @Input() select: ControllerSelectModel;
-  @Input() dashboardType: string;
+  @Input() dashboardSection: DashboardSectionModel;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
   ngOnInit() {

@@ -4,6 +4,7 @@
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { ControllerInputModel } from '../models/controller.model';
 import { KerviService } from '../../kervi.service'
+import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 declare var jQuery: any;
 
 @Component({
@@ -13,7 +14,7 @@ declare var jQuery: any;
 })
 export class ControllerNumberInputComponent implements OnInit {
 	@Input() input: ControllerInputModel;
-	@Input() dashboardType: string;
+	@Input() dashboardSection: DashboardSectionModel;
 	private moveDelayTimer = null;
 
 	constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
@@ -21,7 +22,7 @@ export class ControllerNumberInputComponent implements OnInit {
 	ngOnInit() {
 		var self = this;
 		var color = "#ffffff";
-		if (this.dashboardType == "dashboard")
+		if (this.dashboardSection.dashboard.type == "dashboard")
 			color = "#000000";
 		var p = jQuery('fieldset', this.elementRef.nativeElement).xy({
 			displayPrevious: false

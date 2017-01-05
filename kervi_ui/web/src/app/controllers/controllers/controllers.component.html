@@ -12,7 +12,7 @@
 
 	<div class="tab-content">
 		<div *ngFor="let controller of (controllers$ | async)" class="tab-pane" id="controller-left-tab-{{controller.id}}" role="tabpanel">
-			<kervi-controller [dashboardType]='dashboardType' [section]="'left'" [controller]="controller"></kervi-controller>
+			<kervi-controller [dashboardSection]='dashboardSection' [section]="'left'" [controller]="controller"></kervi-controller>
 		</div>
 	</div>
 </div>

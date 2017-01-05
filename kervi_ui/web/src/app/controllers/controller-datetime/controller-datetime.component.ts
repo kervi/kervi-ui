@@ -4,6 +4,7 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { ControllerDateTimeModel } from '../models/controller.model'
 import { KerviService } from '../../kervi.service'
+import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 declare var jQuery: any;
 
 @Component({
@@ -13,7 +14,7 @@ declare var jQuery: any;
 })
 export class ControllerDateTimeComponent implements OnInit {
   @Input() datetime: ControllerDateTimeModel;
-  @Input() dashboardType: string;
+  @Input() dashboardSection: DashboardSectionModel;
   private valueSubscription: any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 

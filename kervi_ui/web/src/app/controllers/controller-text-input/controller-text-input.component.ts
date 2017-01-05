@@ -4,6 +4,8 @@
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { ControllerInputModel } from '../models/controller.model';
 import { KerviService } from '../../kervi.service'
+import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
+
 declare var jQuery:any;
 @Component({
 	selector: 'kervi-controller-text-input',
@@ -12,7 +14,7 @@ declare var jQuery:any;
 })
 export class ControllerTextInputComponent implements OnInit {
 	@Input() input: ControllerInputModel;
-	@Input() dashboardType: string;
+	@Input() dashboardSection: DashboardSectionModel;
 	
 	constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 

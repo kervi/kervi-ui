@@ -15,18 +15,12 @@
 </div>
 <div *ngIf="dashboard && !dashboard.template">
   <kervi-cam-viewer *ngIf="dashboard.background.type=='camera'" [isBackground]="true" [cameraId]="dashboard.background.cameraId"></kervi-cam-viewer>
-  <div *ngFor="let row of sectionRows">
-    <div class="row">
-      <div *ngFor="let section of row">
-        <div class="col-md-4">
-          <kervi-dashboard-section [section]="section"></kervi-dashboard-section>
-        </div>
-      </div>
-    </div>  
-  </div>
+  <div class="card-columns">
+    <kervi-dashboard-section *ngFor="let section of dashboard.sections" [section]="section"></kervi-dashboard-section>
+  </div>  
 </div>
 <footer class="footer">
 	<kervi-dashboard-section *ngIf="dashboard.footerSection" [section]="dashboard.footerSection"></kervi-dashboard-section>
 </footer>
-<kervi-controllers [dashboardType]="'dashboard'" [dashboard]="dashboardId"></kervi-controllers>
+
 </div>

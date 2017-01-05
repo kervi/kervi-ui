@@ -14,18 +14,30 @@ export class DashboardSectionComponentModel{
     }
 }
 
+export class DashboardSectionParametersModel{
+    public title:string;
+    public columns:number;
+
+    constructor(messageParameters){
+        console.log("mp",messageParameters);
+        this.title=messageParameters.title;
+        this.columns=messageParameters.columns;
+    }
+}
+
 export class DashboardSectionModel{
     public id:string;
     public name:string;
-    public parameters: any;
+    public parameters: DashboardSectionParametersModel;
     public components: DashboardSectionComponentModel[]=[];
     public dashboard: DashboardModel;
 
     constructor (dashboard,messageSection){
+        console.log("dc",messageSection);
         this.dashboard=dashboard;
         this.id=messageSection.id;
         this.name=messageSection.name;
-        this.parameters=messageSection.parameters;
+        this.parameters=new DashboardSectionParametersModel(messageSection.uiParameters);
         for(var componentRef of messageSection.components){
             this.components.push(new DashboardSectionComponentModel(componentRef))
         }
@@ -54,6 +66,7 @@ export class DashboardModel{
     public headerSection: DashboardSectionModel=null;
     public footerSection: DashboardSectionModel=null;
     public sysSection: DashboardSectionModel=null;
+    public controllerSection: DashboardSectionModel=null;
     public background: DashboardBackgroundModel=null;
     public unitSize: number;
     
@@ -77,6 +90,8 @@ export class DashboardModel{
                     this.footerSection=section;
                 else if (section.id=="sys-header")
                     this.sysSection=section;
+                else if (section.id=="controllers")
+                    this.controllerSection=section;    
                 else this.sections.push(section);        
             }
         }

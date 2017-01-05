@@ -14,15 +14,18 @@ import { IComponent } from '../../models/IComponent.model'
 })
 export class DashboardSectionComponent implements OnInit, OnDestroy {
     @Input() section:DashboardSectionModel;
-    @Input() inline:boolean = false; 
+    @Input() inline:boolean = false;
+    sectionWidth:string;
     //sectionComponents:IComponent[] = []
 
     constructor (private kerviService:KerviService){
     }
 
     ngOnInit() {
-        /*console.log("sci",this.section);
-        for (var sectionComponent of this.section.components ){
+        this.sectionWidth=this.section.parameters.columns*this.section.dashboard.unitSize + this.section.parameters.columns * 40 + "px";
+        
+        console.log("sci",this.sectionWidth,this.section);
+        /*for (var sectionComponent of this.section.components ){
             if (!sectionComponent.component)
                 sectionComponent.component=this.kerviService.getComponent(sectionComponent.componentId)
         }*/

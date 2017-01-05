@@ -4,6 +4,7 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { ControllerButtonModel } from '../models/controller.model'
 import { KerviService } from '../../kervi.service'
+import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 declare var jQuery: any;
 
 @Component({
@@ -13,7 +14,7 @@ declare var jQuery: any;
 })
 export class ControllerButtonComponent implements OnInit {
   @Input() button: ControllerButtonModel;
-  @Input() dashboardType: string;
+  @Input() dashboardSection: DashboardSectionModel;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
 

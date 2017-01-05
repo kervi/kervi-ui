@@ -5,6 +5,7 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { ControllerModel } from '../../controllers/models/controller.model'
 import { IComponent } from '../../models/IComponent.model'
 import { ControllersService } from '../../controllers/controllers.service'
+import { DashboardSectionModel } from '../models/dashboard.model'
 declare var jQuery: any;
 
 @Component({
@@ -14,7 +15,7 @@ declare var jQuery: any;
 })
 export class LayoutControllerComponent implements OnInit {
   @Input() id:string;
-  @Input() dashboardType: string;
+  @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any = null;
   controller:ControllerModel;
   constructor(private controllersService:ControllersService) {
