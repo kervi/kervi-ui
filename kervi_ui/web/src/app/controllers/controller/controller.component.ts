@@ -13,6 +13,7 @@ export class ControllerComponent implements OnInit {
   @Input() controller: ControllerModel;
   @Input() section: string = "left";
   @Input() dashboardSection: DashboardSectionModel;
+  @Input() parameters:any;
   constructor() { }
 
   ngOnInit() {

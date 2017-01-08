@@ -15,21 +15,39 @@ declare var jQuery: any;
 export class ControllerNumberInputComponent implements OnInit {
 	@Input() input: ControllerInputModel;
 	@Input() dashboardSection: DashboardSectionModel;
+	@Input() parameters:any;
 	private moveDelayTimer = null;
+	private type:string = "horizontal_slider";
+	private size:number = 1;
+	private unitSize:number=150;
 
-	constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
+	constructor(private kerviService: KerviService, private elementRef: ElementRef) { 
+		console.log("cnio",this);
+	}
 
 	ngOnInit() {
 		var self = this;
-		var color = "#ffffff";
-		if (this.dashboardSection.dashboard.type == "dashboard")
-			color = "#000000";
+		console.log("cnx",this.parameters)
+		if (this.parameters){
+			if (this.parameters.type)
+				this.type=this.parameters.type;
+			if (this.parameters.size)
+				this.size=this.parameters.size;
+			}
+
+			if (this.dashboardSection){
+				this.unitSize=this.dashboardSection.dashboard.unitSize;
+			}
+
+		//var color = "#ffffff";
+		//if (this.dashboardSection.dashboard.type == "dashboard")
+		var	color = "#55595c";
 		var p = jQuery('fieldset', this.elementRef.nativeElement).xy({
 			displayPrevious: false
 			, min: this.input.minValue
 			, max: this.input.maxValue
-			, width: this.input.ui.orientation == "vertical" ? 30 : 180
-			, height: this.input.ui.orientation == "vertical" ? 180 : 30
+			, width: this.type == "vertical_slider" ? 30 : self.unitSize*self.size
+			, height: this.type == "vertical_slider" ? self.unitSize*self.size : 30
 			, fgColor: color
 			, bgColor: color
 			, change: function (value) {
@@ -38,7 +56,7 @@ export class ControllerNumberInputComponent implements OnInit {
 
 
 				self.moveDelayTimer = setTimeout(function () {
-					if (self.input.ui.orientation == "vertical") {
+					if (self.type == "vertical_slider") {
 						self.kerviService.spine.sendCommand(self.input.command, value[1]);
 					} else {
 						self.kerviService.spine.sendCommand(self.input.command, value[0]);
@@ -46,10 +64,21 @@ export class ControllerNumberInputComponent implements OnInit {
 				}, 200);
 			}
 		})
-			.css({ 'border': '2px solid ' + color });
+			.css({ 'border': '1px solid rgba(0, 0, 0, 0.15)', "border-radius": '0.25rem'  });
+
+		if (self.type == "vertical_slider")
+		{
+				jQuery("input[name='y']", self.elementRef.nativeElement).show();
+				jQuery("input[name='x']", self.elementRef.nativeElement).hide();
+		}
+		else
+		{
+				jQuery("input[name='x']", self.elementRef.nativeElement).show();
+				jQuery("input[name='y']", self.elementRef.nativeElement).hide();
+		}
 
 		self.input.value$.subscribe(function (v) {
-			if (self.input.ui.orientation == "vertical")
+			if (self.type == "vertical_slider")
 				jQuery("input[name='y']", self.elementRef.nativeElement).val(v).change();
 			else
 				jQuery("input[name='x']", self.elementRef.nativeElement).val(v).change();

@@ -1,10 +1,10 @@
 <div *ngIf="component.visible">
     <div [ngSwitch]="component.type">
         <template ngSwitchCase="number-input">
-            <kervi-controller-number-input [dashboardSection]="dashboardSection" [input]="component"></kervi-controller-number-input>
+            <kervi-controller-number-input [parameters]="parameters" [dashboardSection]="dashboardSection" [input]="component"></kervi-controller-number-input>
         </template>
         <template ngSwitchCase="text-input">
-            <kervi-controller-text-input [dashboardSection]="dashboardSection" [input]="component"></kervi-controller-text-input>
+            <kervi-controller-text-input [parameters]="parameters" [dashboardSection]="dashboardSection" [input]="component"></kervi-controller-text-input>
         </template>
         <template ngSwitchCase="button">
             <kervi-controller-button [dashboardSection]="dashboardSection" [button]="component"></kervi-controller-button>

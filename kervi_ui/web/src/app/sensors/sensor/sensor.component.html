@@ -1,9 +1,15 @@
-<div *ngIf="type=='value'" class="sensor-inline sensor-type-value">
+<div *ngIf="displayType=='value'" class="sensor-inline sensor-type-value">
 	{{sensor.name}}:
 	<sensor-sparkline *ngIf="showSparkline" [sensor]="sensor"></sensor-sparkline>
 	<span class="sensor-value">{{(sensor.value$ | async)}}{{sensor.unit}}</span>
 </div>
 
-<ng-container *ngIf="type=='gauge'" class="">
-	<canvas id="{{gaugeId}}" class="sensor-canvas" ></canvas>
+<ng-container *ngIf="displayType=='gauge'" class="" >
+	<canvas id="{{canvasId}}" class="sensor-canvas" ></canvas>
+</ng-container>
+
+<ng-container *ngIf="displayType=='chart'" class="" >
+	<div style="width:100%;height:100%">
+	<canvas id="{{canvasId}}" class="sensor-canvas" ></canvas>
+	</div>
 </ng-container>

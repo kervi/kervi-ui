@@ -17,11 +17,13 @@ export class DashboardSectionComponentModel{
 export class DashboardSectionParametersModel{
     public title:string;
     public columns:number;
-
+    public type:string = null;
     constructor(messageParameters){
         console.log("mp",messageParameters);
         this.title=messageParameters.title;
         this.columns=messageParameters.columns;
+        if (messageParameters.type)
+            this.type=messageParameters.type;
     }
 }
 

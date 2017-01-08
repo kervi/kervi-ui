@@ -15,11 +15,15 @@ declare var jQuery:any;
 export class ControllerTextInputComponent implements OnInit {
 	@Input() input: ControllerInputModel;
 	@Input() dashboardSection: DashboardSectionModel;
+	@Input() parameters:any;
 	
 	constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
 	ngOnInit(){
 		var self=this;
+
+		console.log("ctic",this.parameters);
+
 		this.input.value$.subscribe(function(v){
 			console.log("tic",v);
 			jQuery("input", self.elementRef.nativeElement).val(v).change();
