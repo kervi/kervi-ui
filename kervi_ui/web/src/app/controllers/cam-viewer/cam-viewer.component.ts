@@ -81,15 +81,16 @@ export class CamViewerComponent implements OnInit {
         }
       })
         .css({ 'border': '2px solid ' + color });
-      var h = jQuery(self.elementRef.nativeElement).height();
-      var w = jQuery(self.elementRef.nativeElement).width();
-      jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - 100, left: w / 2 - 100 });
+      
+      var h = jQuery(".video",self.elementRef.nativeElement).height();
+      var w = jQuery(".video",self.elementRef.nativeElement).width();
+      jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - 90, left:  w / 2 - 90 });
 
       jQuery(window).bind('resize', function () {
         //jQuery('#video-viewer').height(jQuery(window).height());
-        var h = jQuery(self.elementRef.nativeElement).height();
-        var w = jQuery(self.elementRef.nativeElement).width();
-        jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - 100, left: w / 2 - 100 });
+        var h = jQuery(".video",self.elementRef.nativeElement).height();
+        var w = jQuery(".video",self.elementRef.nativeElement).width();
+        jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - 90, left: w / 2 - 90 });
       });
     }, 0);
 

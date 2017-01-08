@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public sections: DashboardSectionModel[] = [];
   public sectionRows: any[]=[];
   public camera: ControllerModel = null;
+  public dashboardSectionsHidden:boolean=false;
   private routeSubscription;
   
   constructor(private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
@@ -29,8 +30,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.dashboardId = params['name']; 
       this.dashboard=this.dashboardsService.getDashboardById(this.dashboardId);
       console.log("dbs",this.dashboard);
-      if (this.dashboard.background.type=="camera")
+      if (this.dashboard.background.type=="camera"){
+        this.dashboardSectionsHidden=true;
         this.camera=this.kerviService.getComponent(this.dashboard.background.cameraId) as ControllerModel;
+      }
       var rowSize=3;
       this.sectionRows=[]
       var currentRow=[];

@@ -3,3 +3,11 @@
     z-index:2000;
     
 }
+
+dashboard-sections{
+    
+}
+
+.dashboard-sections-hidden{
+    display: none;
+}
