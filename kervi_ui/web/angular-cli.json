@@ -18,10 +18,7 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "../node_modules/bootstrap-v4-dev/dist/css/bootstrap.css",
-        "../node_modules/font-awesome/css/font-awesome.css",
-        "../node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css",
-        "styles.css"
+        "styles.scss"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
@@ -33,7 +30,7 @@
         "../lib/chart-bundle.js",
         "../node_modules/moment/min/moment-with-locales.js",
         "../node_modules/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js",
-        "../node_modules/canvas-gauges/gauge.min"  
+        "../node_modules/canvas-gauges/gauge.min"
       ],
       "environments": {
         "source": "environments/environment.ts",
@@ -43,9 +40,12 @@
     }
   ],
   "addons": [
-    "../node_modules/font-awesome/fonts/*.+(otf|eot|svg|ttf|woff|woff2)"
+    
+      "../node_modules/font-awesome/fonts/*.+(otf|eot|svg|ttf|woff|woff2)"
+    
   ],
-  "packages": [],
+  "packages": [
+  ],
   "e2e": {
     "protractor": {
       "config": "./protractor.conf.js"
@@ -57,7 +57,7 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
+    "styleExt": "sass",
     "prefixInterfaces": false,
     "inline": {
       "style": false,

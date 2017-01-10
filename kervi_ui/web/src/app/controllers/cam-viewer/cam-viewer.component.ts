@@ -11,7 +11,7 @@ declare var jQuery: any;
 @Component({
   selector: 'kervi-cam-viewer',
   templateUrl: './cam-viewer.component.html',
-  styleUrls: ['./cam-viewer.component.css']
+  styleUrls: ['./cam-viewer.component.scss']
 })
 export class CamViewerComponent implements OnInit {
   @Input() cameraId: string = null;

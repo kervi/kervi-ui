@@ -44,6 +44,21 @@ export class SensorComponent implements OnInit {
       return text;
   }
 
+  getStyleRuleValue(style, selector, sheet) {
+    var sheets = typeof sheet !== 'undefined' ? [sheet] : document.styleSheets;
+    for (var i = 0, l = sheets.length; i < l; i++) {
+        var sheet = sheets[i];
+        if( !sheet.cssRules ) { continue; }
+        for (var j = 0, k = sheet.cssRules.length; j < k; j++) {
+            var rule = sheet.cssRules[j];
+            if (rule.selectorText && rule.selectorText.split(',').indexOf(selector) !== -1) {
+                return rule.style[style];
+            }
+        }
+    }
+    return null;
+}
+
   ngOnInit() {
     var self=this;
     if (this.parameters){
@@ -129,14 +144,14 @@ export class SensorComponent implements OnInit {
       jQuery("#"+self.canvasId).height(self.unitSize);
       console.log("sta");
       self.kerviService.spine.sendQuery("getSensorData", self.sensor.id, function (results) {
-        console.log("gsd", this, results);
+        //console.log("gsd", this, results);
         var sensorData = results;
         var chartData = [];
         for (var i = 0; (i < sensorData.length); i++) {
           var dataItem = sensorData[i]
           chartData.push({ x: new Date(dataItem.ts), y: dataItem.value });
         }
-        console.log("cd", chartData);
+        //console.log("cd", chartData);
         var ctx = jQuery("#"+self.canvasId);
         var chart = new Chart(ctx, {
           type: 'line',

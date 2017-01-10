@@ -19,7 +19,6 @@ export class DashboardSectionParametersModel{
     public columns:number;
     public type:string = null;
     constructor(messageParameters){
-        console.log("mp",messageParameters);
         this.title=messageParameters.title;
         this.columns=messageParameters.columns;
         if (messageParameters.type)
@@ -35,7 +34,6 @@ export class DashboardSectionModel{
     public dashboard: DashboardModel;
 
     constructor (dashboard,messageSection){
-        console.log("dc",messageSection);
         this.dashboard=dashboard;
         this.id=messageSection.id;
         this.name=messageSection.name;

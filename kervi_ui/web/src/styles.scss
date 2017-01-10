@@ -1,0 +1,71 @@
+/* You can add global styles to this file, and also import other style files */
+/*! ========================================================================
+ * Bootstrap Toggle: bootstrap-toggle.css v2.2.0
+ * http://www.bootstraptoggle.com
+ * ========================================================================
+ * Copyright 2014 Min Hur, The New York Times Company
+ * Licensed under MIT
+ * ======================================================================== */
+
+
+$brand-primary:             #116611 !default;
+$brand-success:             #5cb85c !default;
+$brand-info:                #5bc0de !default;
+$brand-warning:             #f0ad4e !default;
+$brand-danger:              #d9534f !default;
+
+$input-group-addon-bg:           #00ff00;// $gray-lighter !default;
+$input-group-addon-border-color: #0000ff;// !default;
+
+$card-cap-bg:              #004400 !default;
+$card-bg:                  #88cc88 !default;
+
+$card-link-hover-color:    #fff !default;
+
+
+
+
+/*#video-viewer{
+	margin-top:-20px;
+}
+.cam-pad-area{
+	z-index: 1200;
+	vertical-align: middle; 
+	width: 200px; 
+	display: inline-block; 
+	position: absolute; 
+	left: 389px; 
+	top: 132px;
+	color:white;
+}
+.axis-pad{
+	display:inline-block;
+	margin-right:25px;
+	color:#ffffff;
+    margin-bottom:25px;
+}
+
+.dashboard .axis-pad{
+	display:inline-block;
+	margin-right:25px;
+	color:#000000;
+    margin-bottom:25px;
+}
+
+.axis-pad fieldset{
+	margin-top:0 !important;
+}
+
+
+
+bodyx {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+}
+
+*/
+
+@import "../node_modules/bootstrap-v4-dev/scss/bootstrap.scss";
+//@import "../node_modules/font-awesome/scss/font-awesome.scss";
+@import "../node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
+        
