@@ -58,7 +58,6 @@ export class CamViewerComponent implements OnInit {
     setTimeout(function() {
       
     
-      console.log("cw",self.elementRef.nativeElement,jQuery('.pad', self.elementRef.nativeElement));
       var color = "rgba(255,255,255,.5)";
       var p = jQuery('fieldset', self.elementRef.nativeElement).xy({
         displayPrevious: false

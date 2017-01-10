@@ -40,7 +40,6 @@ export class ControllerDateTimeComponent implements OnInit {
         });
         
         jQuery(self.elementRef.nativeElement).on('dp.hide',function (e,v) {
-          console.log("dv",e,v);
           self.kerviService.spine.sendCommand(self.datetime.changeCommand,e);
         });
       

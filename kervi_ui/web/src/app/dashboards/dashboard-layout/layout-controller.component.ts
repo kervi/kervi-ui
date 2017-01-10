@@ -23,12 +23,8 @@ export class LayoutControllerComponent implements OnInit {
    }
 
   ngOnInit() {
-    console.log('lcc',this.id);
     if (this.id){
       this.controller=this.controllersService.getControllerById(this.id);
-      console.log("lcc c",this.controller);
     }
   }
-
-
 }

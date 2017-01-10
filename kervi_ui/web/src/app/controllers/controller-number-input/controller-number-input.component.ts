@@ -22,12 +22,11 @@ export class ControllerNumberInputComponent implements OnInit {
 	private unitSize:number=150;
 
 	constructor(private kerviService: KerviService, private elementRef: ElementRef) { 
-		console.log("cnio",this);
+		//console.log("cnio",this);
 	}
 
 	ngOnInit() {
 		var self = this;
-		console.log("cnx",this.parameters)
 		if (this.parameters){
 			if (this.parameters.type)
 				this.type=this.parameters.type;

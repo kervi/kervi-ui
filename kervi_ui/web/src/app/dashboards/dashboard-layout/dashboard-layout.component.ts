@@ -45,7 +45,6 @@ export class DashboardLayout implements AfterViewInit, OnChanges, OnDestroy
       
       // here we get a TEMPLATE with dynamic content === TODO
       var template = this.dashboard.template;
-console.log("ccf",template);
       // here we get Factory (just compiled or from cache)
       this.typeBuilder
           .createComponentFactory(template)
@@ -78,7 +77,6 @@ console.log("ccf",template);
     // - then we have to wait till view is intialized - first OnChange is too soon
     public ngOnChanges(changes: {[key: string]: SimpleChange}): void
     {
-        console.log("NGOC",changes);
         if (this.wasViewInitialized) {
             return;
         }

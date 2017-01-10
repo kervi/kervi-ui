@@ -16,7 +16,6 @@ export class ConnectComponent implements OnInit {
   private currentPage = null;
   private ts = new Date()
   constructor(private kerviService: KerviService, private router: Router, private route: ActivatedRoute) {
-    console.log("cc c", this.ts);
     var self = this;
 
 
@@ -30,12 +29,11 @@ export class ConnectComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("cc i");
+    
 
   }
 
   ngOnDestroy() {
-    console.log("cc d", this);
     //this.kerviService.Connected.unsubscribe()    
   }
 

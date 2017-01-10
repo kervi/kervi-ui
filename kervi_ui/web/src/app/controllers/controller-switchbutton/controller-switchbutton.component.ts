@@ -29,7 +29,6 @@ export class ControllerSwitchButtonComponent implements OnInit {
       jQuery('input', self.elementRef.nativeElement).bootstrapToggle();
       jQuery('input', self.elementRef.nativeElement).change(function () {
         var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
-        console.log("bs", state);
         if (state && !self.button.state$.value)
           self.kerviService.spine.sendCommand(self.button.onCommand);
         else if (!state && self.button.state$.value)

@@ -19,15 +19,13 @@ export class LayoutSensorComponent implements OnInit {
   @Input() dashboardSection: DashboardSectionModel;
   sensor:SensorModel;
   constructor(private sensorsService:SensorsService) {
-      console.log("ls constructor",this.id);
+      //console.log("ls constructor",this.id);
       
    }
 
   ngOnInit() {
-    console.log('ls',this.id);
     if (this.id){
       this.sensor=this.sensorsService.getSensorById(this.id);
-      console.log("ls c",this.sensor);
     }
   }
 

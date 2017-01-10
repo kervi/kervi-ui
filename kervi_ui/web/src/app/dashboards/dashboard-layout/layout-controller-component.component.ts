@@ -18,7 +18,7 @@ export class LayoutControllerComponent implements OnInit {
   @Input() parameters:any = null;
   component:IComponent;
   constructor(private controllersService:ControllersService) {
-      console.log("db lcc constructor",this.id);
+      //console.log("db lcc constructor",this.id);
 
    }
 

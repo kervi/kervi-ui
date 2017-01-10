@@ -23,12 +23,6 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.sectionWidth=this.section.parameters.columns*this.section.dashboard.unitSize + this.section.parameters.columns * 40 + "px";
-        
-        console.log("sci",this.sectionWidth,this.section);
-        /*for (var sectionComponent of this.section.components ){
-            if (!sectionComponent.component)
-                sectionComponent.component=this.kerviService.getComponent(sectionComponent.componentId)
-        }*/
   }
 
   ngOnDestroy(){

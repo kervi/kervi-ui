@@ -43,10 +43,8 @@ export class ControllersComponent implements OnInit, OnDestroy {
 
     setTimeout(function () {
       jQuery(".controllers-left-section").on('shown.bs.tab', function (event) {
-        console.log("spc c", event);
         var rightId = event.target.dataset.idright;
         var panelRight = jQuery('.controllers-right-section');
-        console.log("spc d", rightId, panelRight);
         jQuery(".tab-pane", '.controllers-right-section').removeClass("active");
         jQuery(rightId).addClass("active");
 

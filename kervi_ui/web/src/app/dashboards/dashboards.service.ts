@@ -47,7 +47,7 @@ export class DashboardsService {
             
 
             self._dashboards$.next(self.dashboards);
-            console.log("db",self.dashboards);
+            
         });
     }
 

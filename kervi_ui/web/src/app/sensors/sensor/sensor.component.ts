@@ -74,7 +74,6 @@ export class SensorComponent implements OnInit {
       this.unitSize=this.dashboardSection.dashboard.unitSize;
     }
     self.canvasId=this.makeId();
-    console.log("sgi",this.gaugeTypes,this.type);
     if (this.gaugeTypes.indexOf(this.type)>-1){
       
       self.displayType="gauge";
@@ -108,7 +107,7 @@ export class SensorComponent implements OnInit {
       
       
       setTimeout(function() {
-        console.log("ga",self, settings);
+        
         
         if (self.type=="radial_gauge"){
           settings["width"]= self.unitSize*self.size;
@@ -129,20 +128,17 @@ export class SensorComponent implements OnInit {
           self.gauge = new LinearGauge(settings).draw();
         }
 
-        console.log("g",self.gauge);
+        
       }, 0);
     }
 
     if (self.type=="chart"){
       self.displayType="chart";
-      console.log("st");
       setTimeout(function() {
-        console.log("st",self);
-      
+        
       
       jQuery("#"+self.canvasId).width(self.unitSize*self.size);
       jQuery("#"+self.canvasId).height(self.unitSize);
-      console.log("sta");
       self.kerviService.spine.sendQuery("getSensorData", self.sensor.id, function (results) {
         //console.log("gsd", this, results);
         var sensorData = results;

@@ -25,9 +25,8 @@ export class LayoutControllerComponent implements OnInit {
 
   ngOnInit() {
     if (this.id){
-      console.log("ccx",this.id, this.parameters);
       this.component=this.controllersService.getControllerComponent(this.id);
-      console.log("ccx1",this.id, this.parameters, this.component);
+      
     }
   }
 }

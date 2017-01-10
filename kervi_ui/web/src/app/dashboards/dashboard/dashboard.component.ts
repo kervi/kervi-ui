@@ -20,16 +20,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private routeSubscription;
   
   constructor(private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
-      console.log("db c");
+      
    }
 
   ngOnInit() {
-    console.log("db nginit");
     this.routeSubscription = this.activatedRoute.params.subscribe(params => {
-      console.log("cb,rp",params);
       this.dashboardId = params['name']; 
       this.dashboard=this.dashboardsService.getDashboardById(this.dashboardId);
-      console.log("dbs",this.dashboard);
       if (this.dashboard.background.type=="camera"){
         this.dashboardSectionsHidden=true;
         this.camera=this.kerviService.getComponent(this.dashboard.background.cameraId) as ControllerModel;
@@ -45,7 +42,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
              this.sectionRows.push(currentRow);
            }
       }
-      console.log("dbi",this.sectionRows,this.dashboard);
     });
   }
 

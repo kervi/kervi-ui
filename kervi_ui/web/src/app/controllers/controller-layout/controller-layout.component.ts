@@ -57,7 +57,6 @@ export class ControllerLayout implements AfterViewInit, OnChanges, OnDestroy
     
     public ngOnChanges(changes: {[key: string]: SimpleChange}): void
     {
-        console.log("NGOC",changes);
         if (this.wasViewInitialized) {
             return;
         }

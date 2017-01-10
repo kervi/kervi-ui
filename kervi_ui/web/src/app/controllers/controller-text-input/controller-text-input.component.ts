@@ -22,10 +22,8 @@ export class ControllerTextInputComponent implements OnInit {
 	ngOnInit(){
 		var self=this;
 
-		console.log("ctic",this.parameters);
-
+		
 		this.input.value$.subscribe(function(v){
-			console.log("tic",v);
 			jQuery("input", self.elementRef.nativeElement).val(v).change();
 			
 		})

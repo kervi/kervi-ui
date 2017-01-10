@@ -23,7 +23,6 @@ export class ControllerSelectComponent implements OnInit {
   }
 
   onChange(value){
-    console.log("soc", value);
     this.kerviService.spine.sendCommand(this.select.command,[value]);
   }
 
