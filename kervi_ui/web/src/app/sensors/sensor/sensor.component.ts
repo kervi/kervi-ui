@@ -82,6 +82,35 @@ export class SensorComponent implements OnInit {
           self.gauge.update({value:v});  
       });
     
+      var dataHighlights=[];
+      var fromLimit=self.sensor.min;
+      if (self.sensor.lowerFatalLimit!=null){
+        dataHighlights.push({"from": fromLimit, "to": self.sensor.lowerFatalLimit, "color": "rgba(255, 0, 0, .75)"})
+        fromLimit=self.sensor.lowerFatalLimit;
+      }
+      
+      if (self.sensor.lowerWarningLimit!=null){
+        dataHighlights.push({"from": fromLimit, "to": self.sensor.lowerWarningLimit, "color": "rgba(255, 255, 0, .75)"})
+        fromLimit=self.sensor.lowerWarningLimit;
+      }
+
+      var toLimit=self.sensor.max;
+      if (self.sensor.upperFatalLimit){
+        dataHighlights.push({"from": self.sensor.upperFatalLimit, "to": toLimit, "color": "rgba(255, 0, 0, .75)"})
+        toLimit=self.sensor.upperFatalLimit;
+      }
+      
+      if (self.sensor.upperWarningLimit)
+        dataHighlights.push({"from": self.sensor.upperWarningLimit, "to": toLimit, "color": "rgba(255, 255, 0, .75)"})
+
+      
+
+
+      
+
+
+      
+
 
       var settings={
           renderTo: self.canvasId,
@@ -90,7 +119,12 @@ export class SensorComponent implements OnInit {
           title: self.sensor.name,
           minValue: self.sensor.min,
           maxValue: self.sensor.max,
-          /*colorPlate:"#222",
+          highlights: dataHighlights,
+          colorPlate:"rgba(128,128,128,0)",
+          borders:false,
+          //colorBorderOuter:"",
+          //colorBorderMiddle:"",
+          //colorBorderInner:"",
           colorMajorTicks:"#f5f5f5",
           colorMinorTicks:"#ddd",
           colorTitle:"#fff",
@@ -102,7 +136,7 @@ export class SensorComponent implements OnInit {
           animationRule:"bounce",
           animationDuration:"500",
           fontValue:"Led",
-          animatedValue:"true"*/
+          animatedValue:"true"
       }
       
       
@@ -116,12 +150,38 @@ export class SensorComponent implements OnInit {
         }
 
         if (self.type=="vertical_linear_gauge"){
+
+          settings["borders"]=false;
+          settings["needleType"]="arrow";
+          settings["needleWidth"]="2";
+          settings["needleCircleSize"]="7";
+          settings["needleCircleOuter"]="true";
+          settings["needleCircleInner"]="false";
+          settings["animationDuration"]="1500";
+          settings["animationRule"]="linear";
+          settings["barWidth"]="10";
+          settings["barBeginCircle"]=false;
+          settings["numberSide"]="left";
+
           settings["width"]= self.unitSize;
           settings["height"]= self.unitSize*self.size;
           self.gauge = new LinearGauge(settings).draw();
         }
 
         if (self.type=="horizontal_linear_gauge"){
+
+          settings["borders"]=false;
+          settings["needleType"]="arrow";
+          settings["needleWidth"]="2";
+          settings["needleCircleSize"]="7";
+          settings["needleCircleOuter"]="true";
+          settings["needleCircleInner"]="false";
+          settings["animationDuration"]="1500";
+          settings["animationRule"]="linear";
+          settings["barWidth"]="10";
+          settings["barBeginCircle"]=false;
+
+
           settings["width"]= self.unitSize*self.size;
           settings["height"]= self.unitSize;
           
