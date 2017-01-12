@@ -20,7 +20,7 @@ import { ConnectComponent } from './connect/connect.component';
 import { routing } from './app.routes'
 import { KerviService} from "./kervi.service";
 import { ConnectedService} from "./connected.service"
-
+import { TemplateService} from "./template.service"
 
 @NgModule({
   declarations: [
@@ -41,7 +41,7 @@ import { ConnectedService} from "./connected.service"
     ChartsModule,
     
   ],
-  providers:[KerviService,ConnectedService,{provide: LocationStrategy, useClass: HashLocationStrategy}],
+  providers:[KerviService,ConnectedService,TemplateService,{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

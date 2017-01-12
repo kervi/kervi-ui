@@ -5,6 +5,7 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 import { SensorModel } from '../models/sensor.model';
 import { DashboardSectionModel } from '../../dashboards/models/dashboard.model';
 import { KerviService } from '../../kervi.service';
+import { TemplateService } from '../../template.service';
 declare var LinearGauge:any;
 declare var RadialGauge:any;
 declare var jQuery:any;
@@ -30,7 +31,7 @@ export class SensorComponent implements OnInit {
   private unitSize:number=100;
   private chart:any = null;
   private chartData: any = null;
-  constructor(private kerviService:KerviService ) { 
+  constructor(private kerviService:KerviService, private templateService:TemplateService ) { 
     
   }
 
@@ -45,7 +46,9 @@ export class SensorComponent implements OnInit {
       return text;
   }
 
-  
+  private color(style,selector){
+    return this.templateService.getColor(style,selector);
+  }
 
   ngOnInit() {
     var self=this;
@@ -69,9 +72,10 @@ export class SensorComponent implements OnInit {
         if (self.gauge)
           self.gauge.update({value:v});  
       });
-    
-      var warningColor="rgba(255, 166, 24, .5)";
-      var fatalColor="rgba(255, 35, 46, .5)";
+
+      
+      var warningColor=this.color("color",".sensor-template .sensor-warning");
+      var fatalColor=this.color("color",".sensor-template .sensor-fatal");
 
       var dataHighlights=[];
       var fromLimit=self.sensor.min;
@@ -110,18 +114,18 @@ export class SensorComponent implements OnInit {
           maxValue: self.sensor.max,
           highlights: dataHighlights,
           majorTicks:ticks,
-          colorPlate:"rgba(128,128,128,0)",
+          colorPlate:this.color("background-color",".sensor-template"),
           borders:false,
           //colorBorderOuter:"",
           //colorBorderMiddle:"",
           //colorBorderInner:"",
-          colorMajorTicks:"#f5f5f5",
-          colorMinorTicks:"#ddd",
-          colorTitle:"#fff",
-          colorUnits:"#ccc",
-          colorNumbers:"#eee",
-          colorNeedleStart:"rgba(240, 128, 128, 1)",
-          colorNeedleEnd:"rgba(255, 160, 122, .9)",
+          colorMajorTicks:this.color("color",".sensor-template .sensor-major-ticks"),
+          colorMinorTicks:this.color("color",".sensor-template .sensor-minor-ticks"),
+          colorTitle:this.color("color",".sensor-template .sensor-title"),
+          colorUnits:this.color("color",".sensor-template .sensor-units"),
+          colorNumbers:this.color("color",".sensor-template .sensor-numbers"),
+          colorNeedleStart:this.color("color",".sensor-template .sensor-needle-start"),
+          colorNeedleEnd:this.color("color",".sensor-template .sensor-needle-end"),
           valueBox:"true",
           animationRule:"bounce",
           animationDuration:"500",
@@ -140,8 +144,8 @@ export class SensorComponent implements OnInit {
         }
 
         if (self.type=="vertical_linear_gauge"){
-          settings["colorBarProgress"]= "#116611",
-          settings["colorBar"]= "#55aa55",
+          settings["colorBarProgress"]= self.color("color",".sensor-template .sensor-bar-progress"),
+          settings["colorBar"]= self.color("color",".sensor-template .sensor-bar"),
           settings["borders"]=false;
           settings["needleType"]="arrow";
           settings["needleWidth"]="2";
@@ -160,8 +164,8 @@ export class SensorComponent implements OnInit {
         }
 
         if (self.type=="horizontal_linear_gauge"){
-          settings["colorBarProgress"]= "#116611",
-          settings["colorBar"]= "#55aa55",
+          settings["colorBarProgress"]= self.color("color",".sensor-template .sensor-bar-progress"),
+          settings["colorBar"]= self.color("color",".sensor-template .sensor-bar"),
           settings["borders"]=false;
           settings["needleType"]="arrow";
           settings["needleWidth"]="2";
