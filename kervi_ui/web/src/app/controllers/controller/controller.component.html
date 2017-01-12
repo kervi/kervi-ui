@@ -8,7 +8,7 @@
 			fsdf
 		</template>
 		<template ngSwitchDefault>
-			<kervi-cam-viewer *ngIf="controller.type=='camera'" [cameraId]="controller.id"></kervi-cam-viewer>
+			<kervi-cam-viewer *ngIf="controller.type=='camera'" [cameraId]="controller.id"  ></kervi-cam-viewer>
   		<div *ngFor="let component of controller.components">
 				<div *ngIf="component.visible">
 					<div [ngSwitch]="component.type">

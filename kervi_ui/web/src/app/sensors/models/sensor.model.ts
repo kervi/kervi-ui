@@ -16,6 +16,7 @@ export class SensorModel implements IComponent {
     public upperWarningLimit:number = null;
     public lowerFatalLimit:number = null;
     public lowerWarningLimit:number = null;
+    public valueTS:Date = null;
     public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     public dashboards: string[] = [];
     public sparkline$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);

@@ -18,6 +18,7 @@ export class CamViewerComponent implements OnInit {
   @Input() isBackground: boolean = false;
   camera$: BehaviorSubject<ControllerModel> = new BehaviorSubject<ControllerModel>(null);
   cameraSource$: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  padSize:number=180;
   private camSubscription: any;
   private currentCamSubscription: any;
   private panSubscription: any = null;
@@ -58,13 +59,26 @@ export class CamViewerComponent implements OnInit {
     setTimeout(function() {
       
     
+      var h = jQuery(".camImage",self.elementRef.nativeElement).height();
+      var w = jQuery(".camImage",self.elementRef.nativeElement).width();
+
+      if (w < self.padSize){
+        console.log("wp",w-10);
+        self.padSize=w-10;
+          //jQuery(".camPad", self.elementRef.nativeElement).css({ width: self.padSize, height:  self.padSize });
+
+      }
+
+      console.log("cwp",h,w,self.padSize);
+      
+
       var color = "rgba(255,255,255,.5)";
       var p = jQuery('fieldset', self.elementRef.nativeElement).xy({
         displayPrevious: false
         , min: -100
         , max: 100
-        , width: 180
-        , height: 180
+        , width: self.padSize
+        , height: self.padSize
         , fgColor: color
         , bgColor: color
         , change: function (value) {
@@ -81,15 +95,19 @@ export class CamViewerComponent implements OnInit {
       })
         .css({ 'border': '2px solid ' + color });
       
-      var h = jQuery(".video",self.elementRef.nativeElement).height();
-      var w = jQuery(".video",self.elementRef.nativeElement).width();
-      jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - 90, left:  w / 2 - 90 });
+
+        
+      
+
+      
+
+      jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - (self.padSize/2), left:  w / 2 - (self.padSize) });
 
       jQuery(window).bind('resize', function () {
         //jQuery('#video-viewer').height(jQuery(window).height());
         var h = jQuery(".video",self.elementRef.nativeElement).height();
         var w = jQuery(".video",self.elementRef.nativeElement).width();
-        jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - 90, left: w / 2 - 90 });
+        jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - self.padSize/2, left: w / 2 - self.padSize/2 });
       });
     }, 0);
 

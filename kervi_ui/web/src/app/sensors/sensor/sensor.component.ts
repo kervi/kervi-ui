@@ -28,7 +28,8 @@ export class SensorComponent implements OnInit {
   private gauge:any=null;
   private gaugeTypes:string[]=['radial_gauge','vertical_linear_gauge', 'horizontal_linear_gauge', 'compass']
   private unitSize:number=100;
-
+  private chart:any = null;
+  private chartData: any = null;
   constructor(private kerviService:KerviService ) { 
     
   }
@@ -44,20 +45,7 @@ export class SensorComponent implements OnInit {
       return text;
   }
 
-  getStyleRuleValue(style, selector, sheet) {
-    var sheets = typeof sheet !== 'undefined' ? [sheet] : document.styleSheets;
-    for (var i = 0, l = sheets.length; i < l; i++) {
-        var sheet = sheets[i];
-        if( !sheet.cssRules ) { continue; }
-        for (var j = 0, k = sheet.cssRules.length; j < k; j++) {
-            var rule = sheet.cssRules[j];
-            if (rule.selectorText && rule.selectorText.split(',').indexOf(selector) !== -1) {
-                return rule.style[style];
-            }
-        }
-    }
-    return null;
-}
+  
 
   ngOnInit() {
     var self=this;
@@ -82,35 +70,36 @@ export class SensorComponent implements OnInit {
           self.gauge.update({value:v});  
       });
     
+      var warningColor="rgba(255, 166, 24, .5)";
+      var fatalColor="rgba(255, 35, 46, .5)";
+
       var dataHighlights=[];
       var fromLimit=self.sensor.min;
       if (self.sensor.lowerFatalLimit!=null){
-        dataHighlights.push({"from": fromLimit, "to": self.sensor.lowerFatalLimit, "color": "rgba(255, 0, 0, .75)"})
+        dataHighlights.push({"from": fromLimit, "to": self.sensor.lowerFatalLimit, "color": fatalColor})
         fromLimit=self.sensor.lowerFatalLimit;
       }
       
       if (self.sensor.lowerWarningLimit!=null){
-        dataHighlights.push({"from": fromLimit, "to": self.sensor.lowerWarningLimit, "color": "rgba(255, 255, 0, .75)"})
+        dataHighlights.push({"from": fromLimit, "to": self.sensor.lowerWarningLimit, "color": warningColor})
         fromLimit=self.sensor.lowerWarningLimit;
       }
 
       var toLimit=self.sensor.max;
       if (self.sensor.upperFatalLimit){
-        dataHighlights.push({"from": self.sensor.upperFatalLimit, "to": toLimit, "color": "rgba(255, 0, 0, .75)"})
+        dataHighlights.push({"from": self.sensor.upperFatalLimit, "to": toLimit, "color": fatalColor})
         toLimit=self.sensor.upperFatalLimit;
       }
       
       if (self.sensor.upperWarningLimit)
-        dataHighlights.push({"from": self.sensor.upperWarningLimit, "to": toLimit, "color": "rgba(255, 255, 0, .75)"})
+        dataHighlights.push({"from": self.sensor.upperWarningLimit, "to": toLimit, "color": warningColor})
 
       
-
-
-      
-
-
-      
-
+      var nspan=(self.sensor.max-self.sensor.min);
+      var tickSpan=nspan/10;
+      var ticks=[];
+      for(var n=self.sensor.min;(n<=self.sensor.max);n+=tickSpan)
+        ticks.push(n);
 
       var settings={
           renderTo: self.canvasId,
@@ -120,6 +109,7 @@ export class SensorComponent implements OnInit {
           minValue: self.sensor.min,
           maxValue: self.sensor.max,
           highlights: dataHighlights,
+          majorTicks:ticks,
           colorPlate:"rgba(128,128,128,0)",
           borders:false,
           //colorBorderOuter:"",
@@ -150,7 +140,8 @@ export class SensorComponent implements OnInit {
         }
 
         if (self.type=="vertical_linear_gauge"){
-
+          settings["colorBarProgress"]= "#116611",
+          settings["colorBar"]= "#55aa55",
           settings["borders"]=false;
           settings["needleType"]="arrow";
           settings["needleWidth"]="2";
@@ -161,7 +152,7 @@ export class SensorComponent implements OnInit {
           settings["animationRule"]="linear";
           settings["barWidth"]="10";
           settings["barBeginCircle"]=false;
-          settings["numberSide"]="left";
+          //settings["numberSide"]="left";
 
           settings["width"]= self.unitSize;
           settings["height"]= self.unitSize*self.size;
@@ -169,7 +160,8 @@ export class SensorComponent implements OnInit {
         }
 
         if (self.type=="horizontal_linear_gauge"){
-
+          settings["colorBarProgress"]= "#116611",
+          settings["colorBar"]= "#55aa55",
           settings["borders"]=false;
           settings["needleType"]="arrow";
           settings["needleWidth"]="2";
@@ -194,6 +186,22 @@ export class SensorComponent implements OnInit {
 
     if (self.type=="chart"){
       self.displayType="chart";
+
+      this.sensor.value$.subscribe(function(v){
+        if (self.chart){
+          try{
+            var ds=self.chart.data.datasets[0].data;
+            ds.push({ x: self.sensor.valueTS, y: v })
+            if (ds.length>20)
+              ds.pop();
+            self.chart.update();
+          }catch(ex){
+            console.log("cdx",ex);  
+          }
+          
+        }
+      });
+
       setTimeout(function() {
         
       
@@ -202,20 +210,20 @@ export class SensorComponent implements OnInit {
       self.kerviService.spine.sendQuery("getSensorData", self.sensor.id, function (results) {
         //console.log("gsd", this, results);
         var sensorData = results;
-        var chartData = [];
+        self.chartData = [];
         for (var i = 0; (i < sensorData.length); i++) {
           var dataItem = sensorData[i]
-          chartData.push({ x: new Date(dataItem.ts), y: dataItem.value });
+          self.chartData.push({ x: new Date(dataItem.ts), y: dataItem.value });
         }
         //console.log("cd", chartData);
         var ctx = jQuery("#"+self.canvasId);
-        var chart = new Chart(ctx, {
+        self.chart = new Chart(ctx, {
           type: 'line',
           responsive: false,
           data: {
             datasets: [
               {
-                data: chartData,
+                data: self.chartData,
                 fill: false
               },
             ]
@@ -251,8 +259,12 @@ export class SensorComponent implements OnInit {
             }
           }
         });
-        
+        console.log("sc",self.chart,self.chart.data.datasets[0].data);  
       });
+
+      
+      
+
       }, 200);
     }
     

@@ -77,6 +77,9 @@ bodyx {
 */
 
 @import "../node_modules/bootstrap-v4-dev/scss/bootstrap.scss";
-//@import "../node_modules/font-awesome/scss/font-awesome.scss";
+
+$fa-font-path: "~font-awesome/fonts";
+@import "../node_modules/font-awesome/scss/font-awesome.scss";
+
 @import "../node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
         

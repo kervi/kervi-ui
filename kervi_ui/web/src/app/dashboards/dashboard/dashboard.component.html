@@ -2,7 +2,7 @@
 	<ul class="nav navbar-nav">
     <app-page-header></app-page-header>
 		<li class="nav-item">
-			<a class="btn btn-default" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-slider fa-2x" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
+			<a class="btn btn-default" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders fa-lg" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
 		</li>
 		<li *ngIf="dashboard.sysSection" class="nav-item core-sensors" style="float:right">
 			<kervi-dashboard-section [inline]="true" [section]="dashboard.sysSection" ></kervi-dashboard-section>
@@ -13,9 +13,9 @@
 <ng-container *ngIf="dashboard && dashboard.template">
 	<dashboard-layout [dashboard]="dashboard"></dashboard-layout>
 </ng-container>
-<div *ngIf="dashboard && !dashboard.template" style="position:relative">
+<div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:25px;">
 	<kervi-cam-viewer *ngIf="dashboard.background.type=='camera'" [isBackground]="true" [cameraId]="dashboard.background.cameraId"></kervi-cam-viewer>
-	<div class="container" style="position:absolute;top:0;z-index:2000" >
+	<div class="container" style="position:absolute;top:0;z-index:1999" >
 		<div class="card-columns" [class.dashboard-sections-hidden]="dashboardSectionsHidden">
 			<kervi-dashboard-section *ngFor="let section of dashboard.sections" [section]="section"></kervi-dashboard-section>
 		</div>  
