@@ -28,6 +28,17 @@ export class TemplateService {
         return null;
     }
 
+    public makeId()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    }
+
     public getColor(colorName:string,cssClass:string){
         var styleValue=this.getStyleRuleValue(colorName,cssClass,null);
         console.log("sv",styleValue);

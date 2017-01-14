@@ -15,8 +15,8 @@ export class DashboardSectionComponentModel{
 }
 
 export class DashboardSectionParametersModel{
-    public title:string;
-    public columns:number;
+    public title:string = null;
+    public columns:number = null;
     public type:string = null;
     constructor(messageParameters){
         this.title=messageParameters.title;

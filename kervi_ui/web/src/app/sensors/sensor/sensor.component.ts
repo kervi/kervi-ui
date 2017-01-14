@@ -35,16 +35,7 @@ export class SensorComponent implements OnInit {
     
   }
 
-  makeId()
-  {
-      var text = "";
-      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-      for( var i=0; i < 5; i++ )
-          text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-      return text;
-  }
+  
 
   private color(style,selector){
     return this.templateService.getColor(style,selector);
@@ -64,7 +55,7 @@ export class SensorComponent implements OnInit {
     if (this.dashboardSection){
       this.unitSize=this.dashboardSection.dashboard.unitSize;
     }
-    self.canvasId=this.makeId();
+    self.canvasId=this.templateService.makeId();
     if (this.gaugeTypes.indexOf(this.type)>-1){
       
       self.displayType="gauge";
@@ -197,7 +188,8 @@ export class SensorComponent implements OnInit {
             var ds=self.chart.data.datasets[0].data;
             ds.push({ x: self.sensor.valueTS, y: v })
             if (ds.length>20)
-              ds.pop();
+              ds.shift();
+            self.chart.render();  
             self.chart.update();
           }catch(ex){
             console.log("cdx",ex);  
@@ -228,7 +220,7 @@ export class SensorComponent implements OnInit {
             datasets: [
               {
                 data: self.chartData,
-                fill: false
+                fill: false,
               },
             ]
           },
@@ -237,6 +229,11 @@ export class SensorComponent implements OnInit {
             title: {
               display: true,
               text: self.sensor.name
+            },
+            elements:{
+              point:{
+                radius:0
+              }
             },
             legend: {
               display: false,
@@ -250,14 +247,14 @@ export class SensorComponent implements OnInit {
                 display: true,
                 scaleLabel: {
                   display: true,
-                  labelString: 'Date'
+                  //labelString: 'Date'
                 }
               }],
               yAxes: [{
                 display: true,
                 scaleLabel: {
                   display: true,
-                  labelString: 'value'
+                  //labelString: 'value'
                 }
               }]
             }

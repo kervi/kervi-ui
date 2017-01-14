@@ -1,11 +1,33 @@
 <div *ngIf="!inline && section.components.length>0" class="card" [style.width]="sectionWidth">
-    <div class="card-block" >
-        <ng-container *ngFor="let sectionComponent of section.components">
+    <div class="card-header" *ngIf="showHeader">
+        
+        <a data-toggle="collapse" role="tab" href="#section-{{section.id}}" aria-expanded="false" aria-control="" style="float:left"> > </a>
+        <span style="float:left">{{title}}</span>
+        <div class="card-block" *ngIf="headerComponents.length>0" style="float:right" >
+            <ng-container *ngFor="let sectionComponent of headerComponents">
+                <controller [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='controller'" ></controller>
+                <controller-component [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component.componentType=='controllerComponent'" ></controller-component>
+                <sensor [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='sensor'" ></sensor>
+            </ng-container>
+        </div>
+  </div>
+    <div id="section-{{section.id}}" role="tabcard" class="collapse" *ngIf="showHeader">
+        <div class="card-block" >
+            <ng-container *ngFor="let sectionComponent of components">
+                <controller [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='controller'" ></controller>
+                <controller-component [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component.componentType=='controllerComponent'" ></controller-component>
+                <sensor [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='sensor'" ></sensor>
+            </ng-container>
+        </div>
+    </div>
+    <div class="card-block" *ngIf="!showHeader" >
+        <ng-container *ngFor="let sectionComponent of components">
             <controller [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='controller'" ></controller>
             <controller-component [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component.componentType=='controllerComponent'" ></controller-component>
             <sensor [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='sensor'" ></sensor>
         </ng-container>
     </div>
+    
 </div>
 
 <template [ngIf]="inline && section.components.length>0" style="display:inline-block">

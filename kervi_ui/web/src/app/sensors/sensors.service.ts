@@ -26,7 +26,7 @@ export class SensorsService {
                 self.kerviService.spine.addEventHandler("NewSensorReading","",function(){
                     for (let sensor of self.sensors){
                         if (sensor.id==this.sensor){
-                            sensor.valueTS=new Date(this.timestamp);
+                            sensor.valueTS=new Date(this.timestamp*1000);
                             sensor.value$.next(this.value);
                             var spl=sensor.sparkline$.value;
                             spl.push(this.value);
