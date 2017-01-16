@@ -45,9 +45,21 @@ export class CamViewerComponent implements OnInit {
         self.tiltSubscription = tilt.value$.subscribe(function (v) {
           jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();
         });
+        if (v.parameters && v.parameters.type == "frame" ){
+          setInterval(function() {
+            self.cameraSource$.next(v.parameters.source + "?t=" + new Date().getTime());
+            
+          }, 1000/v.parameters.fps);
+        }
+
       } else {
         self.cameraSource$.next("");
       }
+
+      
+    
+
+
     })
   }
 
@@ -110,6 +122,8 @@ export class CamViewerComponent implements OnInit {
         jQuery(".cam-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - self.padSize/2, left: w / 2 - self.padSize/2 });
       });
     }, 0);
+
+    
 
     self.kerviService.connected$.subscribe(function (connected) {
 
