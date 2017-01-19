@@ -32,6 +32,12 @@ $navbar-light-disabled-color:       rgba(0,0,0,.3) !default;
 $body-bg:    #2d882d !default;
 $body-color: #fff !default;
 
+.container{
+	width:100%;
+}
+
+
+
 
 .sensor-template{
 	background:rgba(128,128,128,0);
@@ -131,4 +137,97 @@ $fa-font-path: "~font-awesome/fonts";
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 
 @import "../node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
-        
+
+@include media-breakpoint-up(xs) {
+  .dashboard-section-width-1 {
+    width:150px !important;
+  }
+
+  .dashboard-section-width-2 {
+    width:300px !important;
+  }
+
+  .dashboard-section-width-3 {
+    width:450px !important;
+  }
+
+  .dashboard-section-width-4 {
+    width:600px !important;
+  }
+}
+
+@include media-breakpoint-down(xs) {
+  .container-fluid{
+		width:100%;
+	}
+	.dashboard-section-width-1 {
+    width:100% !important;
+  }
+
+  .dashboard-section-width-2 {
+    width:100% !important;
+  }
+
+  .dashboard-section-width-3 {
+    width:100% !important;
+  }
+
+  .dashboard-section-width-4 {
+    width:100%;
+  }
+}
+
+
+@include media-breakpoint-up(xs) {
+  .dashboard-section-height-1 {
+    height:150px !important;
+  }
+
+  .dashboard-section-height-2 {
+    height:300px !important;
+  }
+
+  .dashboard-section-height-3 {
+    height:450px !important;
+  }
+
+  .dashboard-section-height-4 {
+    height:600px !important;
+  }
+
+	.has-card-header .dashboard-section-height-1 {
+    height:102px !important;
+  }
+
+  .has-card-header .dashboard-section-height-2 {
+    height:252px !important;
+  }
+
+  .has-card-header .dashboard-section-height-3 {
+    height:402px !important;
+  }
+
+  .has-card-header .dashboard-section-height-4 {
+    height:600px !important;
+  }
+
+
+}
+
+@include media-breakpoint-down(xs) {
+  .dashboard-section-height-1 {
+    height:default !important;
+  }
+
+  .dashboard-section-height-2 {
+    height:default !important;
+  }
+
+  .dashboard-section-height-3 {
+    height:default !important;
+  }
+
+  .dashboard-section-height-4 {
+    height:default !important;
+  }
+}

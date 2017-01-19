@@ -3,6 +3,22 @@
 
 import { IComponent } from '../../models/IComponent.model'
 
+
+
+export class DashboardMessageModel{
+    public timestamp: Date;
+    public topic:string;
+    public body:string;
+    public type:string;
+
+    constructor(message){
+        this.timestamp = new Date(message.timestamp*1000);
+        this.topic = message.topic;
+        this.body = message.body;
+        this.type = message.type;
+    }
+}
+
 export class DashboardSectionComponentModel{
     public component:IComponent;
     public componentId:string;
@@ -17,10 +33,17 @@ export class DashboardSectionComponentModel{
 export class DashboardSectionParametersModel{
     public title:string = null;
     public columns:number = null;
+    public rows:number = null;
     public type:string = null;
+    public userLog: boolean = null;
+    
     constructor(messageParameters){
         this.title=messageParameters.title;
         this.columns=messageParameters.columns;
+        this.rows=messageParameters.rows;
+        this.userLog=messageParameters.userLog;
+        
+        
         if (messageParameters.type)
             this.type=messageParameters.type;
     }

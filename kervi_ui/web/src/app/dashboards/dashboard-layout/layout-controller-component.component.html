@@ -1,5 +1,5 @@
-<div *ngIf="component.visible">
-    <div [ngSwitch]="component.type">
+<ng-container *ngIf="component.visible">
+    <ng-container [ngSwitch]="component.type">
         <template ngSwitchCase="number-input">
             <kervi-controller-number-input [dashboardType]="'dashboard'" [input]="component"></kervi-controller-number-input>
         </template>
@@ -18,5 +18,5 @@
         <template ngSwitchCase="datetime">
             <kervi-controller-datetime [dashboardType]="'dashboard'" [datetime]="component"></kervi-controller-datetime>
         </template>
-    </div>
-</div>
+    </ng-container>
+</ng-container>
