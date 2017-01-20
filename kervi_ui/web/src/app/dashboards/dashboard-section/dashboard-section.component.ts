@@ -21,6 +21,7 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     //sectionWidth:string;
     //sectionHeight:string;
     showHeader:boolean = false;
+    expanded:boolean = true;
     title:string;
     components:Component[]=[];
     headerComponents: Component[] = [];
@@ -32,11 +33,11 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         var self=this;
-        //this.sectionWidth=this.section.parameters.columns*this.section.dashboard.unitSize + this.section.parameters.columns * 40 + "px";
-        //this.sectionHeight=this.section.parameters.rows*this.section.dashboard.unitSize + this.section.parameters.rows * 40 + "px";
+        
         this.sectionClassWidth="dashboard-section-width-"+ this.section.parameters.columns;
         this.sectionClassHeight="dashboard-section-height-"+ this.section.parameters.rows;
         this.title = this.section.parameters.title;
+        
         for( let component of this.section.components){
             console.log("pm",component);
         
@@ -48,7 +49,7 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
         console.log("cccc",this.components,this.headerComponents);
 
         this.showHeader = (this.section.parameters.title != null && this.section.parameters.title.length>0) || (this.headerComponents.length > 0)
-
+        this.expanded = (this.headerComponents.length==0);
         if (this.section.parameters.userLog){
             this.kerviService.spine.addEventHandler("userLogMessage", null, function(v){
                 self.messages.push(new DashboardMessageModel(this));

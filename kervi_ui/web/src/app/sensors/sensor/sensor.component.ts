@@ -52,8 +52,13 @@ export class SensorComponent implements OnInit {
         this.size=this.parameters.size;
     }
 
+    
+
     if (this.dashboardSection){
       this.unitSize=this.dashboardSection.dashboard.unitSize;
+      this.unitSize *= this.dashboardSection.parameters.columns;
+      this.unitSize -= 50;
+      this.unitSize /= this.dashboardSection.parameters.columns;
     }
     self.canvasId=this.templateService.makeId();
     if (this.gaugeTypes.indexOf(this.type)>-1){
