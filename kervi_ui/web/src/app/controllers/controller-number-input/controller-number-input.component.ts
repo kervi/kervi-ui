@@ -4,6 +4,7 @@
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { ControllerInputModel } from '../models/controller.model';
 import { KerviService } from '../../kervi.service'
+import { TemplateService } from '../../template.service'
 import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 declare var jQuery: any;
 
@@ -21,9 +22,13 @@ export class ControllerNumberInputComponent implements OnInit {
 	private size:number = 1;
 	private unitSize:number=150;
 
-	constructor(private kerviService: KerviService, private elementRef: ElementRef) { 
+	constructor(private kerviService: KerviService, private elementRef: ElementRef, private templateService:TemplateService) { 
 		//console.log("cnio",this);
 	}
+
+	 private color(style,selector){
+    	return this.templateService.getColor(style,selector);
+  	}
 
 	ngOnInit() {
 		var self = this;
@@ -40,7 +45,7 @@ export class ControllerNumberInputComponent implements OnInit {
 
 		//var color = "#ffffff";
 		//if (this.dashboardSection.dashboard.type == "dashboard")
-		var	color = "#55595c";
+		var	color = this.color("color",".number-gauge-template");
 		var p = jQuery('fieldset', this.elementRef.nativeElement).xy({
 			displayPrevious: false
 			, min: this.input.minValue
@@ -63,7 +68,7 @@ export class ControllerNumberInputComponent implements OnInit {
 				}, 200);
 			}
 		})
-			.css({ 'border': '1px solid rgba(0, 0, 0, 0.15)', "border-radius": '0.25rem'  });
+			.css({ 'border': self.color("border", ".number-gauge-template"), "border-radius": '0.25rem'  });
 
 		if (self.type == "vertical_slider")
 		{

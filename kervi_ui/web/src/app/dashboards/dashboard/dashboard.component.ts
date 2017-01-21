@@ -26,19 +26,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routeSubscription = this.activatedRoute.params.subscribe(params => {
-      console.log("dbi", params);
       this.dashboardId = params['name']; 
       this.dashboard=this.dashboardsService.getDashboardById(this.dashboardId);
       if (this.dashboard){
         this.dashboardSectionsHidden=false;
         this.showSectionController=false;
-        console.log("dc", this.dashboardSectionsHidden, this ,this.dashboard);
         if (this.dashboard.background.type==="camera"){
           this.dashboardSectionsHidden=true;
           this.showSectionController=true;
           this.camera=this.kerviService.getComponent(this.dashboard.background.cameraId) as ControllerModel;
         }
-        console.log("dcx",this,this.dashboard);
         var rowSize=3;
         this.sectionRows=[]
         var currentRow=[];

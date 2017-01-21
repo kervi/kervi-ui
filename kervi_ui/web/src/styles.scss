@@ -36,8 +36,18 @@ $body-color: #fff !default;
 	width:100%;
 }
 
+.sparkline-template{
+	color:#004400;
+	background:#55aa55;
+	.spot{
+		color:#116611;
+	}
+}
 
-
+.number-gauge-template{
+	color: $brand-primary;
+	border: 1px solid $gray-lightest
+}
 
 .sensor-template{
 	background:rgba(128,128,128,0);
@@ -137,6 +147,14 @@ $fa-font-path: "~font-awesome/fonts";
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 
 @import "../node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
+
+.toggle-off {
+	background: $gray-lightest;
+}
+
+.btn {
+	margin-bottom: .1rem
+}
 
 @include media-breakpoint-up(xs) {
   .dashboard-section-width-1 {

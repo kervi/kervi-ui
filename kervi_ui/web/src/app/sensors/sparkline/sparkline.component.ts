@@ -3,6 +3,8 @@
 
 import { Component, Input, OnInit, ElementRef,ChangeDetectionStrategy } from '@angular/core';
 import { SensorModel} from '../models/sensor.model'
+import { TemplateService } from '../../template.service'
+
 declare var jQuery:any;
 
 @Component({
@@ -13,14 +15,24 @@ declare var jQuery:any;
 })
 export class SparklineComponent implements OnInit {
   @Input() public sensor:SensorModel;
-  constructor(private elementRef:ElementRef) { 
+  constructor(private elementRef:ElementRef, private templateService:TemplateService) { 
 
   }
+
+  private color(style,selector){
+    	return this.templateService.getColor(style,selector);
+  	}
 
   ngOnInit() {
     var self=this;
     this.sensor.sparkline$.subscribe(function(v){
-      jQuery(self.elementRef.nativeElement).sparkline(v, { type: 'line', height:20 });
+      jQuery(self.elementRef.nativeElement).sparkline(v, { 
+        type: 'line', 
+        lineColor:self.color("color",".sparkline-template"),
+        spotColor:self.color("color",".sparkline-template .spot"),
+        fillColor:self.color("background-color",".sparkline-template"),
+        height:self.color("height",".sparkline-template"), 
+      });
     });
     
   }
