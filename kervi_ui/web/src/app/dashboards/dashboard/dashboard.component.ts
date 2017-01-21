@@ -26,29 +26,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routeSubscription = this.activatedRoute.params.subscribe(params => {
+      console.log("dbi", params);
       this.dashboardId = params['name']; 
       this.dashboard=this.dashboardsService.getDashboardById(this.dashboardId);
-      this.dashboardSectionsHidden=false;
-      this.showSectionController=false;
-      console.log("dc", this.dashboardSectionsHidden,this.dashboard);
-      if (this.dashboard.background.type==="camera"){
-        this.dashboardSectionsHidden=true;
-        this.showSectionController=true;
-        this.camera=this.kerviService.getComponent(this.dashboard.background.cameraId) as ControllerModel;
-      }
-      console.log("dcx",this,this.dashboard);
-      var rowSize=3;
-      this.sectionRows=[]
-      var currentRow=[];
-      this.sectionRows.push(currentRow);
-      for(var section of this.dashboard.sections){
-           currentRow.push(section);
-           if (currentRow.length==rowSize){
-             currentRow= [];
-             this.sectionRows.push(currentRow);
-           }
+      if (this.dashboard){
+        this.dashboardSectionsHidden=false;
+        this.showSectionController=false;
+        console.log("dc", this.dashboardSectionsHidden, this ,this.dashboard);
+        if (this.dashboard.background.type==="camera"){
+          this.dashboardSectionsHidden=true;
+          this.showSectionController=true;
+          this.camera=this.kerviService.getComponent(this.dashboard.background.cameraId) as ControllerModel;
+        }
+        console.log("dcx",this,this.dashboard);
+        var rowSize=3;
+        this.sectionRows=[]
+        var currentRow=[];
+        this.sectionRows.push(currentRow);
+        for(var section of this.dashboard.sections){
+            currentRow.push(section);
+            if (currentRow.length==rowSize){
+              currentRow= [];
+              this.sectionRows.push(currentRow);
+            }
+        }
       }
     });
+    
   }
 
   ngOnDestroy(){

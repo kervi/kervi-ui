@@ -15,7 +15,7 @@ export class ConnectedService {
     var self=this;
     this.kerviService.connect();
     var s=this.kerviService.connected$.subscribe(function(connectedValue){
-       console.log("connected service sub",connectedValue, self.isConnected, self);
+      console.log("connected service state",connectedValue, self.isConnected, self);
       if (connectedValue){
         self.isConnected=true;
         
@@ -23,12 +23,12 @@ export class ConnectedService {
           self.router.navigate([self.currentPage]);
         else {
           self.dashboardsService.getDashboards$().subscribe(function(v){
-            console.log("sdb",v);
             if (v && v.length){
               var defaultDashboard=v.filter(function(v){ return v.isDefault; });
-              console.log("df",v,defaultDashboard);
               if (defaultDashboard.length>0){
-                self.router.navigate(['/'+defaultDashboard[0].componentType+'/'+defaultDashboard[0].id]);  
+                setTimeout(function(){
+                  self.router.navigate(['/'+defaultDashboard[0].componentType+'/'+defaultDashboard[0].id]);  
+                },100);
               } 
             }
           });
@@ -39,8 +39,9 @@ export class ConnectedService {
           self.router.navigate(['/connect']);
         }
         self.isConnected=false;
+        
       }
-    })
+    })  
   }
 
 }
