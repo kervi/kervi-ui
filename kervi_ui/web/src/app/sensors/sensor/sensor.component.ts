@@ -220,12 +220,28 @@ export class SensorComponent implements OnInit {
         var ctx = jQuery("#"+self.canvasId);
         self.chart = new Chart(ctx, {
           type: 'line',
-          responsive: false,
+          responsive: true,
           data: {
             datasets: [
               {
                 data: self.chartData,
-                fill: false,
+                fill: true,
+                lineTension: 0.1,
+            //backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: self.color("border-color",".sensor-chart"),
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: self.color("color",".sensor-chart"),
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: self.color("color",".sensor-chart .spot"),
+            pointHoverBorderColor: self.color("border-color",".sensor-chart .spot"),
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
               },
             ]
           },
@@ -245,9 +261,29 @@ export class SensorComponent implements OnInit {
             },
             scales: {
               xAxes: [{
+                gridLines:{
+                  color:"rgba(255,255,255,0.5)",
+                  zeroLineColor:"rgba(255,255,255,0.5)"
+                },
                 type: "time",
+                unit:'second',
+                unitStepSize:120,
+                time:{
+                  displayFormats: {
+                    'millisecond': 'MMM DD',
+                    'second': 'HH:mm:ss',
+                    'minute': 'HH:mm:ss',
+                    'hour': 'HH:mm:ss',
+                    'day': 'MMM DD',
+                    'week': 'MMM DD',
+                    'month': 'MMM DD',
+                    'quarter': 'MMM DD',
+                    'year': 'MMM DD',
+                  }
+                },
                 ticks:{
-                  display:false
+                  display:true,
+                  stepSize: 120,
                 },
                 display: true,
                 scaleLabel: {
@@ -256,6 +292,16 @@ export class SensorComponent implements OnInit {
                 }
               }],
               yAxes: [{
+                ticks: {
+                    fontColor: "white",
+                    //fontSize: 18,
+                    //stepSize: 1,
+                    //beginAtZero:true
+                },
+                gridLines:{
+                  color:"rgba(255,255,255,0.5)",
+                  zeroLineColor:"rgba(255,255,255,0.5)"
+                },
                 display: true,
                 scaleLabel: {
                   display: true,

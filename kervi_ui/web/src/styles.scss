@@ -45,6 +45,15 @@ $body-color: #fff !default;
 	}
 }
 
+.sensor-chart{
+	border-color:rgba(85,170,85,1);
+	color:#004400;
+	.spot{
+		color:#ff7f3f;
+		border-color:#116611;
+	}
+}
+
 .number-gauge-template{
 	color: $brand-primary;
 	border: 1px solid $gray-lightest
