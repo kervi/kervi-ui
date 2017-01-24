@@ -4,6 +4,7 @@ export interface IComponent {
     name: string;
     visible: boolean;
     componentType: string;
+    ui:any;
     dashboards : string[];
 
     updateReferences(kerviService:KerviService);

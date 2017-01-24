@@ -32,6 +32,10 @@ export class ControllerNumberInputComponent implements OnInit {
 
 	ngOnInit() {
 		var self = this;
+
+		if (!this.parameters)
+      		this.parameters = this.input.ui;
+
 		if (this.parameters){
 			if (this.parameters.type)
 				this.type=this.parameters.type;

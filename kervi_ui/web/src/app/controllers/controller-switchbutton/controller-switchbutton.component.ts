@@ -23,6 +23,11 @@ export class ControllerSwitchButtonComponent implements OnInit {
   ngOnInit() {
     var self = this;
 
+    if (!this.parameters)
+      this.parameters = this.button.ui;
+
+    console.log("ui",this.parameters);
+
     var onText= this.parameters && this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "on"; 
     var offText= this.parameters && this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "off"; 
     

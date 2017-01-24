@@ -7,6 +7,7 @@ export class SensorModel implements IComponent {
     public id: string = null;
     public name: string = null;
     public componentType = "sensor";
+    public ui:any = {}
     public type: string = null;
     public visible: boolean = true;
     public max: number = null;
@@ -27,6 +28,7 @@ export class SensorModel implements IComponent {
     constructor(message: any){
         this.id=message.id;
         this.name=message.name;
+        this.ui=message.ui;
         this.visible=message.visible;
         this.dashboards=message.dashboards;
         this.max=message.max;

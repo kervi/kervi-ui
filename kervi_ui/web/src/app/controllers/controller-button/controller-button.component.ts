@@ -23,8 +23,8 @@ export class ControllerButtonComponent implements OnInit {
     this.kerviService.spine.sendCommand(this.button.clickCommand);
   }
   ngOnInit() {
-    var self = this;
-
+    if (!this.parameters)
+      this.parameters = this.button.ui;
   }
 
 }

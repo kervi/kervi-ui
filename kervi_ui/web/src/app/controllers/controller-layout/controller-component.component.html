@@ -6,9 +6,9 @@
         <template ngSwitchCase="text-input">
             <kervi-controller-text-input [parameters]="parameters" [dashboardSection]="dashboardSection" [input]="component"></kervi-controller-text-input>
         </template>
-        <ng-container *ngSwitchCase="button">
+        <template ngSwitchCase="button">
             <kervi-controller-button [dashboardSection]="dashboardSection" [parameters]="parameters" [button]="component"></kervi-controller-button>
-        </ng-container>
+        </template>
         <template ngSwitchCase="switchButton">
             <kervi-controller-switchbutton [dashboardSection]="dashboardSection" [parameters]="parameters" [button]="component"></kervi-controller-switchbutton>
         </template>

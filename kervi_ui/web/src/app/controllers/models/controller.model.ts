@@ -24,6 +24,7 @@ export class ControllerSelectModel implements IComponent{
     public name: string;
     public componentType = "controllerComponent"
     public visible: boolean;
+    public ui:any = {}
     public id: string;
     public dashboards: string[] = [];
     public type:string;
@@ -34,6 +35,7 @@ export class ControllerSelectModel implements IComponent{
         this.name =message.name;
         this.id = message.id;
         this.visible = message.visible;
+        this.ui = message.ui;
         this.type = message.componentType;
         this.command = message.onSelect;
         this.options = [] 
@@ -83,6 +85,7 @@ export class ControllerInputModel implements IComponent {
     constructor(message: any) {
         this.name = message.name;
         this.type = message.componentType;
+        this.ui = message.ui;
         this.orientation = message.orientation;
         this.visible = message.visible;
         this.unit = message.unit;
@@ -105,6 +108,7 @@ export class ControllerSwitchButtonModel implements IComponent {
     public id: string;
     public name: string;
     public componentType = "controllerComponent"
+    public ui:any = {}
     public type: string;
     public visible: boolean;
     public dashboards: string[] = [];
@@ -117,6 +121,7 @@ export class ControllerSwitchButtonModel implements IComponent {
         this.id = message.id;
         this.name = message.name;
         this.type = message.componentType;
+        this.ui = message.ui;
         this.visible = message.visible;
         this.onCommand = message.onCommand;
         this.offCommand = message.offCommand;
@@ -131,6 +136,7 @@ export class ControllerButtonModel implements IComponent {
     public id: string;
     public name: string;
     public componentType = "controllerComponent"
+    public ui:any = {}
     public dashboards: string[] = [];
     public type: string;
     public visible: boolean;
@@ -144,6 +150,7 @@ export class ControllerButtonModel implements IComponent {
         this.name = message.name;
         this.visible = message.visible;
         this.type = message.componentType;
+        this.ui = message.ui;
         this.clickCommand = message.onClick;
 
     }
@@ -155,6 +162,7 @@ export class ControllerDateTimeModel implements IComponent {
     public id: string;
     public name: string;
     public componentType = "controllerComponent"
+    public ui:any = {}
     public dashboards: string[] = [];
     public type: string;
     public visible: boolean;
@@ -166,6 +174,7 @@ export class ControllerDateTimeModel implements IComponent {
         this.id = message.id;
         this.name = message.name;
         this.type = message.componentType;
+        this.ui = message.ui;
         this.visible = message.visible;
         this.subType = message.inputType;
         this.value$.next(message.value);
@@ -179,6 +188,7 @@ export class ControllerModel implements IComponent {
     public type: string;
     public visible: boolean;
     public componentType="controller"
+    public ui:any = {}
     public name: string;
     public id: string;
     public parameters: any;
@@ -191,6 +201,7 @@ export class ControllerModel implements IComponent {
         this.id = message.id;
         this.name = message.name;
         this.type = message.type;
+        this.ui = message.ui;
         this.visible = message.visible;
         this.dashboards = message.dashboards;
         this.parameters = message.parameters;
