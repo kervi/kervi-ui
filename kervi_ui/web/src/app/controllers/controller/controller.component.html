@@ -2,16 +2,16 @@
   <controller-layout [controller]="controller"></controller-layout>
 </div>
 
-<div *ngIf="!controller.template">
-	<div [ngSwitch]="controller.id">
+<ng-container *ngIf="!controller.template">
+	<ng-container [ngSwitch]="controller.id">
 		<template ngSwitchWhen="manualSteeringx">
 			fsdf
 		</template>
 		<template ngSwitchDefault>
 			<kervi-cam-viewer *ngIf="controller.type=='camera'" [cameraId]="controller.id"  ></kervi-cam-viewer>
-  		<div *ngFor="let component of controller.components">
-				<div *ngIf="component.visible">
-					<div [ngSwitch]="component.type">
+  			<ng-container *ngFor="let component of controller.components">
+				<ng-container *ngIf="component.visible">
+					<ng-container [ngSwitch]="component.type">
 						<template ngSwitchCase="number-input">
 							<kervi-controller-number-input [dashboardSection]="dashboardSection" [input]="component"></kervi-controller-number-input>
 						</template>
@@ -30,12 +30,12 @@
 						<template ngSwitchCase="datetime">
 							<kervi-controller-datetime [dashboardSection]="dashboardSection" [datetime]="component"></kervi-controller-datetime>
 						</template>
-					</div>
-				</div>
-			</div>
+					</ng-container>
+				</ng-container>
+  			</ng-container>
 
 
 		</template>
 
-	</div>
-</div>
+	</ng-container>
+</ng-container>

@@ -26,6 +26,7 @@ export class ConnectedService {
             if (v && v.length){
               var defaultDashboard=v.filter(function(v){ return v.isDefault; });
               if (defaultDashboard.length>0){
+                console.log("df",defaultDashboard[0].componentType+'/'+defaultDashboard[0].id);
                 setTimeout(function(){
                   self.router.navigate(['/'+defaultDashboard[0].componentType+'/'+defaultDashboard[0].id]);  
                 },100);

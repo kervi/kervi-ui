@@ -25,6 +25,7 @@ setup(
             'web/dist/*.css',
             'web/dist/*.map',
             'web/dist/*.ico',
+            'web/dist/*.png',
             'web/dist/*.eot',
             'web/dist/*.svg',
             'web/dist/*.woff',

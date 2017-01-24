@@ -23,8 +23,8 @@ export class ControllerSwitchButtonComponent implements OnInit {
   ngOnInit() {
     var self = this;
 
-    var onText= this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "on"; 
-    var offText= this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "off"; 
+    var onText= this.parameters && this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "on"; 
+    var offText= this.parameters && this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "off"; 
     
     self.valueSubscription = self.button.state$.subscribe(function (v) {
       jQuery('input', self.elementRef.nativeElement).bootstrapToggle({on: onText, off: offText});

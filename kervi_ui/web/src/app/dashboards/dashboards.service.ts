@@ -46,12 +46,14 @@ export class DashboardsService {
 
         this.kerviService.connected$.subscribe(function(v){
             if (v){
-                this.kerviService.spine.addEventHandler("dashboardLinkChanged", null,function(v){
+                self.kerviService.spine.addEventHandler("dashboardLinkChanged", null,function(v){
                     for(var dashboard of self.dashboards){
                         for(var section of dashboard.sections){
-                            for (var component of section.components){
-                                if (component.linkId == this.linkId){
-                                    component.parameters[this.name] = this.value;
+                            if (section.components){
+                                for (var component of section.components){
+                                    if (component.linkId == this.linkId){
+                                        component.parameters[this.name] = this.value;
+                                    }
                                 }
                             }
                         }
