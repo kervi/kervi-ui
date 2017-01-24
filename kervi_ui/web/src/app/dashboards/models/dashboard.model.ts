@@ -22,9 +22,11 @@ export class DashboardMessageModel{
 export class DashboardSectionComponentModel{
     public component:IComponent;
     public componentId:string;
+    public linkId:any;
     public parameters:any;
 
     constructor(private message: any){
+        this.linkId = message.linkId;
         this.componentId = message.componentId;
         this.parameters = message.parameters;
     }

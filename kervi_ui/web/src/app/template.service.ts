@@ -41,7 +41,7 @@ export class TemplateService {
 
     public getColor(colorName:string,cssClass:string){
         var styleValue=this.getStyleRuleValue(colorName,cssClass,null);
-        console.log("sv",styleValue);
+        console.log("sv", cssClass,styleValue);
         return styleValue;
     }
 }

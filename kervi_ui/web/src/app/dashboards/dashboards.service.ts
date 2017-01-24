@@ -40,14 +40,24 @@ export class DashboardsService {
                    if (!sectionComponent.component)
                     sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
-
-
             }
-            
-            
-
             self._dashboards$.next(self.dashboards);
-            
+        });
+
+        this.kerviService.connected$.subscribe(function(v){
+            if (v){
+                this.kerviService.spine.addEventHandler("dashboardLinkChanged", null,function(v){
+                    for(var dashboard of self.dashboards){
+                        for(var section of dashboard.sections){
+                            for (var component of section.components){
+                                if (component.linkId == this.linkId){
+                                    component.parameters[this.name] = this.value;
+                                }
+                            }
+                        }
+                    }
+                });
+            };
         });
     }
 

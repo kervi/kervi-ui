@@ -16,17 +16,24 @@ declare var jQuery: any;
 export class ControllerSwitchButtonComponent implements OnInit {
   @Input() button: ControllerSwitchButtonModel;
   @Input() dashboardSection: DashboardSectionModel;
+  @Input() parameters:any;
   private valueSubscription: any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
   ngOnInit() {
     var self = this;
+
+    var onText= this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "on"; 
+    var offText= this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "off"; 
+    
     self.valueSubscription = self.button.state$.subscribe(function (v) {
-      jQuery('input', self.elementRef.nativeElement).bootstrapToggle(v ? 'on' : 'off', true);
+      jQuery('input', self.elementRef.nativeElement).bootstrapToggle({on: onText, off: offText});
     });
 
     setTimeout(function () {
-      jQuery('input', self.elementRef.nativeElement).bootstrapToggle();
+      jQuery('input', self.elementRef.nativeElement).bootstrapToggle({
+          on:onText  
+      });
       jQuery('input', self.elementRef.nativeElement).change(function () {
         var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
         if (state && !self.button.state$.value)

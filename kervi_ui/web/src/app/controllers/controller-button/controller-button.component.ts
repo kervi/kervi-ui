@@ -15,6 +15,7 @@ declare var jQuery: any;
 export class ControllerButtonComponent implements OnInit {
   @Input() button: ControllerButtonModel;
   @Input() dashboardSection: DashboardSectionModel;
+  @Input() parameters:any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
 

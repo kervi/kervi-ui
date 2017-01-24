@@ -1,1 +1,1 @@
-<a class="btn btn-primary" (click)="clickButton()">{{button.name}}</a>
+<a class="btn btn-primary" (click)="clickButton()" [attr.title]="button.name"><i *ngIf="parameters.icon" class='fa fa-{{parameters.icon}}'></i> <ng-container *ngIf="!parameters.icon" >{{ button.name}}</ng-container></a>

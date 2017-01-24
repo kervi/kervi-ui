@@ -25,13 +25,20 @@ export class SparklineComponent implements OnInit {
 
   ngOnInit() {
     var self=this;
+    
+    var lineColor=self.color("color",".sparkline-template");
+    var spotColor=self.color("color",".sparkline-template .spot");
+    var fillColor=self.color("background-color",".sparkline-template");
+    var height=self.color("height",".sparkline-template");
+    
     this.sensor.sparkline$.subscribe(function(v){
-      jQuery(self.elementRef.nativeElement).sparkline(v, { 
+      
+    jQuery(self.elementRef.nativeElement).sparkline(v, { 
         type: 'line', 
-        lineColor:self.color("color",".sparkline-template"),
-        spotColor:self.color("color",".sparkline-template .spot"),
-        fillColor:self.color("background-color",".sparkline-template"),
-        height:self.color("height",".sparkline-template"), 
+        lineColor:lineColor,
+        spotColor:spotColor,
+        fillColor:fillColor,
+        height:height, 
       });
     });
     
