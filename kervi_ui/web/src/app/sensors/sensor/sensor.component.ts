@@ -52,17 +52,22 @@ export class SensorComponent implements OnInit {
     if (this.parameters){
       if (this.parameters.type)
         this.type=this.parameters.type;
-      if (this.parameters.showSparkline)
-        this.showSparkline=this.parameters.showSparkline;
+      this.showSparkline=this.parameters.showSparkline;
       if (this.parameters.size)
         this.size=this.parameters.size;
     }
-
+    console.log("si",this)
     if (this.parameters.icon && typeof this.parameters.icon === "string")
       this.currentIcon=this.parameters.icon;
-    else{
+    else if (this.parameters.icon){
       this.sensor.value$.subscribe(function(v){
-
+        
+        for (let item of self.parameters.icon){
+          if (v>=item.range[0] && v<item.range[1]){
+            self.currentIcon=item.icon
+            break;
+          }
+        }
       });
     }
 

@@ -1,5 +1,6 @@
 <div *ngIf="displayType=='value'" class="sensor-inline sensor-type-value">
 	{{sensor.name}}:
+	<i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
 	<sensor-sparkline *ngIf="showSparkline" [sensor]="sensor"></sensor-sparkline>
 	<span class="sensor-value">{{(sensor.value$ | async)}}{{sensor.unit}}</span>
 </div>
