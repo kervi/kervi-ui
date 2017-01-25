@@ -26,6 +26,7 @@ export class SensorComponent implements OnInit {
   @Input() dashboardSection: DashboardSectionModel = null;
   canvasId:string="";
   displayType:string="value";
+  currentIcon:string=null;
   private gauge:any=null;
   private gaugeTypes:string[]=['radial_gauge','vertical_linear_gauge', 'horizontal_linear_gauge', 'compass']
   private unitSize:number=100;
@@ -43,6 +44,11 @@ export class SensorComponent implements OnInit {
 
   ngOnInit() {
     var self=this;
+    if (!this.parameters)
+      this.parameters=this.sensor.ui;
+
+
+
     if (this.parameters){
       if (this.parameters.type)
         this.type=this.parameters.type;
@@ -52,7 +58,13 @@ export class SensorComponent implements OnInit {
         this.size=this.parameters.size;
     }
 
-    
+    if (this.parameters.icon && typeof this.parameters.icon === "string")
+      this.currentIcon=this.parameters.icon;
+    else{
+      this.sensor.value$.subscribe(function(v){
+
+      });
+    }
 
     if (this.dashboardSection){
       this.unitSize=this.dashboardSection.dashboard.unitSize;
@@ -66,7 +78,11 @@ export class SensorComponent implements OnInit {
       self.displayType="gauge";
       this.sensor.value$.subscribe(function(v){
         if (self.gauge)
-          self.gauge.update({value:v});  
+          self.gauge.update({value:v});
+
+
+
+
       });
 
       

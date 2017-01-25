@@ -3,6 +3,9 @@
 
 import { BehaviorSubject } from 'rxjs/Rx';
 import { IComponent } from '../../models/IComponent.model'
+
+
+
 export class SensorModel implements IComponent {
     public id: string = null;
     public name: string = null;
