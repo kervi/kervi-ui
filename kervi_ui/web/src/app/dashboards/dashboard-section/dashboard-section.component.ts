@@ -41,7 +41,7 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
         for( let component of this.section.components){
             console.log("pm",component);
         
-            if (component.parameters.addToHeader)
+            if (component.parameters.linkToHeader)
                 this.headerComponents.push(component)
             else
                 this.components.push(component)

@@ -43,3 +43,4 @@ def start(ip_address, http_port, ws_port):
 def stop():
     print ("stop web server")
     SERVER.shutdown()
+    print ("stop web server done")
