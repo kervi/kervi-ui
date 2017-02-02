@@ -27,6 +27,7 @@ export class SensorComponent implements OnInit {
   canvasId:string="";
   displayType:string="value";
   currentIcon:string=null;
+  displayTitle:boolean=true;
   private gauge:any=null;
   private gaugeTypes:string[]=['radial_gauge','vertical_linear_gauge', 'horizontal_linear_gauge', 'compass']
   private unitSize:number=100;
@@ -53,6 +54,7 @@ export class SensorComponent implements OnInit {
       if (this.parameters.type)
         this.type=this.parameters.type;
       this.showSparkline=this.parameters.showSparkline;
+      this.displayTitle=this.parameters.showName;
       if (this.parameters.size)
         this.size=this.parameters.size;
     }

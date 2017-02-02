@@ -41,6 +41,5 @@ def start(ip_address, http_port, ws_port):
     #os.chdir(cwd)
 
 def stop():
-    print ("stop web server")
+    print("stop web server")
     SERVER.shutdown()
-    print ("stop web server done")
