@@ -7,7 +7,7 @@ import { AppModule } from '../../app.module'
 import { DashboardsModule} from '../dashboards.module'
 import { SensorsModule} from '../../sensors/sensors.module'
 import { ControllersModule} from '../../controllers/controllers.module'
-import * as _ from 'lodash';
+//import * as _ from 'lodash';
 
 export interface IHaveDynamicData { 
     entity: any;
@@ -43,7 +43,15 @@ export class DashboardDynamicTypeBuilder {
             .compileModuleAndAllComponentsAsync(module)
             .then((moduleWithFactories) =>
             {
-                factory = _.find(moduleWithFactories.componentFactories, { componentType: type });
+                factory=null;
+                for(let cf of moduleWithFactories.componentFactories){
+                    console.log("cf d", cf);
+                    if (cf.componentType==type){
+                        factory=cf;
+                        break;
+                    }
+                }
+                //factory = _.find(moduleWithFactories.componentFactories, { componentType: type });
                 this._cacheOfFactories[template] = factory;
                 resolve(factory);
             });

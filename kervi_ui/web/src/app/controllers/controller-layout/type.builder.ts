@@ -5,7 +5,7 @@ import {Component, ComponentFactory, NgModule, Input, Injectable} from '@angular
 import {RuntimeCompiler} from '@angular/compiler';
 import { AppModule } from '../../app.module'
 import { ControllersModule} from '../controllers.module'
-import * as _ from 'lodash';
+//import * as _ from 'lodash';
 
 export interface IHaveDynamicData { 
     entity: any;
@@ -41,7 +41,16 @@ export class DynamicTypeBuilder {
             .compileModuleAndAllComponentsAsync(module)
             .then((moduleWithFactories) =>
             {
-                factory = _.find(moduleWithFactories.componentFactories, { componentType: type });
+                
+                factory=null;
+                for(let cf of moduleWithFactories.componentFactories){
+                    console.log("cf d", cf);
+                    if (cf.componentType==type){
+                        factory=cf;
+                        break;
+                    }
+                }
+                //factory = _.find(moduleWithFactories.componentFactories, { componentType: type });
 
                 this._cacheOfFactories[template] = factory;
 
