@@ -28,6 +28,7 @@ export class CamViewerComponent implements OnInit {
   constructor(private kerviService: KerviService, private controllersService: ControllersService, private elementRef: ElementRef) { 
     var self=this;
     this.camera$.subscribe(function(v){
+      console.log("cse",v);
       if (self.panSubscription)
         self.panSubscription.unsubscribe();
 
@@ -35,7 +36,9 @@ export class CamViewerComponent implements OnInit {
         self.tiltSubscription.unsubscribe();
 
       if (v) {
-        self.cameraSource$.next(v.parameters.source);
+
+        if (v.ui && v.ui.source)
+          self.cameraSource$.next(v.ui.source);
         var pan = v.components[0] as ControllerInputModel;
         var tilt = v.components[1] as ControllerInputModel;
         self.panSubscription = pan.value$.subscribe(function (v) {
@@ -45,11 +48,11 @@ export class CamViewerComponent implements OnInit {
         self.tiltSubscription = tilt.value$.subscribe(function (v) {
           jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();
         });
-        if (v.parameters && v.parameters.type == "frame" ){
+        if (v.ui && v.ui.type == "frame" ){
           setInterval(function() {
-            self.cameraSource$.next(v.parameters.source + "?t=" + new Date().getTime());
+            self.cameraSource$.next(v.ui.source + "?t=" + new Date().getTime());
             
-          }, 1000/v.parameters.fps);
+          }, 1000/v.ui.fps);
         }
 
       } else {
@@ -65,6 +68,7 @@ export class CamViewerComponent implements OnInit {
 
   ngOnInit() {
     var self = this;
+    console.log("cw", this);
     if (this.cameraId){
       this.camera$.next(this.kerviService.getComponent(this.cameraId) as ControllerModel)  
     }
@@ -170,8 +174,8 @@ export class CamViewerComponent implements OnInit {
       var context = canvas.getContext('2d');
 
       var cam = this.camera$.value;
-      canvas.height = cam.parameters.height;
-      canvas.width = cam.parameters.width;
+      canvas.height = cam.ui.height;
+      canvas.width = cam.ui.width;
       context.clearRect(0, 0, canvas.width, canvas.height);
       for (var i in this.pointOfInterests) {
         var poi = this.pointOfInterests[i];

@@ -1,1 +1,8 @@
-<input type="checkbox" [attr.checked]="(button.state$ | async) ? '' : null" data-toggle="toggle">
+<div *ngIf="parameters.size==0" class="block-component"> 
+    <span *ngIf="parameters.showName" style="display:inline-block;float:left" >{{button.name}}</span>
+    <input style="display:inline-block;float:right"  type="checkbox" [attr.checked]="(button.state$ | async) ? '' : null" data-toggle="toggle">
+</div>
+<span *ngIf="parameters.size>0">
+    <label *ngIf="parameters.showName" >{{button.name}}</label>
+    <input type="checkbox" [attr.checked]="(button.state$ | async) ? '' : null" data-toggle="toggle">
+</span>

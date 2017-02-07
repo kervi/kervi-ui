@@ -32,6 +32,7 @@ export class ControllerSwitchButtonComponent implements OnInit {
     var offText= this.parameters && this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "off"; 
     
     self.valueSubscription = self.button.state$.subscribe(function (v) {
+      console.log("swbc",v);
       jQuery('input', self.elementRef.nativeElement).bootstrapToggle({on: onText, off: offText});
     });
 

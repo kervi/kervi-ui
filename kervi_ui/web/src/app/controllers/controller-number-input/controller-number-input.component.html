@@ -1,3 +1,9 @@
-<div class="axis-pad">{{input.name}}
+<div *ngIf="size==0"   class="axis-pad block-component">
+	{{input.name}}
+	<fieldset style="float:right"> <input name="x" value="0"> <input name="y" value="0"></fieldset>
+</div>
+
+<div *ngIf="size>0" class="axis-pad">
+	{{input.name}}
 	<fieldset> <input name="x" value="0"> <input name="y" value="0"></fieldset>
 </div>

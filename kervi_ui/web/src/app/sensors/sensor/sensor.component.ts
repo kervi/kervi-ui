@@ -55,7 +55,7 @@ export class SensorComponent implements OnInit {
         this.type=this.parameters.type;
       this.showSparkline=this.parameters.showSparkline;
       this.displayTitle=this.parameters.showName;
-      if (this.parameters.size)
+      if (this.parameters.size !== null)
         this.size=this.parameters.size;
     }
     console.log("si",this)
@@ -81,6 +81,9 @@ export class SensorComponent implements OnInit {
     }
     self.canvasId=this.templateService.makeId();
     if (this.gaugeTypes.indexOf(this.type)>-1){
+      
+      if (self.size === 0 && self.dashboardSection)
+        self.size= self.dashboardSection.parameters.columns;
       
       self.displayType="gauge";
       this.sensor.value$.subscribe(function(v){
@@ -210,6 +213,9 @@ export class SensorComponent implements OnInit {
     if (self.type=="chart"){
       self.displayType="chart";
 
+      if (self.size === 0 && self.dashboardSection)
+        self.size= self.dashboardSection.parameters.columns;
+      
       this.sensor.value$.subscribe(function(v){
         if (self.chart){
           try{
@@ -222,12 +228,10 @@ export class SensorComponent implements OnInit {
           }catch(ex){
             console.log("cdx",ex);  
           }
-          
         }
       });
 
       setTimeout(function() {
-        
       
       jQuery("#"+self.canvasId).width(self.unitSize*self.size);
       jQuery("#"+self.canvasId).height(self.unitSize);
