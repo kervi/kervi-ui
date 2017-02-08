@@ -25,8 +25,13 @@ export class CamViewerComponent implements OnInit {
   private tiltSubscription: any = null;
   private moveDelayTimer = null;
   private pointOfInterests = [];
+  private img = new Image();
   constructor(private kerviService: KerviService, private controllersService: ControllersService, private elementRef: ElementRef) { 
     var self=this;
+
+    
+
+
     this.camera$.subscribe(function(v){
       console.log("cse",v);
       if (self.panSubscription)
@@ -37,8 +42,6 @@ export class CamViewerComponent implements OnInit {
 
       if (v) {
 
-        if (v.ui && v.ui.source)
-          self.cameraSource$.next(v.ui.source);
         var pan = v.components[0] as ControllerInputModel;
         var tilt = v.components[1] as ControllerInputModel;
         self.panSubscription = pan.value$.subscribe(function (v) {
@@ -49,10 +52,37 @@ export class CamViewerComponent implements OnInit {
           jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();
         });
         if (v.ui && v.ui.type == "frame" ){
-          setInterval(function() {
-            self.cameraSource$.next(v.ui.source + "?t=" + new Date().getTime());
+          // jQuery("img",self.elementRef.nativeElement).load(function() {
+          //   console.log("il");
+          //   setTimeout(function(){
+          //     self.cameraSource$.next(v.ui.source + "?t=" + new Date().getTime());
+          //     //self.img.src = self.camera$.value.ui.source+ '?t=' + new Date().getTime();
+          //   },0);
+            if (v.ui.source)
+              self.cameraSource$.next(v.ui.source);
+        
+          
+
+          
+          
+          // self.img.onload = function() {
+          //   var canvas = <HTMLCanvasElement>document.getElementById('camCanvas');
+          //   var context = canvas.getContext('2d');
+
+          //   context.drawImage(self.img, 0, 0);
+          //   setTimeout(function(){
+          //     self.img.src = self.camera$.value.ui.source+ '?t=' + new Date().getTime();
+          //   }, 0);
+          // };
+
+          // self.img.src = self.camera$.value.ui.source+ '?t=' + new Date().getTime();
+
+          
+          
+          // setInterval(function() {
+          //   self.cameraSource$.next(v.ui.source + "?t=" + new Date().getTime());
             
-          }, 1000/v.ui.fps);
+          // }, 1000/v.ui.fps);
         }
 
       } else {
@@ -66,6 +96,17 @@ export class CamViewerComponent implements OnInit {
     })
   }
 
+  imageReady(){
+    jQuery("img",this.elementRef.nativeElement).attr("src",this.camera$.value.ui.source + "?t=" + new Date().getTime())
+    //this.cameraSource$.next();
+  }
+
+  private timedRefresh() {
+    // just change src attribute, will always trigger the onload callback
+    console.log("tr", this);
+    this.img.src = this.camera$.value.ui.source+ '?t=' + new Date().getTime();
+  }
+
   ngOnInit() {
     var self = this;
     console.log("cw", this);
@@ -73,7 +114,7 @@ export class CamViewerComponent implements OnInit {
       this.camera$.next(this.kerviService.getComponent(this.cameraId) as ControllerModel)  
     }
     setTimeout(function() {
-      
+      self.timedRefresh();
     
       var h = jQuery(".video",self.elementRef.nativeElement).height();
       var w = jQuery(".video",self.elementRef.nativeElement).width();
@@ -170,7 +211,7 @@ export class CamViewerComponent implements OnInit {
 
   private updatePOI() {
     if (this.camera$.value) {
-      var canvas = <HTMLCanvasElement>document.getElementById('camCanvas');
+      var canvas = <HTMLCanvasElement>document.getElementById('poiCanvas');
       var context = canvas.getContext('2d');
 
       var cam = this.camera$.value;
