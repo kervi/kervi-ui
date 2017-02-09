@@ -28,17 +28,22 @@ export class ControllerSwitchButtonComponent implements OnInit {
 
     console.log("ui",this.parameters);
 
-    var onText= this.parameters && this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "on"; 
-    var offText= this.parameters && this.parameters.icon ? "<i class='fa fa-" + this.parameters.icon + "'></i>" : "off"; 
+    var onText= this.parameters && this.parameters.onIcon ? "<i class='fa fa-" + this.parameters.onIcon + "'></i> " : ""; 
+    var offText= this.parameters && this.parameters.offIcon ? "<i class='fa fa-" + this.parameters.offIcon + "'></i> " : ""; 
     
+    onText+= this.parameters && this.parameters.onText ? this.parameters.onText : ""; 
+    offText+= this.parameters && this.parameters.offText ? this.parameters.offText : ""; 
+    
+
     self.valueSubscription = self.button.state$.subscribe(function (v) {
       console.log("swbc",v);
-      jQuery('input', self.elementRef.nativeElement).bootstrapToggle({on: onText, off: offText});
+      jQuery('input', self.elementRef.nativeElement).bootstrapToggle(v ? "on" :"off");
     });
 
     setTimeout(function () {
       jQuery('input', self.elementRef.nativeElement).bootstrapToggle({
-          on:onText  
+          on: onText,
+          off: offText  
       });
       jQuery('input', self.elementRef.nativeElement).change(function () {
         var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
