@@ -91,8 +91,9 @@ export class DashboardModel{
     public headerSection: DashboardSectionModel=null;
     public footerSection: DashboardSectionModel=null;
     public sysSection: DashboardSectionModel=null;
+    public backgroundSection: DashboardSectionModel=null;
     public controllerSection: DashboardSectionModel=null;
-    public background: DashboardBackgroundModel=null;
+    //public background: DashboardBackgroundModel=null;
     public unitSize: number;
     
 
@@ -104,7 +105,7 @@ export class DashboardModel{
         this.isDefault=message.isDefault;
         this.template=message.template;
         this.unitSize=message.unitSize;
-        this.background=new DashboardBackgroundModel(message.background);
+        //this.background=new DashboardBackgroundModel(message.background);
         this.sections=[];
         if (!this.template){
             for (let messageSection of message.sections){
@@ -116,9 +117,12 @@ export class DashboardModel{
                 else if (section.id=="sys-header")
                     this.sysSection=section;
                 else if (section.id=="controllers")
-                    this.controllerSection=section;    
+                    this.controllerSection=section;
+                else if (section.id=="background")
+                    this.backgroundSection=section;
                 else this.sections.push(section);        
             }
+
         }
     }
 }

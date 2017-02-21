@@ -14,7 +14,7 @@
 	<dashboard-layout [dashboard]="dashboard"></dashboard-layout>
 </ng-container>
 <div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:25px;">
-	<kervi-cam-viewer *ngIf="dashboard.background.type=='camera'" [isBackground]="true" [cameraId]="dashboard.background.cameraId"></kervi-cam-viewer>
+	<kervi-cam-viewer *ngIf="cameraId" [isBackground]="true" [cameraId]="cameraId" [parameters]="cameraParameters"></kervi-cam-viewer>
 	<div class="container-fluid" style="position:absolute;top:0;z-index:1999" >
 		<div class="card-columns" [ngClass]="{'dashboard-sections-hidden' : dashboardSectionsHidden }">
 			<kervi-dashboard-section *ngFor="let section of dashboard.sections" [section]="section"></kervi-dashboard-section>

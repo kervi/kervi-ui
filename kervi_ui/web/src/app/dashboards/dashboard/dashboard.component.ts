@@ -15,7 +15,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public dashboard:DashboardModel;
   public sections: DashboardSectionModel[] = [];
   public sectionRows: any[]=[];
-  public camera: ControllerModel = null;
+  public cameraId: string = null;
+  public cameraParameters:any = null;
   public dashboardSectionsHidden:boolean=false;
   public showSectionController:boolean;
   private routeSubscription;
@@ -31,11 +32,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (this.dashboard){
         this.dashboardSectionsHidden=false;
         this.showSectionController=false;
-        if (this.dashboard.background.type==="camera"){
+        
+        if (this.dashboard.backgroundSection){
+          if (this.dashboard.backgroundSection.components.length >0)
+          {
+            this.dashboardSectionsHidden=true;
+            this.showSectionController=true;
+            this.cameraId=this.dashboard.backgroundSection.components[0].componentId;
+            this.cameraParameters=this.dashboard.backgroundSection.components[0].parameters;
+          }
+        }
+
+        /*if (this.dashboard.background.type==="camera"){
           this.dashboardSectionsHidden=true;
           this.showSectionController=true;
           this.camera=this.kerviService.getComponent(this.dashboard.background.cameraId) as ControllerModel;
-        }
+        }*/
+
         var rowSize=3;
         this.sectionRows=[]
         var currentRow=[];

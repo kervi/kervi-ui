@@ -13,6 +13,7 @@ export class SensorsService {
     private sensorTypes: string[]=[];
     private _sensors$: BehaviorSubject<SensorModel[]> = new BehaviorSubject<SensorModel[]>([]);
     private _sensorTypes$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+    private selectedUnitSystem:string = "ui";
     constructor (private kerviService:KerviService){
         var self=this;
         
@@ -90,4 +91,22 @@ export class SensorsService {
         }
         return null;
     }
+
+    public getUnitSystems(){
+        return [
+            {
+                name:"Metric (SI)",
+                "id":"si"
+            },
+            {
+                name:"Imperial",
+                "id":"imperial"
+            },
+            {
+                name:"US",
+                "id":"us"
+            }
+        ]
+    }
+
 }

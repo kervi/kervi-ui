@@ -16,6 +16,7 @@ declare var jQuery: any;
 export class CamViewerComponent implements OnInit {
   @Input() cameraId: string = null;
   @Input() isBackground: boolean = false;
+  @Input() parameters:any = null;
   camera$: BehaviorSubject<ControllerModel> = new BehaviorSubject<ControllerModel>(null);
   cameraSource$: BehaviorSubject<string> = new BehaviorSubject<string>("");
   padSize:number=180;
@@ -25,7 +26,8 @@ export class CamViewerComponent implements OnInit {
   private tiltSubscription: any = null;
   private moveDelayTimer = null;
   private pointOfInterests = [];
-  private img = new Image();
+  //private img = new Image();
+  private firstLoad=true;
   constructor(private kerviService: KerviService, private controllersService: ControllersService, private elementRef: ElementRef) { 
     var self=this;
 
@@ -97,14 +99,20 @@ export class CamViewerComponent implements OnInit {
   }
 
   imageReady(){
-    jQuery("img",this.elementRef.nativeElement).attr("src",this.camera$.value.ui.source + "?t=" + new Date().getTime())
+    if (this.firstLoad){
+        this.firstLoad=false;
+        var h = jQuery(".video",this.elementRef.nativeElement).height();
+        var w = jQuery(".video",this.elementRef.nativeElement).width();
+        jQuery(".cam-pad-area", this.elementRef.nativeElement).css({ top: h / 2 - this.padSize/2, left: w / 2 - this.padSize/2 });
+    }
+    //jQuery("img",this.elementRef.nativeElement).attr("src",this.camera$.value.ui.source + "?t=" + new Date().getTime())
     //this.cameraSource$.next();
   }
 
   private timedRefresh() {
     // just change src attribute, will always trigger the onload callback
-    console.log("tr", this);
-    this.img.src = this.camera$.value.ui.source+ '?t=' + new Date().getTime();
+    console.log("trx", this);
+    //this.img.src = this.camera$.value.ui.source+ '?t=' + new Date().getTime();
   }
 
   ngOnInit() {
