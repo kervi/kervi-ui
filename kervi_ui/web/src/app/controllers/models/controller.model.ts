@@ -140,8 +140,8 @@ export class ControllerButtonModel implements IComponent {
     public dashboards: string[] = [];
     public type: string;
     public visible: boolean;
-    public onCommand: string;
-    public offCommand: string;
+    public pressCommand: string;
+    public releaseCommand: string;
     public clickCommand: string;
     public state$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -152,6 +152,8 @@ export class ControllerButtonModel implements IComponent {
         this.type = message.componentType;
         this.ui = message.ui;
         this.clickCommand = message.onClick;
+        this.pressCommand = message.onPress;
+        this.releaseCommand = message.onRelease;
 
     }
 

@@ -1,1 +1,18 @@
-<a class="btn btn-primary" (click)="clickButton()" [attr.title]="button.name"><i *ngIf="parameters.icon" class='fa fa-{{parameters.icon}}'></i> <ng-container *ngIf="!parameters.icon" >{{ button.name}}</ng-container></a>
+<div *ngIf="parameters.size==0 && !parameters.inline" class="block-component"> 
+    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+    <span  *ngIf="parameters.label"  >{{parameters.label}}</span>
+    <a class="btn btn-primary pull-right" (click)="clickButton()" (mousedown)="press()" (mouseup)="release()" [attr.title]="button.name">
+        <i *ngIf="parameters.buttonIcon" class='fa fa-{{parameters.buttonIcon}}'></i>
+        <ng-container *ngIf="parameters.buttonText" >{{ parameters.buttonText}}</ng-container>
+    </a>
+</div>
+
+<span *ngIf="parameters.size>0 || parameters.inline"> 
+    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+    <span  *ngIf="parameters.label"  >{{parameters.label}}</span>
+    <a class="btn btn-primary" (click)="clickButton()" (mousedown)="press()" (mouseup)="release()" [attr.title]="button.name">
+        <i *ngIf="parameters.buttonIcon" class='fa fa-{{parameters.buttonIcon}}'></i>
+        <ng-container *ngIf="parameters.buttonText" >{{ parameters.buttonText}}</ng-container>
+    </a>
+</span>
+

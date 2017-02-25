@@ -43,7 +43,8 @@ export class ControllerSwitchButtonComponent implements OnInit {
     setTimeout(function () {
       jQuery('input', self.elementRef.nativeElement).bootstrapToggle({
           on: onText,
-          off: offText  
+          off: offText,
+          style:self.parameters.size == 0 && !self.parameters.inline ? "pull-right" : "" 
       });
       jQuery('input', self.elementRef.nativeElement).change(function () {
         var state = jQuery('input', self.elementRef.nativeElement).prop('checked');

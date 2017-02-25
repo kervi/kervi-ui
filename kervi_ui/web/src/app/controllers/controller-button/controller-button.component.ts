@@ -18,10 +18,19 @@ export class ControllerButtonComponent implements OnInit {
   @Input() parameters:any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
-
-  public clickButton() {
-    this.kerviService.spine.sendCommand(this.button.clickCommand);
+  public click() {
+    this.kerviService.spine.sendCommand(this.button.pressCommand);
+    this.kerviService.spine.sendCommand(this.button.releaseCommand);
   }
+
+  public press() {
+    this.kerviService.spine.sendCommand(this.button.pressCommand);
+  }
+
+  public release() {
+    this.kerviService.spine.sendCommand(this.button.releaseCommand);
+  }
+
   ngOnInit() {
     if (!this.parameters)
       this.parameters = this.button.ui;
