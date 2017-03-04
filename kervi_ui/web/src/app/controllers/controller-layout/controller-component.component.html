@@ -13,10 +13,10 @@
             <kervi-controller-switchbutton [dashboardSection]="dashboardSection" [parameters]="parameters" [button]="component"></kervi-controller-switchbutton>
         </template>
         <template ngSwitchCase="select">
-            <kervi-controller-select [dashboardSection]="dashboardSection" [select]="component"></kervi-controller-select>
+            <kervi-controller-select [dashboardSection]="dashboardSection" [select]="component" [parameters]="parameters"></kervi-controller-select>
         </template>
         <template ngSwitchCase="datetime-input">
-            <kervi-controller-datetime [dashboardSection]="dashboardSection" [datetime]="component"></kervi-controller-datetime>
+            <kervi-controller-datetime [dashboardSection]="dashboardSection" [parameters]="parameters" [datetime]="component"></kervi-controller-datetime>
         </template>
     </ng-container>
 </ng-container>

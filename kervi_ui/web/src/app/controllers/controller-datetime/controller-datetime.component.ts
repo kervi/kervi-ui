@@ -15,12 +15,14 @@ declare var jQuery: any;
 export class ControllerDateTimeComponent implements OnInit {
   @Input() datetime: ControllerDateTimeModel;
   @Input() dashboardSection: DashboardSectionModel;
+  @Input() parameters:any;
   private valueSubscription: any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
   ngOnInit() {
     var self = this;
-    
+    if (!this.parameters)
+      this.parameters = this.datetime.ui;
 
     setTimeout(function () {
       
@@ -39,8 +41,9 @@ export class ControllerDateTimeComponent implements OnInit {
             });
         });
         
-        jQuery(self.elementRef.nativeElement).on('dp.hide',function (e,v) {
-          self.kerviService.spine.sendCommand(self.datetime.changeCommand,e);
+        jQuery(self.elementRef.nativeElement).on('dp.change',function (e,v) {
+          console.log(e,v);
+          self.kerviService.spine.sendCommand(self.datetime.changeCommand,e.timeStamp);
         });
       
     }, 0);

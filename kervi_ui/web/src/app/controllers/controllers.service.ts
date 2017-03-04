@@ -141,7 +141,12 @@ export class ControllersService {
             for (let controller of self.controllers) {
                 for (let component of controller.components) {
                     if (component.id == value.button) {
-                        var button = component as ControllerSwitchButtonModel;
+                        var button = null;
+                        if (component.componentType=="switchButton")
+                            button = component as ControllerSwitchButtonModel;
+                        else
+                            button = component as ControllerButtonModel;
+
                         button.state$.next(value.state);
                     }
                 }

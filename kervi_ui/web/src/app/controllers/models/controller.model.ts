@@ -10,6 +10,7 @@ import { ControllersFactory } from './factory'
 export class ControllerSelectOptionModel{
     public value:string;
     public text:string;
+    public selected:boolean;
     public selected$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(messageOption:any){
@@ -39,6 +40,7 @@ export class ControllerSelectModel implements IComponent{
         this.type = message.componentType;
         this.command = message.onSelect;
         this.options = [] 
+       
         for (let option of message.options){
             this.options.push( new ControllerSelectOptionModel(option)); 
         }
@@ -47,6 +49,7 @@ export class ControllerSelectModel implements IComponent{
     updateReferences(){};
 
     public selectOptions(selectedOptions:any){
+        console.log("soc");
         for (let option of this.options){
             option.selected$.next(false);
         }
@@ -154,6 +157,7 @@ export class ControllerButtonModel implements IComponent {
         this.clickCommand = message.onClick;
         this.pressCommand = message.onPress;
         this.releaseCommand = message.onRelease;
+        this.state$.next(message.state);
 
     }
 

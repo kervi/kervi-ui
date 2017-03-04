@@ -16,6 +16,8 @@ export class ControllerButtonComponent implements OnInit {
   @Input() button: ControllerButtonModel;
   @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any;
+  state:boolean = false
+  private valueSubscription: any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
   public click() {
@@ -32,8 +34,14 @@ export class ControllerButtonComponent implements OnInit {
   }
 
   ngOnInit() {
+    var self = this;
     if (!this.parameters)
       this.parameters = this.button.ui;
+
+    self.valueSubscription = self.button.state$.subscribe(function (v) {
+      console.log("swbc",v);
+      self.state = v;
+    });
   }
 
 }

@@ -31,7 +31,8 @@ export class ControllerTextInputComponent implements OnInit {
 	}
 
 	onChange(event){
-		this.kerviService.spine.sendCommand(this.input.command, event.srcElement.value);
+		console.log("evv",event);
+		this.kerviService.spine.sendCommand(this.input.command, event.target.value, event.target.key, event.keyCode);
 	}
 
 

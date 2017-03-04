@@ -1,9 +1,7 @@
-<div *ngIf="size==0"   class="axis-pad block-component">
-	{{input.name}}
-	<fieldset style="float:right"> <input name="x" value="0"> <input name="y" value="0"></fieldset>
-</div>
-
-<div *ngIf="size>0" class="axis-pad">
-	{{input.name}}
-	<fieldset> <input name="x" value="0"> <input name="y" value="0"></fieldset>
+<div [ngClass]="{'block-component':parameters.size==0 && !parameters.inline}"> 
+    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+    <span  *ngIf="parameters.label"  >{{parameters.label}}</span>
+	<input class="form-control" [style.width.%]="parameters.inputSize"/>
+	<span  [style.width.%]="parameters.valueSize" class="slider-value"></span>
+	
 </div>

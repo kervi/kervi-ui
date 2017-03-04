@@ -15,11 +15,13 @@ declare var jQuery: any;
 export class ControllerSelectComponent implements OnInit {
   @Input() select: ControllerSelectModel;
   @Input() dashboardSection: DashboardSectionModel;
+  @Input() parameters:any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
   ngOnInit() {
     var self = this;
-    
+    if (!this.parameters)
+      this.parameters = this.select.ui;
   }
 
   onChange(value){

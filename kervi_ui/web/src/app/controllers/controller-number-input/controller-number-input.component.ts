@@ -21,6 +21,7 @@ export class ControllerNumberInputComponent implements OnInit {
 	private type:string = "horizontal_slider";
 	private size:number = 0;
 	private unitSize:number=150;
+	private inSlide:boolean=false;
 
 	constructor(private kerviService: KerviService, private elementRef: ElementRef, private templateService:TemplateService) { 
 		//console.log("cnio",this);
@@ -56,51 +57,40 @@ export class ControllerNumberInputComponent implements OnInit {
 		var	color = this.color("color",".number-gauge-template");
 		setTimeout(function() {
 			
-		
-			var p = jQuery('fieldset', self.elementRef.nativeElement).xy({
-				displayPrevious: false
-				, min: self.input.minValue
-				, max: self.input.maxValue
-				, width: self.type == "vertical_slider" ? 30 : sliderSize
-				, height: self.type == "vertical_slider" ? sliderSize : 30
-				, fgColor: color
-				, bgColor: color
-				, change: function (value) {
-					if (self.moveDelayTimer)
-						clearTimeout(self.moveDelayTimer);
-
-
-					self.moveDelayTimer = setTimeout(function () {
-						if (self.type == "vertical_slider") {
-							self.kerviService.spine.sendCommand(self.input.command, value[1]);
-						} else {
-							self.kerviService.spine.sendCommand(self.input.command, value[0]);
-						}
-					}, 200);
-				}
-			})
-				.css({ 'border': self.color("border", ".number-gauge-template"), "border-radius": '0.25rem'  });
-
-			
-
-			if (self.type == "vertical_slider")
-			{
-					jQuery("input[name='y']", self.elementRef.nativeElement).show();
-					jQuery("input[name='x']", self.elementRef.nativeElement).hide();
+			if (self.parameters.type=="horizontal_slider" || self.parameters.type=="vertical_slider")
+			jQuery('input', self.elementRef.nativeElement).bootstrapSlider({
+				tooltip: 'always',
+				min:self.input.minValue,
+				max:self.input.maxValue,
+				orientation: self.parameters.type == "horizontal_slider" ? "horizontal" : "vertical"
+			});
+			if (self.parameters.size==0 && !self.parameters.inline){
+				jQuery('.slider-value', self.elementRef.nativeElement).addClass("pull-right");
+				jQuery('.slider', self.elementRef.nativeElement).addClass("pull-right");
+				
 			}
-			else
-			{
-					jQuery("input[name='x']", self.elementRef.nativeElement).show();
-					jQuery("input[name='y']", self.elementRef.nativeElement).hide();
-			}
-		}, 0);
 
-		self.input.value$.subscribe(function (v) {
-			if (self.type == "vertical_slider")
-				jQuery("input[name='y']", self.elementRef.nativeElement).val(v).change();
-			else
-				jQuery("input[name='x']", self.elementRef.nativeElement).val(v).change();
-		});
+			jQuery('.slider', self.elementRef.nativeElement).on("change",function(e){
+				self.kerviService.spine.sendCommand(self.input.command,e.value.newValue);
+				jQuery(".slider-value", self.elementRef.nativeElement).html(e.value.newValue);
+			});
+
+			jQuery('.slider', self.elementRef.nativeElement).on("slideStart",function(e){
+				self.inSlide=true;
+			});
+
+			jQuery('.slider', self.elementRef.nativeElement).on("slideStop",function(e){
+				self.inSlide=false;
+
+			});
+
+			self.input.value$.subscribe(function (v) {
+				
+				if (!self.inSlide)
+					jQuery("input", self.elementRef.nativeElement).bootstrapSlider('setValue',v);
+				
+			});
+		},0);
 	}
 
 }

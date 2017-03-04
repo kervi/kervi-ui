@@ -26,6 +26,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
+    console.log("db init", this);
+    if (!this.kerviService.connected$.value)
+      this.router.navigate(['/connect']);
+    
     this.routeSubscription = this.activatedRoute.params.subscribe(params => {
       this.dashboardId = params['name']; 
       this.dashboard=this.dashboardsService.getDashboardById(this.dashboardId);

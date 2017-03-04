@@ -39,6 +39,13 @@ $border-radius-base: .25rem;
 }
 
 
+
+.btn-primary-hover
+{
+	background-color: #0a3a0a !important;
+	border-color: #083208 !important;
+}
+
 .block-component{
 	width:100%;
 	clear:both;
@@ -164,7 +171,39 @@ bodyx {
 $fa-font-path: "~font-awesome/fonts";
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 
+
+
+$bs-datetimepicker-timepicker-font-size: 1em !default;
+$bs-datetimepicker-active-bg: $btn-primary-bg !default;
+$bs-datetimepicker-active-color: #ff0000;/*$btn-primary-color !default;*/
+$bs-datetimepicker-border-radius: $border-radius-base !default;
+$bs-datetimepicker-btn-hover-bg: $gray-lighter !default;
+$bs-datetimepicker-disabled-color: $gray-light !default;
+$bs-datetimepicker-alternate-color: $gray-light !default;
+$bs-datetimepicker-secondary-border-color: #ccc !default;
+$bs-datetimepicker-secondary-border-color-rgba: rgba(0, 0, 0, 0.2) !default;
+$bs-datetimepicker-primary-border-color: white !default;
+$bs-datetimepicker-text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !default;
+
 @import "../node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
+
+
+$slider-line-height: 20px !default;
+$slider-border-radius: 4px !default;
+$slider-horizontal-width: 210px !default;
+$slider-vertical-height: 210px !default;
+$slider-handle-color-start: $brand-primary;
+$slider-handle-color-end: $card-cap-bg;
+$slider-handle-color-background: $input-group-addon-bg;
+$slider-height: 20px !default;
+$slider-width: 20px !default;
+.slider-value{
+	border-color:rgba(0,0,0,.25);
+	border-width: 1px;
+	border-style: solid;
+}
+
+@import "../node_modules/bootstrap-slider/src/sass/bootstrap-slider.scss";
 
 .toggle-off {
 	background: $gray-lightest;
@@ -172,6 +211,15 @@ $fa-font-path: "~font-awesome/fonts";
 
 .btn {
 	margin-bottom: .1rem
+}
+
+.input-group-addon{
+	color:#fff;
+}
+
+.bootstrap-datetimepicker-widget{
+	color:#00FF00;
+	z-index:3000;
 }
 
 @include media-breakpoint-up(xs) {
