@@ -36,9 +36,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (this.dashboard){
         this.dashboardSectionsHidden=false;
         this.showSectionController=false;
+         this.cameraId=null;
+         this.cameraParameters=null;
         
         if (this.dashboard.backgroundSection){
-          if (this.dashboard.backgroundSection.components.length >0)
+          if (this.dashboard.backgroundSection.components.length > 0)
           {
             this.dashboardSectionsHidden=true;
             this.showSectionController=true;
@@ -46,12 +48,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.cameraParameters=this.dashboard.backgroundSection.components[0].parameters;
           }
         }
-
-        /*if (this.dashboard.background.type==="camera"){
-          this.dashboardSectionsHidden=true;
-          this.showSectionController=true;
-          this.camera=this.kerviService.getComponent(this.dashboard.background.cameraId) as ControllerModel;
-        }*/
 
         var rowSize=3;
         this.sectionRows=[]
@@ -65,6 +61,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
         }
       }
+       console.log("dbbcx", this.cameraId, this.cameraParameters);
+            
     });
     
   }

@@ -20,6 +20,17 @@ except:
 import threading
 import kervi_ui
 
+try:
+    from SocketServer import ThreadingMixIn
+    class _HTTPServer(ThreadingMixIn, HTTPServer):
+        def __init__(self, addres, handler):
+            HTTPServer.__init__(self, addres, handler)
+except:
+    print("ThreadingMixIn not found, use single thread web server")
+    class _HTTPServer(HTTPServer):
+        def __init__(self, addres, handler):
+            HTTPServer.__init__(self, addres, handler)
+
 SERVER = None
 ASSET_PATH = ""
 def start(ip_address, http_port, ws_port):
@@ -33,7 +44,7 @@ def start(ip_address, http_port, ws_port):
 
     #cwd = os.getcwd()
     os.chdir(docpath)
-    SERVER = HTTPServer((ip_address, http_port), SimpleHTTPRequestHandler)
+    SERVER = _HTTPServer((ip_address, http_port), SimpleHTTPRequestHandler)
     thread = threading.Thread(target=SERVER.serve_forever)
     thread.daemon = True
     thread.start()
