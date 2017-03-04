@@ -59,14 +59,14 @@ export class ControllerNumberInputComponent implements OnInit {
 			
 			if (self.parameters.type=="horizontal_slider" || self.parameters.type=="vertical_slider")
 			jQuery('input', self.elementRef.nativeElement).bootstrapSlider({
-				tooltip: 'always',
+				tooltip: "hide",
 				min:self.input.minValue,
 				max:self.input.maxValue,
 				orientation: self.parameters.type == "horizontal_slider" ? "horizontal" : "vertical"
 			});
 			if (self.parameters.size==0 && !self.parameters.inline){
-				jQuery('.slider-value', self.elementRef.nativeElement).addClass("pull-right");
-				jQuery('.slider', self.elementRef.nativeElement).addClass("pull-right");
+				//jQuery('.slider-value', self.elementRef.nativeElement).addClass("pull-right");
+				//jQuery('.slider', self.elementRef.nativeElement).addClass("pull-right");
 				
 			}
 
@@ -86,8 +86,10 @@ export class ControllerNumberInputComponent implements OnInit {
 
 			self.input.value$.subscribe(function (v) {
 				
-				if (!self.inSlide)
+				if (!self.inSlide) {
 					jQuery("input", self.elementRef.nativeElement).bootstrapSlider('setValue',v);
+					//jQuery(".slider-value", self.elementRef.nativeElement).html(e.value.newValue);
+				}
 				
 			});
 		},0);

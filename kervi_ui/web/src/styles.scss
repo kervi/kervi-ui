@@ -51,6 +51,10 @@ $border-radius-base: .25rem;
 	clear:both;
 }
 
+.inline-component{
+	display: inline-block;
+}
+
 .sparkline-template{
 	color:#004400;
 	background-color:#55aa55;
@@ -198,12 +202,20 @@ $slider-handle-color-background: $input-group-addon-bg;
 $slider-height: 20px !default;
 $slider-width: 20px !default;
 .slider-value{
-	border-color:rgba(0,0,0,.25);
-	border-width: 1px;
-	border-style: solid;
+	//border-color:rgba(0,0,0,.25);
+	//border-width: 1px;
+	//border-style: solid;
+	padding-left:10px;
+	text-align: right;
+	overflow:hidden;
 }
 
 @import "../node_modules/bootstrap-slider/src/sass/bootstrap-slider.scss";
+
+
+.slider{
+	display:table-cell;
+}
 
 .toggle-off {
 	background: $gray-lightest;

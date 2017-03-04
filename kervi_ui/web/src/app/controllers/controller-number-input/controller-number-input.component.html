@@ -1,7 +1,7 @@
-<div [ngClass]="{'block-component':parameters.size==0 && !parameters.inline}"> 
-    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
-    <span  *ngIf="parameters.label"  >{{parameters.label}}</span>
-	<input class="form-control" [style.width.%]="parameters.inputSize"/>
-	<span  [style.width.%]="parameters.valueSize" class="slider-value"></span>
+<div [ngClass]="{'block-component':parameters.size==0 && !parameters.inline}" style="display:table;width:100%"> 
+    <span style="display:table-cell"  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+    <span style="display:table-cell"  *ngIf="parameters.label"  >{{parameters.label}}</span>
+	<input style="display:table-cell" class="form-control" [style.width.%]="parameters.inputSize"/>
+	<span style="display:table-cell" [style.width.%]="parameters.valueSize" [style.max-width.%]="parameters.valueSize" class="slider-value">{{(input.value$ | async)}}</span>
 	
 </div>

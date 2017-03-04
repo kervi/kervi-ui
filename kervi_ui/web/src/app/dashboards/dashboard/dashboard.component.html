@@ -4,6 +4,7 @@
 		<li class="nav-item" *ngIf="showSectionController">
 			<a class="btn btn-default" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders fa-lg" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
 		</li>
+		<li *ngIf="dashboard" style="display: inline">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>
 		<li *ngIf="dashboard && dashboard.sysSection" class="nav-item core-sensors" style="float:right">
 			<kervi-dashboard-section [inline]="true" [section]="dashboard.sysSection" ></kervi-dashboard-section>
 		</li>
