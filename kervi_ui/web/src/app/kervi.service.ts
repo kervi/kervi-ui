@@ -75,6 +75,16 @@ export class KerviService {
         console.log("components",self.components); 
       });  
 	  });
+    this.spine.addEventHandler("moduleStarted","",function(){
+        console.log("module loaded",self.components); 
+        self.spine.sendQuery("getComponentInfo",function(message){
+        console.log("component info",message);
+        self.components = ComponentFactory.createComponents(message);
+        self.components$.next(self.components);
+        self.application$.next(message);
+        console.log("module loaded components",self.components); 
+      });           
+    });
   }
 
   private onClose(){

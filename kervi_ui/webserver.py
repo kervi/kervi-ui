@@ -20,16 +20,15 @@ except:
 import threading
 import kervi_ui
 
-try:
-    from SocketServer import ThreadingMixIn
-    class _HTTPServer(ThreadingMixIn, HTTPServer):
-        def __init__(self, addres, handler):
-            HTTPServer.__init__(self, addres, handler)
-except:
-    print("ThreadingMixIn not found, use single thread web server")
-    class _HTTPServer(HTTPServer):
-        def __init__(self, addres, handler):
-            HTTPServer.__init__(self, addres, handler)
+#try:
+from socketserver import ThreadingMixIn
+class _HTTPServer(ThreadingMixIn, HTTPServer):
+    pass
+# except:
+#     print("ThreadingMixIn not found, use single thread web server")
+#     class _HTTPServer(HTTPServer):
+#         def __init__(self, addres, handler):
+#             HTTPServer.__init__(self, addres, handler)
 
 SERVER = None
 ASSET_PATH = ""
