@@ -10,7 +10,7 @@ import { IComponent } from '../../models/IComponent.model'
   //providers: [ KerviService ],
   templateUrl: './dashboard-section.component.html',
   styleUrls: ['./dashboard-section.component.css'],
-  encapsulation: ViewEncapsulation.None
+  //encapsulation: ViewEncapsulation.None
 })
 export class DashboardSectionComponent implements OnInit, OnDestroy {
     @Input() section:DashboardSectionModel;

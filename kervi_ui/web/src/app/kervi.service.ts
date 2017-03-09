@@ -22,9 +22,57 @@ export class KerviService {
   constructor() 
   { 
     console.log("kervi service constructor");
-    
+    var self=this;
     this.connected$ = new BehaviorSubject<Boolean>(false);
     this.application$= new BehaviorSubject<any>(null);
+    
+    setInterval(function(){
+      if (self.connected$.value){
+        //self.refreshComponents()  
+        
+      }
+    },10000);
+
+  }
+
+  private refreshComponents(){
+    var self=this;
+    self.spine.sendQuery("getComponentInfo",function(message){
+          console.log("refresh component info",message);
+          var components = ComponentFactory.createComponents(message);
+          console.log("refresh components",components);
+          for (var c of components){
+            var found = false;
+            for(var component of self.components){
+              if (component.id == c. id){
+                found=true;
+                break;
+              }
+            }
+            if (!found){
+              self.components.push(c);
+              console.log("add c", c);
+            }
+          }
+
+          var deleteComponents:IComponent[]=[]
+          for (var component of self.components){
+            var found = false;
+            for(var c of components){
+              if (component.id == c. id){
+                found = true;
+                break;
+              }
+            }
+            if (!found)
+              deleteComponents.push(component);
+          }
+          console.log("dc", deleteComponents);
+          for(var component of deleteComponents){
+            self.components.splice( self.components.indexOf(component), 1 );
+          }
+          self.components$.next(self.components);
+        });
   }
 
   public getComponents$(){
@@ -77,14 +125,18 @@ export class KerviService {
 	  });
     this.spine.addEventHandler("moduleStarted","",function(){
         console.log("module loaded",self.components); 
-        self.spine.sendQuery("getComponentInfo",function(message){
-        console.log("component info",message);
-        self.components = ComponentFactory.createComponents(message);
-        self.components$.next(self.components);
-        self.application$.next(message);
-        console.log("module loaded components",self.components); 
-      });           
+        self.refreshComponents(); 
+    });           
+    
+    this.spine.addEventHandler("moduleStopped","",function(){
+        console.log("module unloaded"); 
+        setTimeout(function() {
+          console.log("module unloaded, refresh");
+        
+          self.refreshComponents()
+      }, 2000);           
     });
+    
   }
 
   private onClose(){
