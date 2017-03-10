@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { KerviService } from "../../kervi.service";
 import { DashboardsService } from "../dashboards.service";
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public showSectionController:boolean;
   private routeSubscription;
   
-  constructor(private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
+  constructor(private zone:NgZone, private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
       
    }
 
@@ -32,42 +32,51 @@ export class DashboardComponent implements OnInit, OnDestroy {
     
     this.routeSubscription = this.activatedRoute.params.subscribe(params => {
       this.dashboardId = params['name']; 
-      this.dashboard=this.dashboardsService.getDashboardById(this.dashboardId);
-      if (this.dashboard){
-        this.dashboardSectionsHidden=false;
-        this.showSectionController=false;
-         this.cameraId=null;
-         this.cameraParameters=null;
-        
-        if (this.dashboard.backgroundSection){
-          if (this.dashboard.backgroundSection.components.length > 0)
-          {
-            this.dashboardSectionsHidden=true;
-            this.showSectionController=true;
-            this.cameraId=this.dashboard.backgroundSection.components[0].componentId;
-            this.cameraParameters=this.dashboard.backgroundSection.components[0].parameters;
-          }
-        }
+      this.setupDashboard();
 
-        var rowSize=3;
-        this.sectionRows=[]
-        var currentRow=[];
-        this.sectionRows.push(currentRow);
-        for(var section of this.dashboard.sections){
-            currentRow.push(section);
-            if (currentRow.length==rowSize){
-              currentRow= [];
-              this.sectionRows.push(currentRow);
-            }
-        }
-      }
-       console.log("dbbcx", this.cameraId, this.cameraParameters);
-            
+      this.dashboardsService.getDashboards$().subscribe(function(v){
+        this.setupDashboard()
+      })
+
     });
     
   }
 
   ngOnDestroy(){
     this.routeSubscription.unsubscribe();
+  }
+
+  private setupDashboard(){
+    console.log("setup dashboard")
+    this.dashboard=this.dashboardsService.getDashboardById(this.dashboardId);
+    if (this.dashboard){
+      this.dashboardSectionsHidden=false;
+      this.showSectionController=false;
+        this.cameraId=null;
+        this.cameraParameters=null;
+      
+      if (this.dashboard.backgroundSection){
+        if (this.dashboard.backgroundSection.components.length > 0)
+        {
+          this.dashboardSectionsHidden=true;
+          this.showSectionController=true;
+          this.cameraId=this.dashboard.backgroundSection.components[0].componentId;
+          this.cameraParameters=this.dashboard.backgroundSection.components[0].parameters;
+        }
+      }
+
+      var rowSize=3;
+      this.sectionRows=[]
+      var currentRow=[];
+      this.sectionRows.push(currentRow);
+      for(var section of this.dashboard.sections){
+          currentRow.push(section);
+          if (currentRow.length==rowSize){
+            currentRow= [];
+            this.sectionRows.push(currentRow);
+          }
+      }
+    }
+    console.log("dbbcx", this.cameraId, this.cameraParameters);
   }
 }

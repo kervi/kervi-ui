@@ -17,6 +17,7 @@ export class DashboardsService {
         
         var s=this.kerviService.getComponents$().subscribe(function(v){
             self.dashboards=self.kerviService.getComponentsByType("dashboard") ;
+            console.log("load dashboards",self.dashboards);
             for(var dashboard of self.dashboards){
                 //var dashboard = dashboardComponent as DashboardModel;
                 for(var section of dashboard.sections){
@@ -41,6 +42,7 @@ export class DashboardsService {
                     sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
             }
+            console.log("load dashboards updated",self.dashboards);
             self._dashboards$.next(self.dashboards);
         });
 

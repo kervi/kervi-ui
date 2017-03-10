@@ -19,6 +19,7 @@ export class ControllerSelectOptionModel{
         this.selected$.next(messageOption.selected);
     }
     updateReferences(){};
+    reload(component:IComponent){};
 }
 
 export class ControllerSelectModel implements IComponent{
@@ -47,6 +48,7 @@ export class ControllerSelectModel implements IComponent{
     }
 
     updateReferences(){};
+    reload(component:IComponent){};
 
     public selectOptions(selectedOptions:any){
         console.log("soc");
@@ -105,6 +107,7 @@ export class ControllerInputModel implements IComponent {
     }
 
     updateReferences(){};
+    reload(component:IComponent){};
 }
 
 export class ControllerSwitchButtonModel implements IComponent {
@@ -133,6 +136,7 @@ export class ControllerSwitchButtonModel implements IComponent {
     }
 
     updateReferences(){};
+    reload(component:IComponent){};
 }
 
 export class ControllerButtonModel implements IComponent {
@@ -162,6 +166,7 @@ export class ControllerButtonModel implements IComponent {
     }
 
     updateReferences(){};
+    reload(component:IComponent){};
 }
 
 export class ControllerDateTimeModel implements IComponent {
@@ -188,6 +193,7 @@ export class ControllerDateTimeModel implements IComponent {
     }
 
     updateReferences(){};
+    reload(component:IComponent){};
 }
 
 export class ControllerModel implements IComponent {
@@ -218,4 +224,5 @@ export class ControllerModel implements IComponent {
     }
 
     updateReferences(){};
+    reload(component:IComponent){};
 }

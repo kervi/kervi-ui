@@ -46,6 +46,7 @@ export class KerviService {
             for(var component of self.components){
               if (component.id == c. id){
                 found=true;
+                component.reload(c);
                 break;
               }
             }
@@ -54,7 +55,7 @@ export class KerviService {
               console.log("add c", c);
             }
           }
-
+          console.log("delete hanging components")
           var deleteComponents:IComponent[]=[]
           for (var component of self.components){
             var found = false;
@@ -71,6 +72,7 @@ export class KerviService {
           for(var component of deleteComponents){
             self.components.splice( self.components.indexOf(component), 1 );
           }
+          console.log("refresh done");
           self.components$.next(self.components);
         });
   }
@@ -134,7 +136,7 @@ export class KerviService {
           console.log("module unloaded, refresh");
         
           self.refreshComponents()
-      }, 2000);           
+      }, 5000);           
     });
     
   }

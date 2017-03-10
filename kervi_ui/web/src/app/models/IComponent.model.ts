@@ -8,4 +8,5 @@ export interface IComponent {
     dashboards : string[];
 
     updateReferences(kerviService:KerviService);
+    reload(component:IComponent);
 }

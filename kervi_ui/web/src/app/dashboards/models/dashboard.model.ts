@@ -30,6 +30,7 @@ export class DashboardSectionComponentModel{
         this.componentId = message.componentId;
         this.parameters = message.parameters;
     }
+    
 }
 
 export class DashboardSectionParametersModel{
@@ -67,6 +68,38 @@ export class DashboardSectionModel{
             this.components.push(new DashboardSectionComponentModel(componentRef))
         }
     }
+
+    public reload(source:DashboardSectionModel){
+        console.log("rl", this);
+        for(var sourceComponent of source.components){
+            var found=false;
+            for(var component of this.components){
+                if (component.componentId == sourceComponent.componentId){
+                    found=true;
+                }
+            }
+            if (!found){
+                //component.component=self.getComponent(sectionComponent.componentId)
+                this.components.push(sourceComponent);
+            }
+        }
+        var deleteComponents:DashboardSectionComponentModel[] = [];
+        for (var component of this.components){
+            var found=false;
+            for(var sourceComponent of source.components){
+                if (sourceComponent.componentId == component.componentId){
+                    found=true;
+                    break;
+                }
+            }
+            if (!found)
+                deleteComponents.push(component);
+        }
+        console.log("dsc",deleteComponents);
+        for(var component of deleteComponents){
+            this.components.splice( this.components.indexOf(component), 1 );
+        }
+    }
 }
 
 export class DashboardBackgroundModel{
@@ -80,7 +113,7 @@ export class DashboardBackgroundModel{
     }
 }
 
-export class DashboardModel{
+export class DashboardModel implements IComponent{
     public id:string;
     public name:string;
     public componentType:string;
@@ -96,6 +129,12 @@ export class DashboardModel{
     //public background: DashboardBackgroundModel=null;
     public unitSize: number;
     
+    //not used in dashboards
+    public visible:boolean;
+    public ui:any;
+    public dashboards:any;
+
+
 
     constructor(message){
         this.id=message.id;
@@ -125,4 +164,43 @@ export class DashboardModel{
 
         }
     }
+
+    updateReferences(){};
+    reload(component:IComponent){
+        var source = component as DashboardModel;
+        if (!this.backgroundSection && source.backgroundSection)
+            this.backgroundSection=source.backgroundSection;
+        else if (this.backgroundSection && !source.backgroundSection)
+            this.backgroundSection = null
+        else if (this.backgroundSection)
+            this.backgroundSection.reload(source.backgroundSection)
+
+        if (!this.footerSection && source.footerSection)
+            this.footerSection=source.footerSection;
+        else if (this.footerSection && !source.footerSection)
+            this.footerSection = null
+        else if (this.footerSection)
+            this.footerSection.reload(source.footerSection)
+
+        if (!this.headerSection && source.headerSection)
+            this.headerSection=source.headerSection;
+        else if (this.headerSection && !source.headerSection)
+            this.headerSection = null
+        else if (this.headerSection)
+            this.headerSection.reload(source.headerSection)
+
+        if (!this.sysSection && source.sysSection)
+            this.sysSection=source.sysSection;
+        else if (this.sysSection && !source.sysSection)
+            this.sysSection = null
+        else if (this.sysSection)
+            this.sysSection.reload(source.sysSection)
+
+         if (!this.controllerSection && source.controllerSection)
+            this.controllerSection=source.controllerSection;
+        else if (this.controllerSection && !source.controllerSection)
+            this.controllerSection = null
+        else if (this.controllerSection)
+            this.controllerSection.reload(source.controllerSection)
+    };
 }

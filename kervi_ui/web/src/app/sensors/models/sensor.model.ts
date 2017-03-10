@@ -27,6 +27,7 @@ export class SensorModel implements IComponent {
 
 
     updateReferences(){};
+    reload(component:IComponent){};
     
     constructor(message: any){
         this.id=message.id;
