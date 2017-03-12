@@ -27,7 +27,7 @@ export class SensorComponent implements OnInit {
   canvasId:string="";
   displayType:string="value";
   currentIcon:string=null;
-  displayTitle:boolean=true;
+  //displayTitle:boolean=true;
   private gauge:any=null;
   private gaugeTypes:string[]=['radial_gauge','vertical_linear_gauge', 'horizontal_linear_gauge', 'compass']
   private unitSize:number=100;
@@ -36,8 +36,6 @@ export class SensorComponent implements OnInit {
   constructor(private kerviService:KerviService, private templateService:TemplateService ) { 
     
   }
-
-  
 
   private color(style,selector){
     return this.templateService.getColor(style,selector);
@@ -54,7 +52,6 @@ export class SensorComponent implements OnInit {
       if (this.parameters.type)
         this.type=this.parameters.type;
       this.showSparkline=this.parameters.showSparkline;
-      this.displayTitle=this.parameters.showName;
       if (this.parameters.size !== null)
         this.size=this.parameters.size;
     }
@@ -89,9 +86,6 @@ export class SensorComponent implements OnInit {
       this.sensor.value$.subscribe(function(v){
         if (self.gauge)
           self.gauge.update({value:v});
-
-
-
 
       });
 
@@ -131,7 +125,7 @@ export class SensorComponent implements OnInit {
           renderTo: self.canvasId,
           value:self.sensor.value$.value,
           units: self.sensor.unit,
-          title: self.sensor.name,
+          title: self.parameters.label,
           minValue: self.sensor.min,
           maxValue: self.sensor.max,
           highlights: dataHighlights,
@@ -276,7 +270,7 @@ export class SensorComponent implements OnInit {
             responsive: true,
             title: {
               display: true,
-              text: self.sensor.name
+              text: self.parameters.label
             },
             elements:{
               point:{
@@ -340,10 +334,6 @@ export class SensorComponent implements OnInit {
         });
         console.log("sc",self.chart,self.chart.data.datasets[0].data);  
       });
-
-      
-      
-
       }, 200);
     }
     

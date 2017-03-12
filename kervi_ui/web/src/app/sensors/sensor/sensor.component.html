@@ -1,12 +1,13 @@
 <div *ngIf="displayType=='value' && size>0" class="sensor-inline sensor-type-value">
-	<ng-container *ngIf="displayTitle">{{sensor.name}}:</ng-container>
+	<i *ngIf="parameters.labelIcon" class="fa fa-{{currentIcon}}"></i>
+	<ng-container *ngIf="parameters.label">{{parameters.label}}:</ng-container>
 	<i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
 	<sensor-sparkline *ngIf="showSparkline" [sensor]="sensor"></sensor-sparkline>
 	<span class="sensor-value">{{(sensor.value$ | async)}}{{sensor.unit}}</span>
 </div>
 
 <div *ngIf="displayType=='value' && size==0 " class="sensor-block sensor-type-value">
-	<div style="display: inline-block" *ngIf="displayTitle">{{sensor.name}}:</div>
+	<div style="display: inline-block" *ngIf="parameters.label">{{parameters.label}}:</div>
 	<div style="display:inline-block; float: right">
 		<i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
 		<sensor-sparkline *ngIf="showSparkline" [sensor]="sensor"></sensor-sparkline>
