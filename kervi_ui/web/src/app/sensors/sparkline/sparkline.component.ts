@@ -30,7 +30,8 @@ export class SparklineComponent implements OnInit {
     var spotColor=self.color("color",".sparkline-template .spot");
     var fillColor=self.color("background-color",".sparkline-template");
     var height=self.color("height",".sparkline-template");
-    
+    var width=self.color("width",".sparkline-template");
+    console.log("sl", width, height);
     this.sensor.sparkline$.subscribe(function(v){
       
     jQuery(self.elementRef.nativeElement).sparkline(v, { 
@@ -38,7 +39,8 @@ export class SparklineComponent implements OnInit {
         lineColor:lineColor,
         spotColor:spotColor,
         fillColor:fillColor,
-        height:height, 
+        height:height,
+        width:width 
       });
     });
     

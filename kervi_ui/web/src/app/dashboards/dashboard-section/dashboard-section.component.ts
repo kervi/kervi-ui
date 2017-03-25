@@ -4,6 +4,7 @@ import { DashboardsService } from "../dashboards.service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { DashboardModel, DashboardSectionModel, DashboardMessageModel } from '../models/dashboard.model'
 import { IComponent } from '../../models/IComponent.model'
+import {BehaviorSubject} from 'rxjs/Rx';
 
 @Component({
   selector: 'kervi-dashboard-section',
@@ -26,7 +27,8 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     title:string;
     components:Component[]=[];
     headerComponents: Component[] = [];
-    messages: DashboardMessageModel[] = [];
+    //messages: DashboardMessageModel[] = [];
+    messages$: BehaviorSubject<DashboardMessageModel[]> = new BehaviorSubject<DashboardMessageModel[]>([]);
     //sectionComponents:IComponent[] = []
 
     constructor (private kerviService:KerviService){
@@ -53,10 +55,13 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
         this.expanded = (this.headerComponents.length==0);
         if (this.section.parameters.userLog){
             this.kerviService.spine.addEventHandler("userLogMessage", null, function(v){
-                self.messages.push(new DashboardMessageModel(this));
-                if (self.messages.length>20)
-                    self.messages.shift();
-                 console.log("lm",self.messages);   
+                //console.log("um",this);
+                var messages = self.messages$.value
+                messages.push(new DashboardMessageModel(this));
+                if (messages.length>20)
+                    messages.shift();
+
+                 self.messages$.next(messages);   
             });
         }
         
