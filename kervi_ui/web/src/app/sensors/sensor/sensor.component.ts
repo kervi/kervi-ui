@@ -22,7 +22,7 @@ export class SensorComponent implements OnInit {
   @Input() parameters: any = null;
   @Input() type: string = "value";
   @Input() showSparkline: boolean = true;
-  @Input() size:number = 1;
+  @Input() size:number = 0;
   @Input() dashboardSection: DashboardSectionModel = null;
   canvasId:string="";
   displayType:string="value";
@@ -45,8 +45,6 @@ export class SensorComponent implements OnInit {
     var self=this;
     if (!this.parameters)
       this.parameters=this.sensor.ui;
-
-
 
     if (this.parameters){
       if (this.parameters.type)
@@ -89,7 +87,6 @@ export class SensorComponent implements OnInit {
 
       });
 
-      
       var warningColor=this.color("color",".sensor-template .sensor-warning");
       var fatalColor=this.color("color",".sensor-template .sensor-fatal");
 
@@ -114,7 +111,6 @@ export class SensorComponent implements OnInit {
       if (self.sensor.upperWarningLimit)
         dataHighlights.push({"from": self.sensor.upperWarningLimit, "to": toLimit, "color": warningColor})
 
-      
       var nspan=(self.sensor.max-self.sensor.min);
       var tickSpan=nspan/10;
       var ticks=[];

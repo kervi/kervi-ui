@@ -6,6 +6,10 @@ import { IComponent } from '../../models/IComponent.model'
 
 
 export class DashboardMessageModel{
+    public sourceId:string;
+    public sourceName:string;
+    public area: string;
+    public level: number;
     public timestamp: Date;
     public topic:string;
     public body:string;
@@ -16,6 +20,11 @@ export class DashboardMessageModel{
         this.topic = message.topic;
         this.body = message.body;
         this.type = message.type;
+        this.sourceId = message.source_id;
+        this.sourceName = message.source_name;
+        this.area = message.area;
+        this.level = message.level;
+        
     }
 }
 

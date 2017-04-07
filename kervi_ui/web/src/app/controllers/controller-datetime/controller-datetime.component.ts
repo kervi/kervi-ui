@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
-import { ControllerDateTimeModel } from '../models/controller.model'
+import { DynamicDateTimeModel } from '../models/controller.model'
 import { KerviService } from '../../kervi.service'
 import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 declare var jQuery: any;
@@ -13,7 +13,7 @@ declare var jQuery: any;
   styleUrls: ['./controller-datetime.component.css']
 })
 export class ControllerDateTimeComponent implements OnInit {
-  @Input() datetime: ControllerDateTimeModel;
+  @Input() datetime: DynamicDateTimeModel;
   @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any;
   private valueSubscription: any;

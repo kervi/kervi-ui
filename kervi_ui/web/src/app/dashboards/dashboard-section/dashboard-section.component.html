@@ -26,13 +26,17 @@
                 <tr>
                     <th>&nbsp;</th>
                     <th>Time</th>
+                    <th>component</th>
                     <th>topic</th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let message of messages$ | async">
-                        <td class="alert" [ngClass]="{'alert-danger': message.level==1, 'alert-warning': message.level==2}">&nbsp;</td>
+                        <td>
+                            <span *ngIf="message.level<3" class="alert" [ngClass]="{'text-danger': message.level==1, 'text-warning': message.level==2}" >&#11044;</span>
+                        </td>
                         <td>{{message.timestamp | date: 'HH:mm:ss'}}</td>
+                        <td>{{message.sourceName}}</td>
                         <td>{{message.topic}}</td>
                     </tr>
                 </tbody>

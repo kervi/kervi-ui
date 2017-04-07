@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
-import { ControllerInputModel } from '../models/controller.model';
+import { DynamicStringModel } from '../models/controller.model';
 import { KerviService } from '../../kervi.service'
 import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 
@@ -13,7 +13,7 @@ declare var jQuery:any;
 	styleUrls: ['./controller-text-input.component.css']
 })
 export class ControllerTextInputComponent implements OnInit {
-	@Input() input: ControllerInputModel;
+	@Input() input: DynamicStringModel;
 	@Input() dashboardSection: DashboardSectionModel;
 	@Input() parameters:any;
 	

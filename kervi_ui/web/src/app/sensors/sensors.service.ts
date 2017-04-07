@@ -22,7 +22,6 @@ export class SensorsService {
         });
 
         var s1=this.kerviService.connected$.subscribe(function(connected){
-
             if (connected){
                 self.kerviService.spine.addEventHandler("NewSensorReading","",function(){
                     for (let sensor of self.sensors){
@@ -34,6 +33,18 @@ export class SensorsService {
                             if (spl.length>10)
                                 spl.shift();
                             sensor.sparkline$.next(spl);
+                        }
+
+                        for (let subSensor of sensor.subSensors){
+                            if (subSensor.id==this.sensor){
+                                subSensor.valueTS=new Date(this.timestamp*1000);
+                                subSensor.value$.next(this.value);
+                                var spl=subSensor.sparkline$.value;
+                                spl.push(this.value);
+                                if (spl.length>10)
+                                    spl.shift();
+                                subSensor.sparkline$.next(spl);
+                            }
                         }
                     }
                 });

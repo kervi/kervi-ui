@@ -5,6 +5,9 @@
 import os
 import time
 from socketserver import ThreadingMixIn
+import http.client
+from kervi.spine import Spine
+
 try:
     from SimpleHTTPServer import SimpleHTTPRequestHandler
 except:
@@ -34,7 +37,26 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            if self.path.endswith("global.js"):
+            if self.path.startswith("/cam"):
+                path = self.path.split("/")
+                cam_id = path[-1]
+                spine = Spine()
+                print("cam:", cam_id)
+                info = spine.send_query("getComponentInfo", cam_id)
+                if info:
+                    conn = http.client.HTTPConnection(info["ui"]["source"]["server"], timeout=self.timeout)
+                    conn.request("GET", info["ui"]["source"]["path"])
+                    res = conn.getresponse()
+                    self.send_response(res.status)
+                    for line in res.headers:
+                        self.send_header(line, res.headers[line])
+                    self.end_headers()
+                    while not self.server.terminate:
+                        chunk = res.read(8192)
+                        if not chunk:
+                            break
+                        self.wfile.write(chunk)
+            elif self.path.endswith("global.js"):
                 self.send_response(200)
                 self.send_header('Content-type', 'text/javascript')
                 self.end_headers()
@@ -83,10 +105,27 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
         except IOError:
             self.send_error(404, 'file not found')
 
+    def relay_streaming(self, res):
+        self.wfile.write("%s %d %s\r\n" % (self.protocol_version, res.status, res.reason))
+        for line in res.headers.headers:
+            self.wfile.write(line)
+        self.end_headers()
+        try:
+            while not self.server.terminate:
+                chunk = res.read(8192)
+                if not chunk:
+                    break
+                self.wfile.write(chunk)
+            self.wfile.flush()
+        except socket.error:
+            # connection closed by client
+            pass
+
 class _HTTPServer(ThreadingMixIn, HTTPServer):
     def __init__(self, address, web_port, ws_port, handler):
         HTTPServer.__init__(self, (address, web_port), handler)
         self.ip_address = address
+        self.terminate = False
         self.ws_port = ws_port
         kervipath = os.path.dirname(kervi_ui.__file__)
         self.docpath = os.path.join(kervipath, "web/dist")
@@ -103,4 +142,5 @@ def start(ip_address, http_port, ws_port):
 
 def stop():
     print("stop web server")
+    SERVER.terminate = True
     SERVER.shutdown()

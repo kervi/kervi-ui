@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
-import { ControllerModel, ControllerInputModel } from '../models/controller.model';
+import { ControllerModel, DynamicNumberModel } from '../models/controller.model';
 import { KerviService } from '../../kervi.service';
 import { ControllersService } from '../controllers.service';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
@@ -44,8 +44,8 @@ export class CamViewerComponent implements OnInit {
 
       if (v) {
 
-        var pan = v.components[0] as ControllerInputModel;
-        var tilt = v.components[1] as ControllerInputModel;
+        var pan = v.inputs[0] as DynamicNumberModel;
+        var tilt = v.inputs[1] as DynamicNumberModel;
         self.panSubscription = pan.value$.subscribe(function (v) {
           jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();
         });
@@ -61,7 +61,8 @@ export class CamViewerComponent implements OnInit {
           //     //self.img.src = self.camera$.value.ui.source+ '?t=' + new Date().getTime();
           //   },0);
             if (v.ui.source)
-              self.cameraSource$.next(v.ui.source);
+              self.cameraSource$.next("cam/"+v.id);
+              //self.cameraSource$.next(v.ui.source);
         
           
 
@@ -151,8 +152,8 @@ export class CamViewerComponent implements OnInit {
             clearTimeout(self.moveDelayTimer);
           }
           self.moveDelayTimer = setTimeout(function () {
-            var pan = self.camera$.value.components[0] as ControllerInputModel;
-            var tilt = self.camera$.value.components[1] as ControllerInputModel;
+            var pan = self.camera$.value.inputs[0] as DynamicNumberModel;
+            var tilt = self.camera$.value.inputs[1] as DynamicNumberModel;
             self.kerviService.spine.sendCommand(pan.command, value[0]);
             self.kerviService.spine.sendCommand(tilt.command, value[1]);
           }, 200);

@@ -2,8 +2,9 @@ import { Component, Input, OnInit, OnDestroy, ViewEncapsulation, ChangeDetection
 import { KerviService } from "../../kervi.service";
 import { DashboardsService } from "../dashboards.service";
 import { Router, ActivatedRoute } from '@angular/router';
-import { DashboardModel, DashboardSectionModel, DashboardMessageModel } from '../models/dashboard.model'
-import { IComponent } from '../../models/IComponent.model'
+import { DashboardModel, DashboardSectionModel, DashboardMessageModel } from '../models/dashboard.model';
+import { DashboardFactory } from '../models/factory';
+import { IComponent } from '../../models/IComponent.model';
 import {BehaviorSubject} from 'rxjs/Rx';
 
 @Component({
@@ -54,6 +55,12 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
         this.showHeader = (this.section.parameters.title != null && this.section.parameters.title.length>0) || (this.headerComponents.length > 0)
         this.expanded = (this.headerComponents.length==0);
         if (this.section.parameters.userLog){
+            this.kerviService.spine.sendQuery("getLogItems",0,20,function(v){
+                console.log('lm', v);
+                var messages = DashboardFactory.createLogMessages(v)
+                self.messages$.next(messages);
+                
+            });
             this.kerviService.spine.addEventHandler("userLogMessage", null, function(v){
                 //console.log("um",this);
                 var messages = self.messages$.value

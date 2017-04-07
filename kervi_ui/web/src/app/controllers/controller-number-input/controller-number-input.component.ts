@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
-import { ControllerInputModel } from '../models/controller.model';
+import { DynamicNumberModel } from '../models/controller.model';
 import { KerviService } from '../../kervi.service'
 import { TemplateService } from '../../template.service'
 import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
@@ -14,7 +14,7 @@ declare var jQuery: any;
 	styleUrls: ['./controller-number-input.component.css']
 })
 export class ControllerNumberInputComponent implements OnInit {
-	@Input() input: ControllerInputModel;
+	@Input() input: DynamicNumberModel;
 	@Input() dashboardSection: DashboardSectionModel;
 	@Input() parameters:any;
 	private moveDelayTimer = null;

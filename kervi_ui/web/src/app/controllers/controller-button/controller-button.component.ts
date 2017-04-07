@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
-import { ControllerButtonModel } from '../models/controller.model'
+import { DynamicBooleanModel } from '../models/controller.model'
 import { KerviService } from '../../kervi.service'
 import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 declare var jQuery: any;
@@ -13,7 +13,7 @@ declare var jQuery: any;
   styleUrls: ['./controller-button.component.css']
 })
 export class ControllerButtonComponent implements OnInit {
-  @Input() button: ControllerButtonModel;
+  @Input() button: DynamicBooleanModel;
   @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any;
   state:boolean = false
@@ -21,16 +21,16 @@ export class ControllerButtonComponent implements OnInit {
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
   public click() {
-    this.kerviService.spine.sendCommand(this.button.pressCommand);
-    this.kerviService.spine.sendCommand(this.button.releaseCommand);
+    //this.kerviService.spine.sendCommand(this.button.pressCommand);
+    //this.kerviService.spine.sendCommand(this.button.releaseCommand);
   }
 
   public press() {
-    this.kerviService.spine.sendCommand(this.button.pressCommand);
+    //this.kerviService.spine.sendCommand(this.button.pressCommand);
   }
 
   public release() {
-    this.kerviService.spine.sendCommand(this.button.releaseCommand);
+    //this.kerviService.spine.sendCommand(this.button.releaseCommand);
   }
 
   ngOnInit() {

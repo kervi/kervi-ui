@@ -7,6 +7,7 @@ import { IComponent } from '../../models/IComponent.model'
 
 
 export class SensorModel implements IComponent {
+    public subSensors:SensorModel[] = [];
     public id: string = null;
     public name: string = null;
     public componentType = "sensor";
@@ -45,6 +46,9 @@ export class SensorModel implements IComponent {
         this.unit=message.unit;
         this.value$.next(message.value);
         this.sparkline$.next(message.sparkline);
+        for(var subSensor of message.subSensors){
+            this.subSensors.push(new SensorModel(subSensor));
+        }
     } 
 
 

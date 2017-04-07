@@ -6,8 +6,7 @@ import { BehaviorSubject } from 'rxjs/Rx';
 import { ControllersFactory } from './factory' 
 
 
-
-export class ControllerSelectOptionModel{
+export class DynamicEnumOptionModel{
     public value:string;
     public text:string;
     public selected:boolean;
@@ -22,16 +21,16 @@ export class ControllerSelectOptionModel{
     reload(component:IComponent){};
 }
 
-export class ControllerSelectModel implements IComponent{
+export class DynamicEnumModel implements IComponent{
     public name: string;
-    public componentType = "controllerComponent"
+    public componentType = "dynamicValue"
     public visible: boolean;
     public ui:any = {}
     public id: string;
     public dashboards: string[] = [];
     public type:string;
     public command:string;
-    public options:ControllerSelectOptionModel[] = [];
+    public options:DynamicEnumOptionModel[] = [];
     
     constructor (message:any){
         this.name =message.name;
@@ -39,11 +38,11 @@ export class ControllerSelectModel implements IComponent{
         this.visible = message.visible;
         this.ui = message.ui;
         this.type = message.componentType;
-        this.command = message.onSelect;
+        this.command = message.command;
         this.options = [] 
        
         for (let option of message.options){
-            this.options.push( new ControllerSelectOptionModel(option)); 
+            this.options.push( new DynamicEnumOptionModel(option)); 
         }
     }
 
@@ -69,7 +68,7 @@ export class ControllerSelectModel implements IComponent{
     }
 }
 
-export class ControllerInputModel implements IComponent {
+export class DynamicNumberModel implements IComponent {
     public name: string;
     public componentType = "controllerComponent"
     public type: string;
@@ -110,7 +109,48 @@ export class ControllerInputModel implements IComponent {
     reload(component:IComponent){};
 }
 
-export class ControllerSwitchButtonModel implements IComponent {
+export class DynamicStringModel implements IComponent {
+    public name: string;
+    public componentType = "controllerComponent"
+    public type: string;
+    public visible: boolean;
+    public dashboards: string[] = [];
+    public orientation: string;
+    public unit: string;
+    public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    public maxValue: number;
+    public minValue: number;
+    public command: string;
+    public id: string;
+    public ui = {
+        type: "",
+        orientation: ""
+    }
+
+    constructor(message: any) {
+        this.name = message.name;
+        this.type = message.componentType;
+        this.ui = message.ui;
+        this.orientation = message.orientation;
+        this.visible = message.visible;
+        this.unit = message.unit;
+        this.value$.next(message.value);
+        this.maxValue = message.maxValue;
+        this.minValue = message.minValue;
+        this.command = message.command;
+        this.id = message.id;
+
+        for (var prop in message.ui) {
+            if (this.ui[prop] != undefined)
+                this.ui[prop] = message.ui[prop];
+        }
+    }
+
+    updateReferences(){};
+    reload(component:IComponent){};
+}
+
+export class DynamicBooleanModel implements IComponent {
     public id: string;
     public name: string;
     public componentType = "controllerComponent"
@@ -118,9 +158,7 @@ export class ControllerSwitchButtonModel implements IComponent {
     public type: string;
     public visible: boolean;
     public dashboards: string[] = [];
-    public onCommand: string;
-    public offCommand: string;
-    public clickCommand: string;
+    public command: string;
     public state$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(message) {
@@ -129,8 +167,7 @@ export class ControllerSwitchButtonModel implements IComponent {
         this.type = message.componentType;
         this.ui = message.ui;
         this.visible = message.visible;
-        this.onCommand = message.onCommand;
-        this.offCommand = message.offCommand;
+        this.command = message.command;
         this.state$.next(message.state);
 
     }
@@ -139,7 +176,7 @@ export class ControllerSwitchButtonModel implements IComponent {
     reload(component:IComponent){};
 }
 
-export class ControllerButtonModel implements IComponent {
+/*export class ControllerButtonModel implements IComponent {
     public id: string;
     public name: string;
     public componentType = "controllerComponent"
@@ -167,9 +204,9 @@ export class ControllerButtonModel implements IComponent {
 
     updateReferences(){};
     reload(component:IComponent){};
-}
+}*/
 
-export class ControllerDateTimeModel implements IComponent {
+export class DynamicDateTimeModel implements IComponent {
     public id: string;
     public name: string;
     public componentType = "controllerComponent"
@@ -204,8 +241,10 @@ export class ControllerModel implements IComponent {
     public name: string;
     public id: string;
     public parameters: any;
-    public components: IComponent[] = [];
-    public componentReferences: ComponentRef[] = [];
+    public inputs: IComponent[] = [];
+    public outputs: IComponent[] = [];
+    public inputReferences: ComponentRef[] = [];
+    public outputReferences: ComponentRef[] = [];
     public dashboards: string[];
     public template:string;
 
@@ -218,8 +257,12 @@ export class ControllerModel implements IComponent {
         this.dashboards = message.dashboards;
         this.parameters = message.parameters;
         this.template=message.template;
-        for(var ref of message.components){
-            this.componentReferences.push( new ComponentRef(ref));
+        for(var ref of message.inputs){
+            this.inputReferences.push( new ComponentRef(ref));
+        }
+
+        for(var ref of message.outputs){
+            this.outputReferences.push( new ComponentRef(ref));
         }
     }
 

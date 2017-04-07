@@ -5,18 +5,18 @@ export class ControllersFactory{
         //console.log("cf",message.componentType,message);
         if (message.componentType=="controller")
             component = new models.ControllerModel(message);
-        else if (message.componentType == "button")
-            component = new models.ControllerButtonModel(message);
-        else if (message.componentType == "switchButton")
-            component = new models.ControllerSwitchButtonModel(message);
-        else if (message.componentType == "number-input")
-            component = new models.ControllerInputModel(message);
-        else if (message.componentType == "text-input")
-            component = new models.ControllerInputModel(message);
-        else if (message.componentType == "select")
-            component = new models.ControllerSelectModel(message);
-        else if (message.componentType == "datetime-input")
-            component = new models.ControllerDateTimeModel(message);
+        //else if (message.componentType == "button")
+        //    component = new models.ControllerButtonModel(message);
+        else if (message.componentType == "dynamic-boolean")
+            component = new models.DynamicBooleanModel(message);
+        else if (message.componentType == "dynamic-number")
+            component = new models.DynamicNumberModel(message);
+        else if (message.componentType == "dynamic-string")
+            component = new models.DynamicStringModel(message);
+        else if (message.componentType == "dynamic-enum")
+            component = new models.DynamicEnumModel(message);
+        else if (message.componentType == "dynamic-datetime")
+            component = new models.DynamicDateTimeModel(message);
             
         return component;
     }

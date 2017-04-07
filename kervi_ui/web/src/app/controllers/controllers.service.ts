@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Injectable } from '@angular/core';
-import { ControllerModel, ControllerButtonModel, ControllerSwitchButtonModel, ControllerInputModel, ControllerSelectModel } from './models/controller.model'
+import  { ControllerModel, DynamicBooleanModel, DynamicDateTimeModel, DynamicEnumModel, DynamicNumberModel, DynamicStringModel}  from './models/controller.model'
 import { KerviService } from "../kervi.service";
 import { BehaviorSubject, Subject } from 'rxjs/Rx';
 import { ControllersFactory } from "./models/factory"
@@ -41,11 +41,17 @@ export class ControllersService {
         this.controllers= this.kerviService.getComponentsByType("controller");
         self._controllers$.next(self.controllers);
         for (let controller of this.controllers){
-            if (controller.components.length==0){
-                for(var ref of controller.componentReferences){
-                    controller.components.push(this.kerviService.getComponent(ref.id))
+            if (controller.inputs.length==0){
+                for(var ref of controller.inputReferences){
+                    controller.inputs.push(this.kerviService.getComponent(ref.id))
                 }
             }
+            if (controller.outputs.length==0){
+                for(var ref of controller.outputReferences){
+                    controller.outputs.push(this.kerviService.getComponent(ref.id))
+                }
+            }
+
             if (this.controllerTypes.indexOf(controller.type) == -1) {
                 this.controllerTypes.push(controller.type);
             }
@@ -105,7 +111,14 @@ export class ControllersService {
         //console.log("gdc",dashboard,type,this.controllers.length);
 
         for (let controller of this.controllers) {
-            for (let component of controller.components){
+            for (let component of controller.inputs){
+                if (component.id==id)
+                    return component
+            }
+        }
+
+        for (let controller of this.controllers) {
+            for (let component of controller.outputs){
                 if (component.id==id)
                     return component
             }
@@ -137,46 +150,32 @@ export class ControllersService {
 
     private setEventHandlers() {
         var self = this;
-        this.kerviService.spine.addEventHandler("controllerButtonStateChange", "", function (id, value) {
+        this.kerviService.spine.addEventHandler("dynamicValueChanged", "", function (id, value) {
+            console.log("dvc", id, value);
             for (let controller of self.controllers) {
-                for (let component of controller.components) {
-                    if (component.id == value.button) {
-                        var button = null;
-                        if (component.componentType=="switchButton")
-                            button = component as ControllerSwitchButtonModel;
-                        else
-                            button = component as ControllerButtonModel;
-
-                        button.state$.next(value.state);
+                for (let component of controller.inputs) {
+                    if (component.id == value.id) {
+                        console.log("dvc x", component);
+                        if (component instanceof DynamicNumberModel){
+                            component.value$.next(value.value)
+                        }
+                        else if (component instanceof DynamicStringModel){
+                            component.value$.next(value.value)
+                        }
+                        else if (component instanceof DynamicEnumModel){
+                            component.selectOptions(value.value)
+                        }
+                        else if (component instanceof DynamicBooleanModel){
+                            component.state$.next(value.value)
+                        }
+                        else if (component instanceof DynamicDateTimeModel){
+                            component.value$.next(value.value)
+                        }
+                            
                     }
                 }
             }
         });
-
-        this.kerviService.spine.addEventHandler("changeControllerInputValue", "", function (id, value) {
-            for (let controller of self.controllers) {
-                for (let component of controller.components) {
-                    if (component.id == value.input) {
-                        var input = component as ControllerInputModel;
-                        input.value$.next(value.value);
-                    }
-                }
-            }
-        });
-
-        this.kerviService.spine.addEventHandler("controllerSelectChange", "", function (id, value) {
-            for (let controller of self.controllers) {
-                for (let component of controller.components) {
-                    if (component.id == value.select) {
-                        var select = component as ControllerSelectModel;
-                        select.selectOptions(value.value)
-                        
-                    }
-                }
-            }
-        });
-
-
     }
 
     private updateCameraControllers() {

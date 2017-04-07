@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ElementRef, ViewEncapsulation } from '@angular/core';
-import { ControllerSwitchButtonModel } from '../models/controller.model'
+import { DynamicBooleanModel } from '../models/controller.model'
 import { KerviService } from '../../kervi.service'
 import { DashboardSectionModel } from '../../dashboards/models/dashboard.model'
 declare var jQuery: any;
@@ -14,7 +14,7 @@ declare var jQuery: any;
   encapsulation: ViewEncapsulation.None
 })
 export class ControllerSwitchButtonComponent implements OnInit {
-  @Input() button: ControllerSwitchButtonModel;
+  @Input() button: DynamicBooleanModel;
   @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any;
   private valueSubscription: any;
@@ -49,9 +49,9 @@ export class ControllerSwitchButtonComponent implements OnInit {
       jQuery('input', self.elementRef.nativeElement).change(function () {
         var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
         if (state && !self.button.state$.value)
-          self.kerviService.spine.sendCommand(self.button.onCommand);
+          self.kerviService.spine.sendCommand(self.button.command, true);
         else if (!state && self.button.state$.value)
-          self.kerviService.spine.sendCommand(self.button.offCommand);
+          self.kerviService.spine.sendCommand(self.button.command, false);
       });
     }, 0);
   }
