@@ -17,8 +17,17 @@ export class ControllerSwitchButtonComponent implements OnInit {
   @Input() button: DynamicBooleanModel;
   @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any;
+  state:boolean = false
   private valueSubscription: any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
+
+  public press() {
+     this.kerviService.spine.sendCommand(this.button.command, true);
+  }
+
+  public release() {
+     this.kerviService.spine.sendCommand(this.button.command, false);
+  }
 
   ngOnInit() {
     var self = this;
@@ -33,28 +42,30 @@ export class ControllerSwitchButtonComponent implements OnInit {
     
     onText+= this.parameters && this.parameters.onText ? this.parameters.onText : ""; 
     offText+= this.parameters && this.parameters.offText ? this.parameters.offText : ""; 
-    
 
     self.valueSubscription = self.button.state$.subscribe(function (v) {
       console.log("swbc",v);
-      jQuery('input', self.elementRef.nativeElement).bootstrapToggle(v ? "on" :"off");
+      self.state = v;
+      if (self.parameters.type=="switch")
+        jQuery('input', self.elementRef.nativeElement).bootstrapToggle(v ? "on" :"off");
     });
 
     setTimeout(function () {
-      jQuery('input', self.elementRef.nativeElement).bootstrapToggle({
-          on: onText,
-          off: offText,
-          style:self.parameters.size == 0 && !self.parameters.inline ? "pull-right" : "" 
-      });
-      jQuery('input', self.elementRef.nativeElement).change(function () {
-        var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
-        if (state && !self.button.state$.value)
-          self.kerviService.spine.sendCommand(self.button.command, true);
-        else if (!state && self.button.state$.value)
-          self.kerviService.spine.sendCommand(self.button.command, false);
-      });
+      if(self.parameters.type=="switch")
+      {
+        jQuery('input', self.elementRef.nativeElement).bootstrapToggle({
+            on: onText,
+            off: offText,
+            style:self.parameters.size == 0 && !self.parameters.inline ? "pull-right" : "" 
+        });
+        jQuery('input', self.elementRef.nativeElement).change(function () {
+          var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
+          if (state && !self.button.state$.value)
+            self.kerviService.spine.sendCommand(self.button.command, true);
+          else if (!state && self.button.state$.value)
+            self.kerviService.spine.sendCommand(self.button.command, false);
+        });
+      }
     }, 0);
   }
-
-
 }
