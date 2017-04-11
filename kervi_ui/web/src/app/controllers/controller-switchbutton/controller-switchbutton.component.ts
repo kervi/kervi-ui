@@ -35,8 +35,6 @@ export class ControllerSwitchButtonComponent implements OnInit {
     if (!this.parameters)
       this.parameters = this.button.ui;
 
-    console.log("ui",this.parameters);
-
     var onText= this.parameters && this.parameters.onIcon ? "<i class='fa fa-" + this.parameters.onIcon + "'></i> " : ""; 
     var offText= this.parameters && this.parameters.offIcon ? "<i class='fa fa-" + this.parameters.offIcon + "'></i> " : ""; 
     
@@ -44,7 +42,6 @@ export class ControllerSwitchButtonComponent implements OnInit {
     offText+= this.parameters && this.parameters.offText ? this.parameters.offText : ""; 
 
     self.valueSubscription = self.button.state$.subscribe(function (v) {
-      console.log("swbc",v);
       self.state = v;
       if (self.parameters.type=="switch")
         jQuery('input', self.elementRef.nativeElement).bootstrapToggle(v ? "on" :"off");

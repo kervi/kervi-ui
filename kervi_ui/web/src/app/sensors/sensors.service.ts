@@ -23,20 +23,20 @@ export class SensorsService {
 
         var s1=this.kerviService.connected$.subscribe(function(connected){
             if (connected){
-                self.kerviService.spine.addEventHandler("NewSensorReading","",function(){
+                self.kerviService.spine.addEventHandler("dynamicValueChanged","",function(id, value){
                     for (let sensor of self.sensors){
-                        if (sensor.id==this.sensor){
+                        if (sensor.id==value.id){
                             sensor.valueTS=new Date(this.timestamp*1000);
-                            sensor.value$.next(this.value);
+                            sensor.value$.next(value.value);
                             var spl=sensor.sparkline$.value;
-                            spl.push(this.value);
+                            spl.push(value.value);
                             if (spl.length>10)
                                 spl.shift();
                             sensor.sparkline$.next(spl);
                         }
 
                         for (let subSensor of sensor.subSensors){
-                            if (subSensor.id==this.sensor){
+                            if (subSensor.id==value.id){
                                 subSensor.valueTS=new Date(this.timestamp*1000);
                                 subSensor.value$.next(this.value);
                                 var spl=subSensor.sparkline$.value;

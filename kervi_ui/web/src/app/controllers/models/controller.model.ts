@@ -168,7 +168,7 @@ export class DynamicBooleanModel implements IComponent {
         this.ui = message.ui;
         this.visible = message.visible;
         this.command = message.command;
-        this.state$.next(message.state);
+        this.state$.next(message.value);
 
     }
 

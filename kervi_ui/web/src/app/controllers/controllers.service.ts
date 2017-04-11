@@ -4,6 +4,7 @@
 import { Injectable } from '@angular/core';
 import  { ControllerModel, DynamicBooleanModel, DynamicDateTimeModel, DynamicEnumModel, DynamicNumberModel, DynamicStringModel}  from './models/controller.model'
 import { KerviService } from "../kervi.service";
+import { IComponent } from "../models/IComponent.model";
 import { BehaviorSubject, Subject } from 'rxjs/Rx';
 import { ControllersFactory } from "./models/factory"
 @Injectable()
@@ -16,11 +17,13 @@ export class ControllersService {
     private _controllerTypes$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
     private _cameraControllers$: BehaviorSubject<ControllerModel[]> = new BehaviorSubject<ControllerModel[]>([]);
     private _currentCameraController$: BehaviorSubject<ControllerModel> = new BehaviorSubject<ControllerModel>(null);
+    private components:IComponent[];
 
     constructor(private kerviService: KerviService) {
         var self = this;
 
-        var s=this.kerviService.getComponents$().subscribe(function(){
+        var s=this.kerviService.getComponents$().subscribe(function(v){
+            self.components = v;
             self.refreshControllers()
         }); 
 
@@ -123,9 +126,7 @@ export class ControllersService {
                     return component
             }
         }
-        //console.log("gdce",result);
-        return null;
-
+        return this.kerviService.getComponent(id);
     }
 
     public getDashboardCameras(dashboard: string) {
@@ -151,29 +152,24 @@ export class ControllersService {
     private setEventHandlers() {
         var self = this;
         this.kerviService.spine.addEventHandler("dynamicValueChanged", "", function (id, value) {
-            console.log("dvc", id, value);
-            for (let controller of self.controllers) {
-                for (let component of controller.inputs) {
-                    if (component.id == value.id) {
-                        console.log("dvc x", component);
-                        if (component instanceof DynamicNumberModel){
-                            component.value$.next(value.value)
-                        }
-                        else if (component instanceof DynamicStringModel){
-                            component.value$.next(value.value)
-                        }
-                        else if (component instanceof DynamicEnumModel){
-                            component.selectOptions(value.value)
-                        }
-                        else if (component instanceof DynamicBooleanModel){
-                            component.state$.next(value.value)
-                        }
-                        else if (component instanceof DynamicDateTimeModel){
-                            component.value$.next(value.value)
-                        }
-                            
-                    }
+            var component = self.kerviService.getComponent(value.id)
+            if (component.id == value.id) {
+                if (component instanceof DynamicNumberModel){
+                    component.value$.next(value.value)
                 }
+                else if (component instanceof DynamicStringModel){
+                    component.value$.next(value.value)
+                }
+                else if (component instanceof DynamicEnumModel){
+                    component.selectOptions(value.value)
+                }
+                else if (component instanceof DynamicBooleanModel){
+                    component.state$.next(value.value)
+                }
+                else if (component instanceof DynamicDateTimeModel){
+                    component.value$.next(value.value)
+                }
+                    
             }
         });
     }
