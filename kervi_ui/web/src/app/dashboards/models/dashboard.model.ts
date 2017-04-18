@@ -24,7 +24,7 @@ export class DashboardMessageModel{
         this.sourceName = message.source_name;
         this.area = message.area;
         this.level = message.level;
-        
+
     }
 }
 
@@ -135,6 +135,10 @@ export class DashboardModel implements IComponent{
     public sysSection: DashboardSectionModel=null;
     public backgroundSection: DashboardSectionModel=null;
     public controllerSection: DashboardSectionModel=null;
+    public LeftPadXSection: DashboardSectionModel=null;
+    public LeftPadYSection: DashboardSectionModel=null;
+    public RightPadXSection: DashboardSectionModel=null;
+    public RightPadYSection: DashboardSectionModel=null;
     //public background: DashboardBackgroundModel=null;
     public unitSize: number;
     
@@ -168,9 +172,16 @@ export class DashboardModel implements IComponent{
                     this.controllerSection=section;
                 else if (section.id=="background")
                     this.backgroundSection=section;
+                else if (section.id=="left_pad_x")
+                    this.LeftPadXSection=section;
+                else if (section.id=="left_pad_y")
+                    this.LeftPadYSection=section;
+                else if (section.id=="right_pad_x")
+                    this.RightPadXSection=section;
+                else if (section.id=="right_pad_y")
+                    this.RightPadYSection=section;
                 else this.sections.push(section);        
             }
-
         }
     }
 

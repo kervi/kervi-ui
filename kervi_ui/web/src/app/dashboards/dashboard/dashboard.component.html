@@ -16,6 +16,20 @@
 </ng-container>
 <div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:25px;">
 	<kervi-cam-viewer *ngIf="cameraId" [isBackground]="true" [cameraId]="cameraId" [parameters]="cameraParameters"></kervi-cam-viewer>
+	<div id="controller-pads">
+		<div class="left-pad-area" style="position:absolute;top:150;left:50">
+			<fieldset id="leftPad" style="position:absolute" class="pad" [attr.data-width]="padSize" [attr.data-height]="padSize">
+				<legend></legend>
+				<input type="hidden" id="left-pad-x" name="x" value="0"><input type="hidden" id="left-pad-y" name="y" value="0">
+			</fieldset>
+		</div>
+		<div class="right-pad-area" style="position:absolute">
+			<fieldset id="rightPad" style="position:absolute" class="pad" [attr.data-width]="padSize" [attr.data-height]="padSize">
+				<legend></legend>
+				<input id="right-pad-x" name="x" value="0"> tilt : <input id="right-pad-y" name="y" value="0">
+			</fieldset>
+		</div>
+	</div>
 	<div class="container-fluid" style="position:absolute;top:0;z-index:1999" >
 		<div class="card-columns" [ngClass]="{'dashboard-sections-hidden' : dashboardSectionsHidden }">
 			<kervi-dashboard-section *ngFor="let section of dashboard.sections" [section]="section"></kervi-dashboard-section>

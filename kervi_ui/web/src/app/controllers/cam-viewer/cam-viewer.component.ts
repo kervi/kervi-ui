@@ -44,15 +44,26 @@ export class CamViewerComponent implements OnInit {
 
       if (v) {
 
-        var pan = v.inputs[0] as DynamicNumberModel;
-        var tilt = v.inputs[1] as DynamicNumberModel;
-        self.panSubscription = pan.value$.subscribe(function (v) {
-          jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();
-        });
+        var pan = null;
+        var tilt = null;
+        for(var i of v.inputs){
+          if (i.id.endsWith(".pan"))
+            pan=i as DynamicNumberModel;
+          else if (i.id.endsWith(".tilt"))
+            tilt=i as DynamicNumberModel
 
-        self.tiltSubscription = tilt.value$.subscribe(function (v) {
-          jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();
-        });
+        }
+        if (pan){
+          self.panSubscription = pan.value$.subscribe(function (v) {
+            jQuery("input[name='x']", self.elementRef.nativeElement).val(v).change();
+          });
+        }
+
+        if (tilt){
+          self.tiltSubscription = tilt.value$.subscribe(function (v) {
+            jQuery("input[name='y']", self.elementRef.nativeElement).val(v).change();
+          });
+        }
         if (v.ui && v.ui.type == "frame" ){
           // jQuery("img",self.elementRef.nativeElement).load(function() {
           //   console.log("il");
@@ -151,11 +162,22 @@ export class CamViewerComponent implements OnInit {
           if (self.moveDelayTimer) {
             clearTimeout(self.moveDelayTimer);
           }
+          
+          var pan = null;
+          var tilt = null
+          for(var i of self.camera$.value.inputs){
+            if (i.id.endsWith(".pan"))
+              pan=i as DynamicNumberModel;
+            else if (i.id.endsWith(".tilt"))
+              tilt=i as DynamicNumberModel
+
+          }
+          
           self.moveDelayTimer = setTimeout(function () {
-            var pan = self.camera$.value.inputs[0] as DynamicNumberModel;
-            var tilt = self.camera$.value.inputs[1] as DynamicNumberModel;
-            self.kerviService.spine.sendCommand(pan.command, value[0]);
-            self.kerviService.spine.sendCommand(tilt.command, value[1]);
+            if (pan)
+              self.kerviService.spine.sendCommand(pan.command, value[0]);
+            if (tilt)
+              self.kerviService.spine.sendCommand(tilt.command, value[1]);
           }, 200);
         }
       })
