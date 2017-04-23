@@ -59,6 +59,6 @@
         <ng-container *ngFor="let sectionComponent of section.components" style="display:inline-block">
             <controller [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='controller'" ></controller>
             <controller-component [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component.componentType=='controllerComponent'" ></controller-component>
-            <sensor [dashboardSection]="section" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='sensor'" ></sensor>
+            <sensor [dashboardSection]="section" [inline]="true" [id]="sectionComponent.componentId" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='sensor'" ></sensor>
         </ng-container>
 </template>

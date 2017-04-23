@@ -65,38 +65,10 @@ export class CamViewerComponent implements OnInit {
           });
         }
         if (v.ui && v.ui.type == "frame" ){
-          // jQuery("img",self.elementRef.nativeElement).load(function() {
-          //   console.log("il");
-          //   setTimeout(function(){
-          //     self.cameraSource$.next(v.ui.source + "?t=" + new Date().getTime());
-          //     //self.img.src = self.camera$.value.ui.source+ '?t=' + new Date().getTime();
-          //   },0);
             if (v.ui.source)
               self.cameraSource$.next("cam/"+v.id);
-              //self.cameraSource$.next(v.ui.source);
-        
-          
-
           
           
-          // self.img.onload = function() {
-          //   var canvas = <HTMLCanvasElement>document.getElementById('camCanvas');
-          //   var context = canvas.getContext('2d');
-
-          //   context.drawImage(self.img, 0, 0);
-          //   setTimeout(function(){
-          //     self.img.src = self.camera$.value.ui.source+ '?t=' + new Date().getTime();
-          //   }, 0);
-          // };
-
-          // self.img.src = self.camera$.value.ui.source+ '?t=' + new Date().getTime();
-
-          
-          
-          // setInterval(function() {
-          //   self.cameraSource$.next(v.ui.source + "?t=" + new Date().getTime());
-            
-          // }, 1000/v.ui.fps);
         }
 
       } else {
@@ -117,14 +89,12 @@ export class CamViewerComponent implements OnInit {
         var w = jQuery(".video",this.elementRef.nativeElement).width();
         jQuery(".cam-pad-area", this.elementRef.nativeElement).css({ top: h / 2 - this.padSize/2, left: w / 2 - this.padSize/2 });
     }
-    //jQuery("img",this.elementRef.nativeElement).attr("src",this.camera$.value.ui.source + "?t=" + new Date().getTime())
-    //this.cameraSource$.next();
+    
   }
 
   private timedRefresh() {
-    // just change src attribute, will always trigger the onload callback
-    console.log("trx", this);
-    //this.img.src = this.camera$.value.ui.source+ '?t=' + new Date().getTime();
+    //console.log("trx", this);
+    
   }
 
   ngOnInit() {
@@ -147,7 +117,19 @@ export class CamViewerComponent implements OnInit {
       }
 
       console.log("cwp",h,w,self.padSize);
-      
+
+      var pan = null;
+      var tilt = null
+      for(var i of self.camera$.value.inputs){
+        if (i.id.endsWith(".pan"))
+          pan=i as DynamicNumberModel;
+        else if (i.id.endsWith(".tilt"))
+          tilt=i as DynamicNumberModel
+
+      }    
+
+      jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();
+      jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();  
 
       var color = "rgba(255,255,255,.5)";
       var p = jQuery('fieldset', self.elementRef.nativeElement).xy({
@@ -163,15 +145,7 @@ export class CamViewerComponent implements OnInit {
             clearTimeout(self.moveDelayTimer);
           }
           
-          var pan = null;
-          var tilt = null
-          for(var i of self.camera$.value.inputs){
-            if (i.id.endsWith(".pan"))
-              pan=i as DynamicNumberModel;
-            else if (i.id.endsWith(".tilt"))
-              tilt=i as DynamicNumberModel
-
-          }
+          
           
           self.moveDelayTimer = setTimeout(function () {
             if (pan)

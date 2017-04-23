@@ -24,6 +24,7 @@ export class SensorComponent implements OnInit {
   @Input() showSparkline: boolean = true;
   @Input() size:number = 0;
   @Input() dashboardSection: DashboardSectionModel = null;
+  @Input() inline:boolean = false;
   canvasId:string="";
   displayType:string="value";
   currentIcon:string=null;
@@ -53,6 +54,9 @@ export class SensorComponent implements OnInit {
       if (this.parameters.size !== null)
         this.size=this.parameters.size;
     }
+
+    
+
     console.log("si",this)
     if (this.parameters.icon && typeof this.parameters.icon === "string")
       this.currentIcon=this.parameters.icon;

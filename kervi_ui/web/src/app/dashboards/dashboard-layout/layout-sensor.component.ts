@@ -17,6 +17,7 @@ export class LayoutSensorComponent implements OnInit {
   @Input() dashboardType: string;
   @Input() parameters:any = null;
   @Input() dashboardSection: DashboardSectionModel;
+  @Input() inline: boolean=false;
   sensor:SensorModel;
   constructor(private sensorsService:SensorsService) {
       //console.log("ls constructor",this.id);

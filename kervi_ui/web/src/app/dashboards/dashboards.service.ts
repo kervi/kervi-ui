@@ -37,9 +37,37 @@ export class DashboardsService {
                     sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
 
-                for (var sectionComponent of dashboard.footerSection.components){
+                for (var sectionComponent of dashboard.footerLeftSection.components){
                    if (!sectionComponent.component)
                     sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+
+                for (var sectionComponent of dashboard.footerCenterSection.components){
+                   if (!sectionComponent.component)
+                    sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+
+                for (var sectionComponent of dashboard.footerRightSection.components){
+                   if (!sectionComponent.component)
+                    sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+
+                for (var sectionComponent of dashboard.LeftPadXSection.components){
+                    if (!sectionComponent.component)
+                        sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+                for (var sectionComponent of dashboard.LeftPadYSection.components){
+                    if (!sectionComponent.component)
+                        sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+
+                for (var sectionComponent of dashboard.RightPadXSection.components){
+                    if (!sectionComponent.component)
+                        sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                }
+                for (var sectionComponent of dashboard.RightPadYSection.components){
+                    if (!sectionComponent.component)
+                        sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
             }
             console.log("load dashboards updated",self.dashboards);

@@ -1,5 +1,5 @@
 <ng-container *ngIf="sensor.subSensors.length == 0">
-	<div *ngIf="displayType=='value' && size>0" class="sensor-inline sensor-type-value">
+	<div *ngIf="displayType=='value' && (size>0 || inline)" class="sensor-inline sensor-type-value">
 		<i *ngIf="parameters.labelIcon" class="fa fa-{{currentIcon}}"></i>
 		<ng-container *ngIf="parameters.label">{{parameters.label}}:</ng-container>
 		<i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
@@ -7,7 +7,7 @@
 		<span class="sensor-value">{{(sensor.value$ | async)}}{{sensor.unit}}</span>
 	</div>
 
-	<div *ngIf="displayType=='value' && size==0 " class="sensor-block sensor-type-value">
+	<div *ngIf="displayType=='value' && size==0 && !inline " class="sensor-block sensor-type-value">
 		<div style="display: inline-block" *ngIf="parameters.label">{{parameters.label}}:</div>
 		<div style="display:inline-block; float: right">
 			<i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>

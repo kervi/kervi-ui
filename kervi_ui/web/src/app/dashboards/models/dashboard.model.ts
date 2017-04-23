@@ -55,7 +55,6 @@ export class DashboardSectionParametersModel{
         this.rows=messageParameters.rows;
         this.userLog=messageParameters.userLog;
         
-        
         if (messageParameters.type)
             this.type=messageParameters.type;
     }
@@ -68,7 +67,7 @@ export class DashboardSectionModel{
     public components: DashboardSectionComponentModel[]=[];
     public dashboard: DashboardModel;
 
-    constructor (dashboard,messageSection){
+    constructor (dashboard, messageSection){
         this.dashboard=dashboard;
         this.id=messageSection.id;
         this.name=messageSection.name;
@@ -131,7 +130,9 @@ export class DashboardModel implements IComponent{
     public template:string;
     public sections:DashboardSectionModel[];
     public headerSection: DashboardSectionModel=null;
-    public footerSection: DashboardSectionModel=null;
+    public footerCenterSection: DashboardSectionModel=null;
+    public footerLeftSection: DashboardSectionModel=null;
+    public footerRightSection: DashboardSectionModel=null;
     public sysSection: DashboardSectionModel=null;
     public backgroundSection: DashboardSectionModel=null;
     public controllerSection: DashboardSectionModel=null;
@@ -162,11 +163,15 @@ export class DashboardModel implements IComponent{
         if (!this.template){
             for (let messageSection of message.sections){
                 var section=new DashboardSectionModel(this, messageSection);
-                if (section.id=="header")
+                if (section.id=="header_center")
                     this.headerSection=section;
-                else if (section.id=="footer")
-                    this.footerSection=section;
-                else if (section.id=="sys-header")
+                else if (section.id=="footer_left")
+                    this.footerLeftSection=section;
+                else if (section.id=="footer_center")
+                    this.footerCenterSection=section;
+                else if (section.id=="footer_right")
+                    this.footerRightSection=section;
+                else if (section.id=="header_right")
                     this.sysSection=section;
                 else if (section.id=="controllers")
                     this.controllerSection=section;
@@ -195,19 +200,33 @@ export class DashboardModel implements IComponent{
         else if (this.backgroundSection)
             this.backgroundSection.reload(source.backgroundSection)
 
-        if (!this.footerSection && source.footerSection)
-            this.footerSection=source.footerSection;
-        else if (this.footerSection && !source.footerSection)
-            this.footerSection = null
-        else if (this.footerSection)
-            this.footerSection.reload(source.footerSection)
+        if (!this.footerLeftSection && source.footerLeftSection)
+            this.footerLeftSection=source.footerLeftSection;
+        else if (this.footerLeftSection && !source.footerLeftSection)
+            this.footerLeftSection = null
+        else if (this.footerLeftSection)
+            this.footerLeftSection.reload(source.footerLeftSection)
 
-        if (!this.headerSection && source.headerSection)
+        if (!this.footerRightSection && source.footerRightSection)
+            this.footerRightSection=source.footerRightSection;
+        else if (this.footerRightSection && !source.footerRightSection)
+            this.footerRightSection = null
+        else if (this.footerRightSection)
+            this.footerRightSection.reload(source.footerRightSection)
+
+        if (!this.footerCenterSection && source.footerCenterSection)
+            this.footerCenterSection=source.footerCenterSection;
+        else if (this.footerCenterSection && !source.footerCenterSection)
+            this.footerCenterSection = null
+        else if (this.footerCenterSection)
+            this.footerCenterSection.reload(source.footerCenterSection)
+
+        /*if (!this.headerSection && source.headerSection)
             this.headerSection=source.headerSection;
         else if (this.headerSection && !source.headerSection)
             this.headerSection = null
         else if (this.headerSection)
-            this.headerSection.reload(source.headerSection)
+            this.headerSection.reload(source.headerSection)*/
 
         if (!this.sysSection && source.sysSection)
             this.sysSection=source.sysSection;
@@ -216,7 +235,35 @@ export class DashboardModel implements IComponent{
         else if (this.sysSection)
             this.sysSection.reload(source.sysSection)
 
-         if (!this.controllerSection && source.controllerSection)
+        if (!this.LeftPadXSection && source.LeftPadXSection)
+            this.LeftPadXSection=source.LeftPadXSection;
+        else if (this.LeftPadXSection && !source.LeftPadXSection)
+            this.LeftPadXSection = null
+        else if (this.LeftPadXSection)
+            this.LeftPadXSection.reload(source.LeftPadXSection)
+
+        if (!this.LeftPadYSection && source.LeftPadYSection)
+            this.LeftPadYSection=source.LeftPadYSection;
+        else if (this.LeftPadYSection && !source.LeftPadYSection)
+            this.LeftPadYSection = null
+        else if (this.LeftPadYSection)
+            this.LeftPadYSection.reload(source.LeftPadYSection)
+
+        if (!this.RightPadXSection && source.RightPadXSection)
+            this.RightPadXSection=source.RightPadXSection;
+        else if (this.RightPadXSection && !source.RightPadXSection)
+            this.RightPadXSection = null
+        else if (this.RightPadXSection)
+            this.RightPadXSection.reload(source.RightPadXSection)
+
+        if (!this.RightPadYSection && source.RightPadYSection)
+            this.RightPadYSection=source.RightPadYSection;
+        else if (this.RightPadYSection && !source.RightPadYSection)
+            this.RightPadYSection = null
+        else if (this.RightPadYSection)
+            this.RightPadYSection.reload(source.RightPadYSection)
+
+        if (!this.controllerSection && source.controllerSection)
             this.controllerSection=source.controllerSection;
         else if (this.controllerSection && !source.controllerSection)
             this.controllerSection = null
