@@ -62,6 +62,7 @@ export class ControllerNumberInputComponent implements OnInit {
 				tooltip: "hide",
 				min:self.input.minValue,
 				max:self.input.maxValue,
+				step:self.parameters.tick,
 				orientation: self.parameters.type == "horizontal_slider" ? "horizontal" : "vertical"
 			});
 			if (self.parameters.size==0 && !self.parameters.inline){

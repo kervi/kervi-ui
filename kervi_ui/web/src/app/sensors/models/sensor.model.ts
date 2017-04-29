@@ -4,7 +4,25 @@
 import { BehaviorSubject } from 'rxjs/Rx';
 import { IComponent } from '../../models/IComponent.model'
 
+export enum RangeType {normal, warning, error};
 
+export class SensorRange{
+    
+    public start:number = null;
+    public end:number = null;
+    public type:RangeType = null;
+
+    constructor(range:any){
+        this.start = range["start"];
+        this.end = range["end"]
+        if (range["type"] == "warning")
+            this.type = RangeType.warning;
+        else if (range["type"] == "error")
+            this.type = RangeType.error;
+        else
+            this.type = RangeType.normal;
+    }
+}
 
 export class SensorModel implements IComponent {
     public subSensors:SensorModel[] = [];
@@ -17,15 +35,11 @@ export class SensorModel implements IComponent {
     public max: number = null;
     public min: number = null;
     public unit: string = null;
-    public upperFatalLimit:number = null;
-    public upperWarningLimit:number = null;
-    public lowerFatalLimit:number = null;
-    public lowerWarningLimit:number = null;
+    public ranges:SensorRange[] = []
     public valueTS:Date = null;
     public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     public dashboards: string[] = [];
     public sparkline$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-
 
     updateReferences(){};
     reload(component:IComponent){};
@@ -38,10 +52,10 @@ export class SensorModel implements IComponent {
         this.dashboards=message.dashboards;
         this.max=message.max;
         this.min=message.min;
-        this.upperFatalLimit=message.upperFatalLimit;
-        this.upperWarningLimit=message.upperWarningLimit;
-        this.lowerFatalLimit=message.lowerFatalLimit;
-        this.lowerWarningLimit=message.lowerWarningLimit;
+        
+        for(var range of message.ranges){
+            this.ranges.push(new SensorRange(range));
+        }
         this.type=message.type;
         this.unit=message.unit;
         this.value$.next(message.value);
@@ -49,7 +63,5 @@ export class SensorModel implements IComponent {
         for(var subSensor of message.subSensors){
             this.subSensors.push(new SensorModel(subSensor));
         }
-    } 
-
-
+    }
 }

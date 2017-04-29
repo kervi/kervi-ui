@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { SensorModel } from '../models/sensor.model';
+import { SensorModel, SensorRange, RangeType  } from '../models/sensor.model';
 import { DashboardSectionModel } from '../../dashboards/models/dashboard.model';
 import { KerviService } from '../../kervi.service';
 import { TemplateService } from '../../template.service';
@@ -96,25 +96,14 @@ export class SensorComponent implements OnInit {
 
       var dataHighlights=[];
       var fromLimit=self.sensor.min;
-      if (self.sensor.lowerFatalLimit!=null){
-        dataHighlights.push({"from": fromLimit, "to": self.sensor.lowerFatalLimit, "color": fatalColor})
-        fromLimit=self.sensor.lowerFatalLimit;
+      
+      for(var range of self.sensor.ranges){
+        if (range.type == RangeType.error)
+          dataHighlights.push({"from": range.start, "to": range.end, "color": fatalColor})
+        if (range.type == RangeType.warning)
+          dataHighlights.push({"from": range.start, "to": range.end, "color": warningColor})
       }
       
-      if (self.sensor.lowerWarningLimit!=null){
-        dataHighlights.push({"from": fromLimit, "to": self.sensor.lowerWarningLimit, "color": warningColor})
-        fromLimit=self.sensor.lowerWarningLimit;
-      }
-
-      var toLimit=self.sensor.max;
-      if (self.sensor.upperFatalLimit){
-        dataHighlights.push({"from": self.sensor.upperFatalLimit, "to": toLimit, "color": fatalColor})
-        toLimit=self.sensor.upperFatalLimit;
-      }
-      
-      if (self.sensor.upperWarningLimit)
-        dataHighlights.push({"from": self.sensor.upperWarningLimit, "to": toLimit, "color": warningColor})
-
       var nspan=(self.sensor.max-self.sensor.min);
       var tickSpan=nspan/10;
       var ticks=[];

@@ -29,6 +29,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private showRightPad = false
   private inLeftPadDrag:boolean = false;
   private inRightPadDrag:boolean = false;
+  private autoZeroLeftPad:boolean = false;
+  private autoZeroRightPad:boolean = false;
+
+  private leftXValue: DynamicNumberModel = null;
+  private leftYValue: DynamicNumberModel = null;
+
+  private rightXValue: DynamicNumberModel = null;
+  private rightYValue: DynamicNumberModel = null;
 
   constructor(private elementRef:ElementRef, private zone:NgZone, private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
       
@@ -38,13 +46,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
      if (pad=="left")
         this.inLeftPadDrag=true;
 
-      console.log("pp", this.inLeftPadDrag)
+      if (pad=="right")
+        this.inRightPadDrag=true;  
    }
 
    padRelease(pad:string){
      if (pad=="left")
         this.inLeftPadDrag=false;
-      console.log("pr", this.inLeftPadDrag)
+        if (this.autoZeroLeftPad && this.leftXValue){
+          jQuery("input[name='left-x']", this.elementRef.nativeElement).val(0).change();
+          this.kerviService.spine.sendCommand(this.leftXValue.command, 0);
+        }
+        if (this.autoZeroLeftPad && this.leftYValue){
+          jQuery("input[name='left-y']", this.elementRef.nativeElement).val(0).change();
+          this.kerviService.spine.sendCommand(this.leftYValue.command, 0);
+        }
+      
+     if (pad=="right")
+        this.inRightPadDrag=false;
+        if (this.autoZeroRightPad && this.rightXValue){
+          jQuery("input[name='right-x']", this.elementRef.nativeElement).val(0).change();
+          this.kerviService.spine.sendCommand(this.rightXValue.command, 0);
+        }
+        if (this.autoZeroRightPad && this.rightYValue){
+          jQuery("input[name='right-y']", this.elementRef.nativeElement).val(0).change();
+          this.kerviService.spine.sendCommand(this.rightYValue.command, 0);
+        }
    }
 
 
@@ -60,9 +87,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.dashboardsService.getDashboards$().subscribe(function(v){
         this.setupDashboard()
       })
-
     });
-    
   }
 
   ngOnDestroy(){
@@ -103,24 +128,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       if (this.dashboard.LeftPadXSection && this.dashboard.LeftPadXSection.components.length || this.dashboard.LeftPadYSection && this.dashboard.LeftPadYSection.components.length){
         this.showLeftPad = true;
-        var xValue = null;
-        var yValue = null
-        if (self.dashboard.LeftPadXSection.components.length)
-          xValue=self.dashboard.LeftPadXSection.components[0].component as DynamicNumberModel
-        if (self.dashboard.LeftPadYSection.components.length)
-          yValue=self.dashboard.LeftPadYSection.components[0].component as DynamicNumberModel
-        console.log("lc",self.dashboard.LeftPadXSection, self.dashboard.LeftPadYSection,xValue,yValue)
+        if (self.dashboard.LeftPadXSection.components.length){
+          self.leftXValue=self.dashboard.LeftPadXSection.components[0].component as DynamicNumberModel
+          if (self.dashboard.LeftPadXSection.components[0].parameters.padAutoCenter)
+            self.autoZeroLeftPad = true;
+        }
+        if (self.dashboard.LeftPadYSection.components.length){
+          self.leftYValue=self.dashboard.LeftPadYSection.components[0].component as DynamicNumberModel
+          if (self.dashboard.LeftPadYSection.components[0].parameters.padAutoCenter)
+            self.autoZeroLeftPad = true;
+        }
+        console.log("lc",self.dashboard.LeftPadXSection, self.dashboard.LeftPadYSection,this.leftXValue,this.leftYValue)
                 
 
-        if (xValue){
-          xValue.value$.subscribe(function (v) {
+        if (self.leftXValue){
+          self.leftXValue.value$.subscribe(function (v) {
             if (!this.inLeftPadDrag)
               jQuery("input[name='left-x']", self.elementRef.nativeElement).val(v).change();
           });
         }
 
-        if (yValue){
-          yValue.value$.subscribe(function (v) {
+        if (self.leftYValue){
+          self.leftYValue.value$.subscribe(function (v) {
             if (!this.inLeftPadDrag)
               jQuery("input[name='left-y']", self.elementRef.nativeElement).val(v).change();
           });
@@ -139,8 +168,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             jQuery(".left-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - self.padSize/2, left: w / 4 - self.padSize/2 });
           });
 
-           jQuery("input[name='left-x']", self.elementRef.nativeElement).val(xValue.value$.value).change();
-          jQuery("input[name='left-y']", self.elementRef.nativeElement).val(yValue.value$.value).change();
+           jQuery("input[name='left-x']", self.elementRef.nativeElement).val(self.leftXValue.value$.value).change();
+          jQuery("input[name='left-y']", self.elementRef.nativeElement).val(self.leftYValue.value$.value).change();
           
           var color = "rgba(255,255,255,.5)";
           console.log("lpx", jQuery('#leftPad'));
@@ -158,11 +187,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
               
                 self.moveLeftDelayTimer = setTimeout(function () {
-                  console.log("lcx",xValue,yValue)
-                  if (xValue && self.inLeftPadDrag)
-                    self.kerviService.spine.sendCommand(xValue.command, value[0]);
-                  if (yValue && self.inLeftPadDrag)
-                    self.kerviService.spine.sendCommand(yValue.command, value[1]);
+                  console.log("lcx",self.leftXValue,self.leftYValue)
+                  if (self.leftXValue && self.inLeftPadDrag)
+                    self.kerviService.spine.sendCommand(self.leftXValue.command, value[0]);
+                  if (self.leftYValue && self.inLeftPadDrag)
+                    self.kerviService.spine.sendCommand(self.leftYValue.command, value[1]);
                 }, 200);
               }
             })
@@ -174,24 +203,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.dashboard.RightPadXSection && this.dashboard.RightPadXSection.components.length || this.dashboard.RightPadYSection && this.dashboard.RightPadYSection.components.length){
         this.showRightPad = true;
 
-        var xValueRight = null;
-        var yValueRight = null
-        if (self.dashboard.RightPadXSection.components.length)
-          xValueRight=self.dashboard.RightPadXSection.components[0].component as DynamicNumberModel
-        if (self.dashboard.RightPadYSection.components.length)
-          yValueRight=self.dashboard.RightPadYSection.components[0].component as DynamicNumberModel
+        if (self.dashboard.RightPadXSection.components.length){
+          self.rightXValue=self.dashboard.RightPadXSection.components[0].component as DynamicNumberModel
+          if (self.dashboard.RightPadXSection.components[0].parameters.padAutoCenter)
+            self.autoZeroRightPad = true;
+        }
+        if (self.dashboard.RightPadYSection.components.length){
+          self.rightYValue=self.dashboard.RightPadYSection.components[0].component as DynamicNumberModel
+          if (self.dashboard.RightPadYSection.components[0].parameters.padAutoCenter)
+            self.autoZeroRightPad = true;
+        }
         
-        console.log("lc",self.dashboard.RightPadXSection, self.dashboard.RightPadYSection, xValue, yValue)
+        console.log("lc",self.dashboard.RightPadXSection, self.dashboard.RightPadYSection, self.rightXValue, self.rightYValue)
 
-        if (xValueRight){
-          xValueRight.value$.subscribe(function (v) {
+        if (self.rightXValue){
+          self.rightXValue.value$.subscribe(function (v) {
             if (!this.inLeftPadDrag)
               jQuery("input[name='right-x']", self.elementRef.nativeElement).val(v).change();
           });
         }
 
-        if (yValueRight){
-          yValueRight.value$.subscribe(function (v) {
+        if (self.rightYValue){
+          self.rightYValue.value$.subscribe(function (v) {
             if (!this.inLeftPadDrag)
               jQuery("input[name='right-y']", self.elementRef.nativeElement).val(v).change();
           });
@@ -213,8 +246,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             jQuery(".right-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - self.padSize/2, left: w -(w / 4) - self.padSize/2 });
           });
           
-          jQuery("input[name='right-x']", self.elementRef.nativeElement).val(xValueRight.value$.value).change();
-          jQuery("input[name='right-y']", self.elementRef.nativeElement).val(yValueRight.value$.value).change();
+          jQuery("input[name='right-x']", self.elementRef.nativeElement).val(self.rightXValue.value$.value).change();
+          jQuery("input[name='right-y']", self.elementRef.nativeElement).val(self.rightYValue.value$.value).change();
           var p = jQuery('#rightPad').xy({
             displayPrevious: false,
             min: -100,
@@ -224,17 +257,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
             fgColor: color,
             bgColor: color,
             change: function (value) {
-                if (self.moveLeftDelayTimer) {
+                if (self.moveRightDelayTimer) {
                   clearTimeout(self.moveRightDelayTimer);
                 }
               
                 
                 self.moveRightDelayTimer = setTimeout(function () {
-                  console.log("rcx",xValueRight,yValueRight)
-                  if (xValueRight )
-                    self.kerviService.spine.sendCommand(xValueRight.command, value[0]);
-                  if (yValueRight)
-                    self.kerviService.spine.sendCommand(yValueRight.command, value[1]);
+                  console.log("rcx",self.rightXValue,self.rightYValue)
+                  if (self.rightXValue)
+                    self.kerviService.spine.sendCommand(self.rightXValue.command, value[0]);
+                  if (self.rightYValue)
+                    self.kerviService.spine.sendCommand(self.rightYValue.command, value[1]);
                 }, 200);
               }
             })
