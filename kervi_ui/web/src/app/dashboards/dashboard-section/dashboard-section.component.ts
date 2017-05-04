@@ -62,11 +62,11 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
                 
             });
             this.kerviService.spine.addEventHandler("userLogMessage", null, function(v){
-                //console.log("um",this);
+                console.log("um",this);
                 var messages = self.messages$.value
-                messages.push(new DashboardMessageModel(this));
+                messages.unshift(new DashboardMessageModel(this));
                 if (messages.length>20)
-                    messages.shift();
+                    messages.pop();
 
                  self.messages$.next(messages);   
             });
