@@ -1,0 +1,51 @@
+<nav class="navbar navbar-fixed-top navbar-light bg-faded page-header">
+	<ul class="nav navbar-nav">
+    <app-page-header></app-page-header>
+		<li class="nav-item" *ngIf="showSectionController">
+			<a style="padding-top:0;" class="btn btn-default" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders fa-lg" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
+		</li>
+		<li *ngIf="dashboard" style="display: inline">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>
+		<li *ngIf="dashboard && dashboard.sysSection" class="nav-item core-sensors" style="float:right">
+			<kervi-dashboard-section [inline]="true" [section]="dashboard.sysSection" ></kervi-dashboard-section>
+		</li>
+	</ul>
+</nav>
+
+<ng-container *ngIf="dashboard && dashboard.template">
+	<!--<dashboard-layout [dashboard]="dashboard"></dashboard-layout>-->
+</ng-container>
+<div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:25px;">
+	<!--<kervi-cam-viewer *ngIf="cameraId" [isBackground]="true" [cameraId]="cameraId" [parameters]="cameraParameters"></kervi-cam-viewer>-->
+	<div id="controller-pads">
+		<div *ngIf="showLeftPad" class="left-pad-area" style="position:fixed;" (mousedown)="padPress('left')" (mouseup)="padRelease('left')">
+			<fieldset id="leftPad" style="position:absolute" class="pad" [attr.data-width]="padSize" [attr.data-height]="padSize">
+				<legend></legend>
+				<input type="hidden" id="left-pad-x" name="left-x" value="0"><input type="hidden" id="left-pad-y" name="left-y" value="0">
+			</fieldset>
+		</div>
+		<div *ngIf="showRightPad" class="right-pad-area" style="position:fixed" (mousedown)="padPress('right')" (mouseup)="padRelease('right')">
+			<fieldset id="rightPad" style="position:absolute" class="pad" [attr.data-width]="padSize" [attr.data-height]="padSize">
+				<legend></legend>
+				<input id="right-pad-x" type="hidden" name="right-x" value="0"> <input type="hidden" id="right-pad-y" name="right-y" value="0">
+			</fieldset>
+		</div>
+	</div>
+	<div class="container-fluid" style="top:0;z-index:1999;position:absolute" >
+		<div class="card-columns" [ngClass]="{'dashboard-sections-hidden' : dashboardSectionsHidden }">
+			<kervi-dashboard-section *ngFor="let section of dashboard.sections" [section]="section"></kervi-dashboard-section>
+		</div>  
+	</div>
+  <footer class="footer">
+		<div class="row">
+			<div class="col-sm-4 text-left" style="text-align: left">
+				<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerLefSection" [section]="dashboard.footerLeftSection"></kervi-dashboard-section>
+			</div>
+			<div class="col-sm-4 text-center" style="text-align:center">
+				<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerCenterSection" [section]="dashboard.footerCenterSection"></kervi-dashboard-section>
+			</div>
+			<div class="col-sm-4 text-right" style="text-align: right">
+				<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerRightSection" [section]="dashboard.footerRightSection"></kervi-dashboard-section>
+			</div>
+		</div>
+	</footer>
+</div>

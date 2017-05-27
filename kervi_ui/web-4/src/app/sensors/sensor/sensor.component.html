@@ -1,0 +1,6 @@
+<ng-container *ngIf="sensor.subSensors.length == 0">
+    <dynamic-value-number [input]="sensor.value" [parameters]="parameters" [dashboardSection]="dashboardSection"></dynamic-value-number>	
+</ng-container>
+<ng-container *ngIf="sensor.subSensors.length > 0">
+	<dynamic-value-number [input]="sensor.value" [parameters]="parameters" [dashboardSection]="dashboardSection"></dynamic-value-number>	
+</ng-container>
