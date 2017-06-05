@@ -43,6 +43,5 @@ export class SparklineComponent implements OnInit {
         width:width 
       });
     });
-    
   }
 }

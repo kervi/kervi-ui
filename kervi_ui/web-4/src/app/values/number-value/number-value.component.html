@@ -1,9 +1,33 @@
-
-<!--<div [ngClass]="{'block-component':parameters.size==0 && !parameters.inline}" style="display:table;width:100%"> 
+<div *ngIf="input.isInput" [ngClass]="{'block-component':parameters.size==0 && !parameters.inline}" style="display:table;width:100%"> 
     <span style="display:table-cell"  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
     <span style="display:table-cell"  *ngIf="parameters.label"  >{{parameters.label}}</span>
-	<input style="display:table-cell" class="form-control" [style.width.%]="parameters.inputSize"/>
-	<span style="display:table-cell" [style.width.%]="parameters.valueSize" [style.max-width.%]="parameters.valueSize" class="slider-value">{{(input.value$ | async)}}</span>
 	
-</div>-->
-<p>Number<p>
+    <ui-slider [value]="input" [parameters]="parameters"></ui-slider>
+	
+</div>
+
+<div *ngIf="!input.isInput && displayType=='value' && (size>0 || inline)" class="input-inline input-type-value">
+		<i *ngIf="parameters.labelIcon" class="fa fa-{{currentIcon}}"></i>
+		<ng-container *ngIf="parameters.label">{{parameters.label}}:</ng-container>
+		<i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
+		<value-sparkline *ngIf="parameters.showSparkline" [value]="input"></value-sparkline>
+		<span class="input-value">{{(input.value$ | async)}}{{input.unit}}</span>
+</div>
+
+<div *ngIf="!input.isInput && displayType=='value' && size==0 && !inline " class="input-block input-type-value">
+    <div style="display: inline-block" *ngIf="parameters.label">{{parameters.label}}:</div>
+    <div style="display:inline-block; float: right">
+        <i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
+        <value-sparkline *ngIf="parameters.showSparkline" [value]="input"></value-sparkline>
+        <span class="input-value">{{(input.value$ | async)}}{{input.unit}}</span>
+    </div>
+</div>
+
+<ng-container *ngIf="!input.isInput && displayType=='gauge'" class="" >
+    <kervi-gauge [value]="input" [parameters]="parameters" [type]="gaugeType" [size]="size"></kervi-gauge>    
+</ng-container>
+
+<ng-container *ngIf="!input.isInput && displayType=='chart'" class="" >
+    <kervi-chart [value]="input" [parameters]="parameters" [size]="size" ></kervi-chart>
+</ng-container>
+

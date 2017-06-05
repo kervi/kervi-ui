@@ -22,7 +22,17 @@
         "styles.scss"
       ],
       "scripts": [
-
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/tether/dist/js/tether.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../node_modules/bootstrap-slider/dist/bootstrap-slider.js",
+        "../lib/jquery.sparkline.js",
+        "../lib/jquery.kontrol.js",
+        "../lib/bootstrap-toggle.js",
+        "../node_modules/canvas-gauges/gauge.min",
+        "../node_modules/moment/min/moment-with-locales.js",
+        "../node_modules/chart.js/dist/Chart.js"
+        
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -30,6 +40,11 @@
         "prod": "environments/environment.prod.ts"
       }
     }
+  ],
+  "addons": [
+    
+      "../node_modules/font-awesome/fonts/*.+(otf|eot|svg|ttf|woff|woff2)"
+    
   ],
   "e2e": {
     "protractor": {

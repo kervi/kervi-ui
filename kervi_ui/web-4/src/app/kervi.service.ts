@@ -33,6 +33,39 @@ export class KerviService {
       }
     },10000);
 
+     var s1=this.connected$.subscribe(function(connected){
+            if (connected){
+                self.spine.addEventHandler("dynamicValueChanged","",function(id, value){
+                    for (let component of self.components){
+                        if (component.id==value.id){
+                            if (component.componentType == "sensor"){
+                              var dynamicValue = component as any;
+                            
+                              dynamicValue.value.valueTS=new Date(this.timestamp*1000);
+                              dynamicValue.value.value$.next(value.value);
+                              var spl=dynamicValue.value.sparkline$.value;
+                              spl.push(value.value);
+                              if (spl.length>10)
+                                  spl.shift();
+                              dynamicValue.value.sparkline$.next(spl);  
+                            } else {
+                              var dynamicValue = component as any;
+                              
+                              console.log("dvc", value, dynamicValue);
+                              dynamicValue.valueTS=new Date(this.timestamp*1000);
+                              dynamicValue.value$.next(value.value);
+                              var spl=dynamicValue.sparkline$.value;
+                              spl.push(value.value);
+                              if (spl.length>10)
+                                  spl.shift();
+                              dynamicValue.sparkline$.next(spl);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
   }
 
   private refreshComponents(){
@@ -100,7 +133,7 @@ export class KerviService {
   }
 
   public connect(){
-    var kerviSocketAddress = "192.168.0.124:9000"
+    var kerviSocketAddress = "192.168.50.101:9000"
     console.log("ks", kerviSocketAddress);
     this.spine = new KerviSpine({
       address:"ws://" + kerviSocketAddress,

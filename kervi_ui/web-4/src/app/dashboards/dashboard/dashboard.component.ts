@@ -5,6 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DashboardModel, DashboardSectionModel } from '../../models/dashboard.model'
 import { ControllerModel } from '../../models/controller.model'
 import {  DynamicNumberModel } from '../../models/dynamicValues.model'
+import { BehaviorSubject, Subject, Observable } from 'rxjs/Rx';
+
 declare var jQuery: any;
 
 @Component({
@@ -14,9 +16,12 @@ declare var jQuery: any;
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  public dashboards$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  
   public dashboardId:string;
   public dashboard:DashboardModel;
   public sections: DashboardSectionModel[] = [];
+
   public sectionRows: any[]=[];
   public cameraId: string = null;
   public cameraParameters:any = null;
@@ -78,6 +83,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log("db init", this);
+    var self = this;
+    this.dashboardsService.getDashboards$().subscribe(function (v) {
+        self.dashboards$.next(v);
+      
+    });
+
     if (!this.kerviService.connected$.value)
       this.router.navigate(['/connect']);
     

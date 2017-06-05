@@ -11,7 +11,6 @@ import { ValuesModule } from './values/values.module'
 import { AppComponent } from './app.component';
 import { ConnectComponent } from './connect/connect.component';
 import { DashboardComponent } from './dashboards/dashboard/dashboard.component';
-import { ControllerComponent } from './controller/controller.component';
 
 import { KerviService} from "./kervi.service";
 import { ConnectedService} from "./connected.service";
@@ -34,7 +33,7 @@ const ROUTES: Routes = [
     ConnectComponent,
     //DashboardComponent,
     //DashboardSectionComponent,
-    ControllerComponent,
+    //ControllerComponent,
     //PageHeaderComponent
   ],
   imports: [

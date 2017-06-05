@@ -2,67 +2,50 @@
 // Licensed under MIT
 
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
-import { DynamicNumberModel } from '../../models/dynamicValues.model';
+import { DynamicBooleanModel } from '../../models/dynamicValues.model';
 import { KerviService } from '../../kervi.service'
 import { TemplateService } from '../../template.service'
 import { DashboardSectionModel } from '../../models/dashboard.model'
 
 @Component({
-	selector: 'dynamic-value-number',
-	templateUrl: './number-value.component.html',
-	styleUrls: ['./number-value.component.scss']
+	selector: 'dynamic-value-boolean',
+	templateUrl: './boolean-value.component.html',
+	styleUrls: ['./boolean-value.component.scss']
 	//directives: [ CommonModule  ],
 })
-export class DynamicNumberComponent implements OnInit {
-	@Input() input: DynamicNumberModel;
+export class DynamicBooleanComponent implements OnInit {
+	@Input() value: DynamicBooleanModel;
 	@Input() dashboardSection: DashboardSectionModel;
 	@Input() parameters:any;
-	private moveDelayTimer = null;
 	private size:number = 0;
 	private unitSize:number=150;
-	private inSlide:boolean=false;
-
-	displayType:string="value";
-	gaugeType:string;
-	currentIcon:string=null;
-	private gaugeTypes:string[]=['radial_gauge','vertical_linear_gauge', 'horizontal_linear_gauge', 'compass']
-	private slideTypes:string[]=['horizontal_slider','vertical_slider']
 	
-
+	displayType:string="switch";
+	
 	constructor(private kerviService: KerviService, private elementRef: ElementRef, private templateService:TemplateService) { 
 		//console.log("cnio",this);
 	}
-
-	 private color(style,selector){
-    	return this.templateService.getColor(style,selector);
-  	}
 
 	ngOnInit() {
 		var self = this;
 		console.log("ngi ni",this);
 		if (!this.parameters)
-      		this.parameters = this.input.ui;
+      		this.parameters = this.value.ui;
 
 		if (this.parameters){
 			if (this.parameters.type){
-				if (this.gaugeTypes.indexOf(this.parameters.type) > -1 ){
-					this.displayType = "gauge";
-					this.gaugeType = this.parameters.type;
-				} else if (this.parameters.type=="chart"){
-					this.displayType="chart"
-				}
-			}
-				
+				this.displayType = this.parameters.type
+            }
 			if (this.parameters.size)
 				this.size=this.parameters.size;
-		}
+        }
 
 		if (this.dashboardSection){
 			this.unitSize=this.dashboardSection.dashboard.unitSize;
 
 		}
 
-		if (self.input.isInput){
+		if (self.value.isInput){
 			var sliderSize=self.unitSize*self.size;
 			if (self.size==0)
 				sliderSize=self.unitSize;

@@ -53,7 +53,7 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
         console.log("cccc",this.components,this.headerComponents);
 
         this.showHeader = (this.section.parameters.title != null && this.section.parameters.title.length>0) || (this.headerComponents.length > 0)
-        this.expanded = (this.headerComponents.length==0);
+        //this.expanded = (this.headerComponents.length==0);
         if (this.section.parameters.userLog){
             this.kerviService.spine.sendQuery("getLogItems",0,20,function(v){
                 console.log('lm', v);

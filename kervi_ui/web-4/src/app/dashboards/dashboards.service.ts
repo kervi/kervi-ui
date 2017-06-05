@@ -139,8 +139,6 @@ export class DashboardsService {
         return null;
     }
 
-    
-
     public getDashboardComponents(dashboardId){
         var result=[]
 

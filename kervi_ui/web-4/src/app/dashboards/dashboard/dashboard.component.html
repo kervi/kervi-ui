@@ -1,14 +1,27 @@
-<nav class="navbar navbar-fixed-top navbar-light bg-faded page-header">
-	<ul class="nav navbar-nav">
-    <app-page-header></app-page-header>
-		<li class="nav-item" *ngIf="showSectionController">
-			<a style="padding-top:0;" class="btn btn-default" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders fa-lg" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
+<nav class="navbar navbar-toggleable-md navbar-fixed-top navbar-light bg-faded page-header">
+	<ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link" title="Dashboards" style="padding-top:0;cursor: pointer" data-toggle="dropdown"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></a>
+      <div class="dropdown-menu  multi-leve ul.nav.navbar-nav.no-collapse">
+          <!--<span class="dropdown-divider">&nbsp; Dashboards</span>-->
+          <div class="dropdown-submenu">
+              <a *ngFor="let dashboard of (dashboards$ | async)" class="dropdown-item" [routerLink]="['/dashboard', dashboard.id]">{{dashboard.name}}</a>
+          </div>
+        <!--<div class="dropdown-divider"></div>-->
+        <!--<a class="dropdown-item" href="#/charts">Charts</a>-->
+        <!--<a class="dropdown-item" href="#/about">About</a>-->
+        <!--<a class="dropdown-item" href="#/settings">Settings</a>-->
+      </div>
+    </li>
+    <li class="nav-item" *ngIf="showSectionController">
+			<a style="padding-top:0;" class="nav-link btn btn-default" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders fa-lg" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
 		</li>
 		<li *ngIf="dashboard" style="display: inline">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>
 		<li *ngIf="dashboard && dashboard.sysSection" class="nav-item core-sensors" style="float:right">
 			<kervi-dashboard-section [inline]="true" [section]="dashboard.sysSection" ></kervi-dashboard-section>
 		</li>
 	</ul>
+	
 </nav>
 
 <ng-container *ngIf="dashboard && dashboard.template">
@@ -35,7 +48,8 @@
 			<kervi-dashboard-section *ngFor="let section of dashboard.sections" [section]="section"></kervi-dashboard-section>
 		</div>  
 	</div>
-  <footer class="footer">
+</div>
+<footer class="footer" *ngIf="dashboard">
 		<div class="row">
 			<div class="col-sm-4 text-left" style="text-align: left">
 				<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerLefSection" [section]="dashboard.footerLeftSection"></kervi-dashboard-section>
@@ -48,4 +62,3 @@
 			</div>
 		</div>
 	</footer>
-</div>

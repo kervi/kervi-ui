@@ -1,0 +1,23 @@
+<ng-container [ngSwitch]="value.type">
+    <ng-template ngSwitchCase="dynamic-number">
+        <dynamic-value-number [dashboardSection]="dashboardSection" [input]="value"></dynamic-value-number>
+    </ng-template>
+    <ng-template ngSwitchCase="dynamic-boolean">
+        <dynamic-value-boolean [dashboardSection]="dashboardSection" [value]="value"></dynamic-value-boolean>
+    </ng-template>
+    <!--<template ngSwitchCase="dynamic-input">
+        <kervi-controller-text-input [dashboardSection]="dashboardSection" [input]="component"></kervi-controller-text-input>
+    </template>
+    <template ngSwitchCase="button">
+        <kervi-controller-button [dashboardSection]="dashboardSection" [button]="component"></kervi-controller-button>
+    </template>
+    <template ngSwitchCase="dynamic-boolean">
+        <kervi-controller-switchbutton [dashboardSection]="dashboardSection" [button]="component"></kervi-controller-switchbutton>
+    </template>
+    <template ngSwitchCase="dynamic-enum">
+        <kervi-controller-select [dashboardSection]="dashboardSection" [select]="component"></kervi-controller-select>
+    </template>
+    <template ngSwitchCase="dynamic-datetime">
+        <kervi-controller-datetime [dashboardSection]="dashboardSection" [datetime]="component"></kervi-controller-datetime>
+    </template>-->
+</ng-container>

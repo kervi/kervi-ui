@@ -1,0 +1,10 @@
+<div *ngIf="parameters.size==0 && !parameters.inline" class="block-component"> 
+    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+    <span  *ngIf="parameters.label"  >{{parameters.label}}</span>
+    <input class="pull-right" [style.width.%]="parameters.inputSize" type="checkbox" [attr.checked]="(button.state$ | async) ? '' : null" data-toggle="toggle">
+</div>
+<span *ngIf="parameters.size>0 || parameters.inline">
+    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+    <label *ngIf="parameters.label" >{{paramers.label}}</label>
+    <input type="checkbox" [style.width.%]="parameters.inputSize" [attr.checked]="(button.state$ | async) ? '' : null" data-toggle="toggle">
+</span>

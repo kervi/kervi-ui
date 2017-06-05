@@ -4,25 +4,6 @@
 import { BehaviorSubject } from 'rxjs/Rx';
 import { IComponent } from './IComponent.model'
 import { DynamicNumberModel } from './dynamicValues.model'
-export enum RangeType {normal, warning, error};
-
-export class SensorRange{
-    
-    public start:number = null;
-    public end:number = null;
-    public type:RangeType = null;
-
-    constructor(range:any){
-        this.start = range["start"];
-        this.end = range["end"]
-        if (range["type"] == "warning")
-            this.type = RangeType.warning;
-        else if (range["type"] == "error")
-            this.type = RangeType.error;
-        else
-            this.type = RangeType.normal;
-    }
-}
 
 export class SensorModel implements IComponent {
     public subSensors:SensorModel[] = [];

@@ -1,0 +1,9 @@
+    <ng-container *ngFor="let component of controller.inputs">
+      <ng-container *ngIf="component.visible">
+        <ng-container [ngSwitch]="component.type">
+          <ng-template ngSwitchCase="dynamic-number">
+            <dynamic-value [dashboardSection]="dashboardSection" [value]="component"></dynamic-value>
+          </ng-template>
+        </ng-container>
+      </ng-container>
+    </ng-container>

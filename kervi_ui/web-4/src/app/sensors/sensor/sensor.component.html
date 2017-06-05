@@ -1,6 +1,17 @@
+
 <ng-container *ngIf="sensor.subSensors.length == 0">
     <dynamic-value-number [input]="sensor.value" [parameters]="parameters" [dashboardSection]="dashboardSection"></dynamic-value-number>	
 </ng-container>
 <ng-container *ngIf="sensor.subSensors.length > 0">
-	<dynamic-value-number [input]="sensor.value" [parameters]="parameters" [dashboardSection]="dashboardSection"></dynamic-value-number>	
+	<div >
+		<div>
+			<i *ngIf="parameters.labelIcon" class="fa fa-{{currentIcon}}"></i>
+			<span *ngIf="parameters.label">{{parameters.label}}:</span>
+		</div>
+		<ng-container *ngFor="let subSensor of sensor.subSensors">
+			<div style="padding-left:15px;clear:both">
+				<kervi-sensor [sensor]="subSensor" ></kervi-sensor>
+			</div>
+		</ng-container>
+	</div>
 </ng-container>

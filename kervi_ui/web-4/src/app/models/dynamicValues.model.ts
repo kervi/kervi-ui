@@ -5,6 +5,27 @@ import { ComponentRef } from "./ComponentRef"
 import { BehaviorSubject } from 'rxjs/Rx';
 //import { ControllersFactory } from './factory' 
 
+export enum DynamicRangeType {normal, warning, error};
+
+export class DynamicRange{
+    
+    public start:number = null;
+    public end:number = null;
+    public type:DynamicRangeType = null;
+
+    constructor(range:any){
+        this.start = range["start"];
+        this.end = range["end"]
+        if (range["type"] == "warning")
+            this.type = DynamicRangeType.warning;
+        else if (range["type"] == "error")
+            this.type = DynamicRangeType.error;
+        else
+            this.type = DynamicRangeType.normal;
+    }
+}
+
+
 
 export class DynamicEnumOptionModel{
     public value:string;
@@ -70,12 +91,14 @@ export class DynamicEnumModel implements IComponent{
 
 export class DynamicNumberModel implements IComponent {
     public name: string;
-    public componentType = "controllerComponent"
+    public componentType = "DynamicValue";
+    public isInput:boolean;
     public type: string;
     public visible: boolean;
     public dashboards: string[] = [];
     public orientation: string;
     public unit: string;
+    public valueTS:Date;
     public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     public maxValue: number;
     public minValue: number;
@@ -91,6 +114,7 @@ export class DynamicNumberModel implements IComponent {
     constructor(message: any) {
         this.name = message.name;
         this.type = message.componentType;
+        this.isInput = message.isInput;
         this.ui = message.ui;
         this.orientation = message.orientation;
         this.visible = message.visible;
@@ -114,7 +138,7 @@ export class DynamicNumberModel implements IComponent {
 
 export class DynamicStringModel implements IComponent {
     public name: string;
-    public componentType = "controllerComponent"
+    public componentType = "DynamicValue"
     public type: string;
     public visible: boolean;
     public dashboards: string[] = [];
@@ -156,7 +180,8 @@ export class DynamicStringModel implements IComponent {
 export class DynamicBooleanModel implements IComponent {
     public id: string;
     public name: string;
-    public componentType = "controllerComponent"
+    public isInput:boolean;
+    public componentType = "DynamicValue"
     public ui:any = {}
     public type: string;
     public visible: boolean;
@@ -169,6 +194,7 @@ export class DynamicBooleanModel implements IComponent {
         this.name = message.name;
         this.type = message.componentType;
         this.ui = message.ui;
+        this.isInput = message.isInput;
         this.visible = message.visible;
         this.command = message.command;
         this.state$.next(message.value);
@@ -182,7 +208,7 @@ export class DynamicBooleanModel implements IComponent {
 /*export class ControllerButtonModel implements IComponent {
     public id: string;
     public name: string;
-    public componentType = "controllerComponent"
+    public componentType = "DynamicValue"
     public ui:any = {}
     public dashboards: string[] = [];
     public type: string;
@@ -212,7 +238,7 @@ export class DynamicBooleanModel implements IComponent {
 export class DynamicDateTimeModel implements IComponent {
     public id: string;
     public name: string;
-    public componentType = "controllerComponent"
+    public componentType = "DynamicValue"
     public ui:any = {}
     public dashboards: string[] = [];
     public type: string;

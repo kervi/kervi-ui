@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { SensorModel, SensorRange, RangeType  } from '../../models/sensor.model';
+import { SensorModel } from '../../models/sensor.model';
 import { DashboardSectionModel } from '../../models/dashboard.model';
 import { KerviService } from '../../kervi.service';
 import { TemplateService } from '../../template.service';
