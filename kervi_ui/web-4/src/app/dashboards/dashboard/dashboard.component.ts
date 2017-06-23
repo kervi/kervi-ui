@@ -263,7 +263,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           if (self.rightXValue)
             jQuery("input[name='right-x']", self.elementRef.nativeElement).val(self.rightXValue.value$.value).change();
           if (self.rightYValue)
-            jQuery("input[name='right-y']", self.elementRef.nativeElement).val(self.rightYValue.value$.value).change();
+            // jQuery("input[name='right-y']", self.elementRef.nativeElement).val(self.rightYValue.value$.value).change();
           var p = jQuery('#rightPad').xy({
             displayPrevious: false,
             min: -100,
