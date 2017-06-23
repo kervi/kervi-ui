@@ -1,1 +1,1 @@
-kerviSocketAddress = "127.0.0.1:9000"
+kerviSocketAddress = "localhost:9000"

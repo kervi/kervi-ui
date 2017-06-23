@@ -2,12 +2,12 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { DynamicNumberModel, DynamicRange, DynamicRangeType  } from '../../models/dynamicValues.model';
+import { DynamicBooleanModel, DynamicRange, DynamicRangeType  } from '../../models/dynamicValues.model';
 import { DashboardSectionModel } from '../../models/dashboard.model';
 import { KerviService } from '../../kervi.service';
 import { TemplateService } from '../../template.service';
 declare var jQuery:any;
-declare var Chart:any;
+//declare var Chart:any;
 @Component({
   selector: 'kervi-button',
   templateUrl: './button.component.html',
@@ -16,14 +16,16 @@ declare var Chart:any;
 })
 
 export class ButtonComponent implements OnInit {
-  @Input() value: DynamicNumberModel = null;
+  @Input() value: DynamicBooleanModel = null;
   @Input() parameters: any = null;
   @Input() type: string;
   @Input() size:number;
-  private  unitSize:number = 150;
-  canvasId:string="";
-  private chart:any=null;
-  private chartData = [];
+  @Input() inline:boolean = false;
+  //private  unitSize:number = 150;
+  //state:boolean = false;
+  //canvasId:string="";
+  //private chart:any=null;
+  //private chartData = [];
 
   constructor(private kerviService:KerviService, private templateService:TemplateService ) {  
   }
@@ -33,10 +35,18 @@ export class ButtonComponent implements OnInit {
   }
 
   ngOnInit() {
-    var self = this;  
-    
-      
-      this.value.value$.subscribe(function(v){
-      });
+    var self = this; 
+    if (self.parameters){
+      if (!self.inline && self.parameters.inline)
+        self.inline=true;
+    } 
+  }
+
+  public press() {
+    this.kerviService.spine.sendCommand(this.value.command, true);
+  }
+
+  public release() {
+    this.kerviService.spine.sendCommand(this.value.command, false);
   }
 }

@@ -187,7 +187,8 @@ export class DynamicBooleanModel implements IComponent {
     public visible: boolean;
     public dashboards: string[] = [];
     public command: string;
-    public state$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public valueTS:Date;
+    public value$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(message) {
         this.id = message.id;
@@ -197,7 +198,7 @@ export class DynamicBooleanModel implements IComponent {
         this.isInput = message.isInput;
         this.visible = message.visible;
         this.command = message.command;
-        this.state$.next(message.value);
+        this.value$.next(message.value);
 
     }
 

@@ -17,6 +17,7 @@ export class DynamicBooleanComponent implements OnInit {
 	@Input() value: DynamicBooleanModel;
 	@Input() dashboardSection: DashboardSectionModel;
 	@Input() parameters:any;
+    @Input() inline:boolean = false;
 	private size:number = 0;
 	private unitSize:number=150;
 	

@@ -20,7 +20,7 @@ export class SliderComponent implements OnInit {
     @Input() parameters:any;
 	private moveDelayTimer = null;
 	private size:number = 0;
-	private unitSize:number=150;
+	private unitSize:number=110;
 	private inSlide:boolean=false;
 
 	constructor(private kerviService: KerviService, private elementRef: ElementRef, private templateService:TemplateService) { 

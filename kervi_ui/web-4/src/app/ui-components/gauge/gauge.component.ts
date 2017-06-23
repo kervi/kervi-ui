@@ -21,7 +21,7 @@ export class GaugeComponent implements OnInit {
   @Input() parameters: any = null;
   @Input() type: string = "radial_gauge";
   @Input() size:number;
-  private  unitSize:number = 150;
+  private  unitSize:number = 110;
   canvasId:string="";
 
   private gauge:any=null;

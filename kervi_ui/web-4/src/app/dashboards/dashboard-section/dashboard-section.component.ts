@@ -71,11 +71,8 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
                  self.messages$.next(messages);   
             });
         }
-        
-  }
+    }
 
-  ngOnDestroy(){
-    
-  }
-
+    ngOnDestroy(){ 
+    }
 }

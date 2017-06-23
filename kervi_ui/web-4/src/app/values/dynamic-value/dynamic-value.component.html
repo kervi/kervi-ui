@@ -1,9 +1,9 @@
 <ng-container [ngSwitch]="value.type">
     <ng-template ngSwitchCase="dynamic-number">
-        <dynamic-value-number [dashboardSection]="dashboardSection" [input]="value"></dynamic-value-number>
+        <dynamic-value-number [parameters]="parameters" [dashboardSection]="dashboardSection" [inline]="inline" [input]="value"></dynamic-value-number>
     </ng-template>
     <ng-template ngSwitchCase="dynamic-boolean">
-        <dynamic-value-boolean [dashboardSection]="dashboardSection" [value]="value"></dynamic-value-boolean>
+        <dynamic-value-boolean [parameters]="parameters" [dashboardSection]="dashboardSection" [inline]="inline" [value]="value"></dynamic-value-boolean>
     </ng-template>
     <!--<template ngSwitchCase="dynamic-input">
         <kervi-controller-text-input [dashboardSection]="dashboardSection" [input]="component"></kervi-controller-text-input>

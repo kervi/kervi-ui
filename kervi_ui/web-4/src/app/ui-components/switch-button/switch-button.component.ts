@@ -17,6 +17,7 @@ export class SwitchButtonComponent implements OnInit {
   @Input() value: DynamicBooleanModel;
   @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any;
+  @Input() inline:boolean = false;
   state:boolean = false
   private valueSubscription: any;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
@@ -41,28 +42,22 @@ export class SwitchButtonComponent implements OnInit {
     onText+= this.parameters && this.parameters.onText ? this.parameters.onText : ""; 
     offText+= this.parameters && this.parameters.offText ? this.parameters.offText : ""; 
 
-    self.valueSubscription = self.value.state$.subscribe(function (v) {
+    self.valueSubscription = self.value.value$.subscribe(function (v) {
       self.state = v;
       if (self.parameters.type=="switch")
-        jQuery('input', self.elementRef.nativeElement).bootstrapToggle(v ? "on" :"off");
+        jQuery('input', self.elementRef.nativeElement).prop('checked',v);
     });
 
     setTimeout(function () {
-      if(self.parameters.type=="switch")
-      {
-        jQuery('input', self.elementRef.nativeElement).bootstrapToggle({
-            on: onText,
-            off: offText,
-            style:self.parameters.size == 0 && !self.parameters.inline ? "pull-right" : "" 
-        });
+      
         jQuery('input', self.elementRef.nativeElement).change(function () {
           var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
-          if (state && !self.value.state$.value)
+          if (state && !self.value.value$.value)
             self.kerviService.spine.sendCommand(self.value.command, true);
-          else if (!state && self.value.state$.value)
+          else if (!state && self.value.value$.value)
             self.kerviService.spine.sendCommand(self.value.command, false);
         });
-      }
+      
     }, 0);
   }
 }

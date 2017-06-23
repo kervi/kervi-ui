@@ -28,7 +28,6 @@
         "../node_modules/bootstrap-slider/dist/bootstrap-slider.js",
         "../lib/jquery.sparkline.js",
         "../lib/jquery.kontrol.js",
-        "../lib/bootstrap-toggle.js",
         "../node_modules/canvas-gauges/gauge.min",
         "../node_modules/moment/min/moment-with-locales.js",
         "../node_modules/chart.js/dist/Chart.js"

@@ -51,14 +51,14 @@ export class KerviService {
                             } else {
                               var dynamicValue = component as any;
                               
-                              console.log("dvc", value, dynamicValue);
+                              //console.log("dvc", value, dynamicValue);
                               dynamicValue.valueTS=new Date(this.timestamp*1000);
                               dynamicValue.value$.next(value.value);
-                              var spl=dynamicValue.sparkline$.value;
+                              /*var spl=dynamicValue.sparkline$.value;
                               spl.push(value.value);
                               if (spl.length>10)
                                   spl.shift();
-                              dynamicValue.sparkline$.next(spl);
+                              dynamicValue.sparkline$.next(spl);*/
                             }
                         }
                     }
@@ -133,10 +133,18 @@ export class KerviService {
   }
 
   public connect(){
-    var kerviSocketAddress = "192.168.50.101:9000"
-    console.log("ks", kerviSocketAddress);
+    var address = null;
+    try{
+      if (kerviSocketAddress)
+      {
+        address = kerviSocketAddress
+      }
+    } catch(e) {
+      address = "192.168.43.130:9000";
+    }
+    console.log("ks", address);
     this.spine = new KerviSpine({
-      address:"ws://" + kerviSocketAddress,
+      address:"ws://" + address,
       onOpen: this.onOpen,
       onClose:this.onClose,
       targetScope:this,

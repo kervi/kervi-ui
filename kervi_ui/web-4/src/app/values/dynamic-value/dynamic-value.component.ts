@@ -17,6 +17,7 @@ export class DynamicValueComponent implements OnInit {
 	@Input() value: any;
 	@Input() dashboardSection: DashboardSectionModel;
 	@Input() parameters:any;
+	@Input() inline:boolean = false;
 	private size:number = 0;
 	private unitSize:number=150;
 	

@@ -6,6 +6,8 @@ import { ChartComponent } from './chart/chart.component'
 import { CommonModule } from '@angular/common';
 import { SwitchButtonComponent} from './switch-button/switch-button.component'
 import { ButtonComponent} from './button/button.component'
+import { CamViewerComponent } from './cam-viewer/cam-viewer.component'
+import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component' 
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { ButtonComponent} from './button/button.component'
     GaugeComponent,
     ChartComponent,
     SwitchButtonComponent,
-    ButtonComponent
+    ButtonComponent,
+    CamViewerComponent,
+    MPEGViewerComponent
   ],
   exports:[
       SparklineComponent,
@@ -22,7 +26,8 @@ import { ButtonComponent} from './button/button.component'
       GaugeComponent,
       ChartComponent,
       SwitchButtonComponent,
-      ButtonComponent
+      ButtonComponent,
+      CamViewerComponent
   ],
   imports: [
     CommonModule

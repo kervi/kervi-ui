@@ -17,6 +17,7 @@ export class DynamicNumberComponent implements OnInit {
 	@Input() input: DynamicNumberModel;
 	@Input() dashboardSection: DashboardSectionModel;
 	@Input() parameters:any;
+	@Input() inline:boolean = false;
 	private moveDelayTimer = null;
 	private size:number = 0;
 	private unitSize:number=150;

@@ -1,34 +1,33 @@
-<nav class="navbar navbar-toggleable-md navbar-fixed-top navbar-light bg-faded page-header">
-	<ul class="navbar-nav mr-auto">
-    <li class="nav-item dropdown">
-      <a class="nav-link" title="Dashboards" style="padding-top:0;cursor: pointer" data-toggle="dropdown"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></a>
-      <div class="dropdown-menu  multi-leve ul.nav.navbar-nav.no-collapse">
-          <!--<span class="dropdown-divider">&nbsp; Dashboards</span>-->
-          <div class="dropdown-submenu">
-              <a *ngFor="let dashboard of (dashboards$ | async)" class="dropdown-item" [routerLink]="['/dashboard', dashboard.id]">{{dashboard.name}}</a>
-          </div>
-        <!--<div class="dropdown-divider"></div>-->
-        <!--<a class="dropdown-item" href="#/charts">Charts</a>-->
-        <!--<a class="dropdown-item" href="#/about">About</a>-->
-        <!--<a class="dropdown-item" href="#/settings">Settings</a>-->
-      </div>
-    </li>
-    <li class="nav-item" *ngIf="showSectionController">
-			<a style="padding-top:0;" class="nav-link btn btn-default" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders fa-lg" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
+<nav class="navbar row navbar-toggleable-md navbar-fixed-top navbar-light bg-faded page-header">
+	<ul class="navbar-nav col-md-4">
+		<li class="nav-item dropdown" style="isplay: inline-block">
+			<a class="nav-link" title="Dashboards" style="padding-top:0;cursor: pointer" data-toggle="dropdown"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></a>
+			<div class="dropdown-menu  multi-leve ul.nav.navbar-nav.no-collapse">
+				<!--<span class="dropdown-divider">&nbsp; Dashboards</span>-->
+				<div class="dropdown-submenu">
+					<a *ngFor="let dashboard of (dashboards$ | async)" class="dropdown-item" [routerLink]="['/dashboard', dashboard.id]">{{dashboard.name}}</a>
+				</div>
+				<!--<div class="dropdown-divider"></div>-->
+				<!--<a class="dropdown-item" href="#/charts">Charts</a>-->
+				<!--<a class="dropdown-item" href="#/about">About</a>-->
+				<!--<a class="dropdown-item" href="#/settings">Settings</a>-->
+			</div>
 		</li>
-		<li *ngIf="dashboard" style="display: inline">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>
-		<li *ngIf="dashboard && dashboard.sysSection" class="nav-item core-sensors" style="float:right">
-			<kervi-dashboard-section [inline]="true" [section]="dashboard.sysSection" ></kervi-dashboard-section>
+		<li class="nav-item" *ngIf="showSectionController">
+			<a style="padding-top:0; display:inline-block" class="nav-link btn btn-default" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders fa-lg" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
 		</li>
+		<li *ngIf="dashboard" style="display:inline-block">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>
 	</ul>
-	
+	<div *ngIf="dashboard && dashboard.sysSection" class="col-md-8 core-sensors text-right" style="float:right; display:inline-block">
+			&nbsp;<kervi-dashboard-section [inline]="true" [section]="dashboard.sysSection" ></kervi-dashboard-section>
+	</div>
 </nav>
 
 <ng-container *ngIf="dashboard && dashboard.template">
 	<!--<dashboard-layout [dashboard]="dashboard"></dashboard-layout>-->
 </ng-container>
 <div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:25px;">
-	<!--<kervi-cam-viewer *ngIf="cameraId" [isBackground]="true" [cameraId]="cameraId" [parameters]="cameraParameters"></kervi-cam-viewer>-->
+	<kervi-cam-viewer *ngIf="cameraId" [isBackground]="true" [cameraId]="cameraId" [parameters]="cameraParameters"></kervi-cam-viewer>
 	<div id="controller-pads">
 		<div *ngIf="showLeftPad" class="left-pad-area" style="position:fixed;" (mousedown)="padPress('left')" (mouseup)="padRelease('left')">
 			<fieldset id="leftPad" style="position:absolute" class="pad" [attr.data-width]="padSize" [attr.data-height]="padSize">

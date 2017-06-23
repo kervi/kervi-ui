@@ -180,8 +180,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
             jQuery(".left-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - self.padSize/2, left: w / 4 - self.padSize/2 });
           });
 
-           jQuery("input[name='left-x']", self.elementRef.nativeElement).val(self.leftXValue.value$.value).change();
-          jQuery("input[name='left-y']", self.elementRef.nativeElement).val(self.leftYValue.value$.value).change();
+          if (self.leftXValue)
+            jQuery("input[name='left-x']", self.elementRef.nativeElement).val(self.leftXValue.value$.value).change();
+           if (self.leftYValue)
+            jQuery("input[name='left-y']", self.elementRef.nativeElement).val(self.leftYValue.value$.value).change();
           
           var color = "rgba(255,255,255,.5)";
           console.log("lpx", jQuery('#leftPad'));
@@ -258,8 +260,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
             jQuery(".right-pad-area", self.elementRef.nativeElement).css({ top: h / 2 - self.padSize/2, left: w -(w / 4) - self.padSize/2 });
           });
           
-          jQuery("input[name='right-x']", self.elementRef.nativeElement).val(self.rightXValue.value$.value).change();
-          jQuery("input[name='right-y']", self.elementRef.nativeElement).val(self.rightYValue.value$.value).change();
+          if (self.rightXValue)
+            jQuery("input[name='right-x']", self.elementRef.nativeElement).val(self.rightXValue.value$.value).change();
+          if (self.rightYValue)
+            jQuery("input[name='right-y']", self.elementRef.nativeElement).val(self.rightYValue.value$.value).change();
           var p = jQuery('#rightPad').xy({
             displayPrevious: false,
             min: -100,

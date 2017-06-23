@@ -11,13 +11,16 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { PageHeaderComponent} from './page-header/page-header.component'
 import { DashboardSectionComponent } from './dashboard-section/dashboard-section.component';
 import { RouterModule } from '@angular/router';
+import { UIComponentsModule} from '../ui-components/ui-components.module'
+
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     SensorsModule,
     ControllersModule,
-    ValuesModule
+    ValuesModule,
+    UIComponentsModule
     
   ],
   exports:[
