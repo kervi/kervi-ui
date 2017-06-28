@@ -1,10 +1,13 @@
 <div *ngIf="input.isInput" [ngClass]="{'block-component':parameters.size==0 && !parameters.inline}" style="display:table;width:100%"> 
-    <span style="display:inline"  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
-    <span style="display:inline"  *ngIf="parameters.label"  >{{parameters.label}}</span>
-	
-    <div style="display:inline-block" [style.width.%]="parameters.valueSize" [style.max-width.%]="parameters.valueSize">
-        <ui-slider [value]="input" [parameters]="parameters"></ui-slider>
+    <div style="display:inline-block" [style.width.%]="100 - parameters.inputSize - parameters.valueSize " [style.max-width.%]="parameters.inputSize - parameters.valueSize">
+        <span style="display:inline"  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+        <span style="display:inline"  *ngIf="parameters.label"  >{{parameters.label}}</span>
 	</div>
+    <div style="display:inline-block" [style.width.%]="parameters.inputSize" [style.max-width.%]="parameters.inputSize">
+        <ui-slider [value]="input" [parameters]="parameters"></ui-slider>
+        
+	</div>
+    <span style="display:inline-block" [style.width.%]="parameters.valueSize" [style.max-width.%]="parameters.valueSize"    class="slider-value">{{(input.value$ | async)}}</span>
 </div>
 
 <span *ngIf="!input.isInput && displayType=='value' && (size>0 || inline)" class="input-inline input-type-value">
