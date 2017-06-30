@@ -53,6 +53,13 @@ export class DynamicNumberComponent implements OnInit {
 					this.displayType="chart"
 				}
 			}
+
+			if (!this.inline && this.parameters.inline){
+				this.inline = true;
+			}else if (!this.inline && this.parameters.size > 0)
+			{
+				this.inline = true;
+			}
 				
 			if (this.parameters.size)
 				this.size=this.parameters.size;

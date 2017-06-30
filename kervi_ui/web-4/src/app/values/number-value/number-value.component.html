@@ -1,4 +1,4 @@
-<div *ngIf="input.isInput" [ngClass]="{'block-component':parameters.size==0 && !parameters.inline}" style="display:table;width:100%"> 
+<div *ngIf="input.isInput && !inline" class="block-component" style="display:table;width:100%"> 
     <div style="display:inline-block" [style.width.%]="100 - parameters.inputSize - parameters.valueSize " [style.max-width.%]="parameters.inputSize - parameters.valueSize">
         <span style="display:inline"  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
         <span style="display:inline"  *ngIf="parameters.label"  >{{parameters.label}}</span>
@@ -10,7 +10,19 @@
     <span style="display:inline-block" [style.width.%]="parameters.valueSize" [style.max-width.%]="parameters.valueSize"    class="slider-value">{{(input.value$ | async)}}</span>
 </div>
 
-<span *ngIf="!input.isInput && displayType=='value' && (size>0 || inline)" class="input-inline input-type-value">
+<div *ngIf="input.isInput && inline" class="inline-component"> 
+    <div style="display:inline-block">
+        <span style="display:inline"  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+        <span style="display:inline"  *ngIf="parameters.label"  >{{parameters.label}}</span>
+	</div>
+    <div style="display:inline-block" [style.width.%]="parameters.inputSize" [style.max-width.%]="parameters.inputSize">
+        <ui-slider [value]="input" [parameters]="parameters"></ui-slider>
+        
+	</div>
+    <span style="display:inline-block" [style.width.%]="parameters.valueSize" [style.max-width.%]="parameters.valueSize"    class="slider-value">{{(input.value$ | async)}}</span>
+</div>
+
+<span *ngIf="!input.isInput && displayType=='value' && inline" class="input-inline input-type-value">
 		<i *ngIf="parameters.labelIcon" class="fa fa-{{currentIcon}}"></i>
 		<ng-container *ngIf="parameters.label">{{parameters.label}}:</ng-container>
 		<i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
@@ -18,7 +30,7 @@
 		<span class="input-value">{{(input.value$ | async)}}{{input.unit}}</span>
 </span>
 
-<div *ngIf="!input.isInput && displayType=='value' && size==0 && !inline " class="input-block input-type-value">
+<div *ngIf="!input.isInput && displayType=='value' && !inline" class="input-block input-type-value">
     <div style="display: inline-block" *ngIf="parameters.label">{{parameters.label}}:</div>
     <div style="display:inline-block; float: right">
         <i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
@@ -34,4 +46,3 @@
 <ng-container *ngIf="!input.isInput && displayType=='chart'" class="" >
     <kervi-chart [value]="input" [parameters]="parameters" [size]="size" ></kervi-chart>
 </ng-container>
-
