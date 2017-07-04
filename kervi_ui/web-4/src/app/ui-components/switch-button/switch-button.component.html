@@ -1,14 +1,13 @@
-<div *ngIf="parameters.size==0 && ! (parameters.inline || inline)" class="block-component"> 
-    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
-    <span  *ngIf="parameters.label"  >y{{parameters.label}}</span>
-    <div class="can-toggle pull-right" [style.width.%]="parameters.inputSize">
-        <input id="a" class=""  type="checkbox" [attr.checked]="state ? '' : null" >
-        <label for="a">
-            <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
-        </label>
+<div *ngIf="!inline" class="can-toggle pull-right" [style.width.%]="parameters.inputSize">
+    <input id="a" class=""  type="checkbox" [attr.checked]="state ? '' : null" >
+    <label for="a">
+        <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
+    </label>
 </div>
-<div *ngIf="parameters.size>0 || parameters.inline || inline" style="display:inline">
-    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
-    <span *ngIf="parameters.label" >x{{parameters.label}}</span>
-    <input class="can-toggle" type="checkbox" [style.width.%]="parameters.inputSize" [attr.checked]="state ? '' : null" data-toggle="toggle">
+
+<div *ngIf="inline" class="can-toggle" style="display:inline-flex">
+    <input id="a" class=""  type="checkbox" [attr.checked]="state ? '' : null" >
+    <label for="a">
+        <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
+    </label>
 </div>

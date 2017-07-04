@@ -39,6 +39,13 @@ export class DynamicBooleanComponent implements OnInit {
             }
 			if (this.parameters.size)
 				this.size=this.parameters.size;
+			
+			if (!this.inline && this.parameters.inline){
+				this.inline = true;
+			}else if (!this.inline && this.parameters.size > 0)
+			{
+				this.inline = true;
+			}
         }
 
 		if (this.dashboardSection){
