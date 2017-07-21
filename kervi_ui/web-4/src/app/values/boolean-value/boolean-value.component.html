@@ -4,12 +4,12 @@
     <kervi-switchbutton [inline]="inline" [value]="value" [parameters]="parameters" *ngIf="displayType!='button'"></kervi-switchbutton>
     <kervi-button [value]="value" [inline]="inline" [parameters]="parameters" *ngIf="displayType=='button'"></kervi-button>
 </div>
-<span *ngIf="inline" >
+<div style="display:inline-block" *ngIf="inline" >
     <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
     <span *ngIf="parameters.label" >{{parameters.label}}</span>
     <kervi-switchbutton [inline]="inline" [value]="value" [parameters]="parameters" *ngIf="displayType!='button'"></kervi-switchbutton>
     <kervi-button [value]="value" [inline]="inline" [parameters]="parameters" *ngIf="displayType=='button'"></kervi-button>
-</span>
+</div>
 
 
 

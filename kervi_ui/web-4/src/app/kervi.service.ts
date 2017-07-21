@@ -140,7 +140,7 @@ export class KerviService {
         address = kerviSocketAddress
       }
     } catch(e) {
-      address = "192.168.50.30:9000";
+      address = "localhost:9000";
     }
     console.log("ks", address);
     this.spine = new KerviSpine({

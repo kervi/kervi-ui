@@ -1,0 +1,129 @@
+$brand-primary:             #116611 !default;
+$brand-success:             #5cb85c !default;
+$brand-info:                #5bc0de !default;
+$brand-warning:             #f0ad4e !default;
+$brand-danger:              #d9534f !default;
+
+$input-group-addon-bg:           #116611;// $gray-lighter !default;
+$input-group-addon-border-color: #116611;// !default;
+
+$card-cap-bg:              #004400 !default;
+$card-bg:                  #88cc88 !default;
+
+$card-link-hover-color:    #fff !default;
+
+$gray-lightest:             #55aa55 !default;
+
+$navbar-light-color:                #55aa55 !default;
+$navbar-light-hover-color:          rgba(0,0,0,.7) !default;
+$navbar-light-active-color:         rgba(0,0,0,.9) !default;
+$navbar-light-disabled-color:       rgba(0,0,0,.3) !default;
+
+$body-bg:    #2d882d !default;
+$body-color: #fff !default;
+$border-radius-base: .25rem;
+
+.btn{
+	overflow:hidden;
+}
+
+sparkline-template{
+	color:#004400;
+	background-color:#55aa55;
+	height:25px;
+	width:35px;
+	.spot{
+		color:#116611;
+	}
+}
+
+.sensor-chart{
+	border-color:rgba(85,170,85,1);
+	color:#004400;
+	.spot{
+		color:#ff7f3f;
+		border-color:#116611;
+	}
+}
+
+.number-gauge-template{
+	color: $brand-primary;
+	border: 1px solid $gray-lightest
+}
+
+.sensor-template{
+	background:rgba(128,128,128,0);
+	color:#ff0000;
+
+	.sensor-warning{
+		color:rgba(255, 166, 24, .5);
+	}
+
+	.sensor-fatal{
+		color:rgba(255, 35, 46, .5);
+	}
+
+	.sensor-major-ticks{
+		color:#f5f5f5;
+	}
+
+	.sensor-minor-ticks{
+		color:#ddd;
+	}
+
+	.sensor-title{
+		color:#fff;
+	}
+
+	.sensor-units{
+		color:#ddd;
+	}
+
+	.sensor-numbers{
+		color:#eee;
+	}
+
+	.sensor-needle-start{
+		color:rgba(240, 128, 128, 1);
+	}
+
+	.sensor-needle-end{
+		color:rgba(255, 160, 122, .9);
+	}
+
+	.sensor-bar{
+		color:#55aa55;
+	}
+
+	.sensor-bar-progress{
+		color:#116611;
+	}
+}
+
+.btn-primary-hover
+{
+	background-color: #0a3a0a !important;
+	border-color: #083208 !important;
+}
+
+.navbar-light{
+	a.nav-link{
+		color:#ffffff !important;	
+	}	
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 25px;
+  background-color: $gray-lightest;
+}
+@import "../../core/core.scss";
+
+@media only screen {
+    @import "./components/switch/toggle.scss";
+ //   @import "./components/switch/candy";
+  
+}

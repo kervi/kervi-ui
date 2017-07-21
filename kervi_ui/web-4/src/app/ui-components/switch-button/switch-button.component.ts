@@ -44,12 +44,22 @@ export class SwitchButtonComponent implements OnInit {
 
     self.valueSubscription = self.value.value$.subscribe(function (v) {
       self.state = v;
-      if (self.parameters.type=="switch")
-        jQuery('input', self.elementRef.nativeElement).prop('checked',v);
+      if (v)
+        jQuery('input', self.elementRef.nativeElement).bootstrapToggle('on')
+      else
+        jQuery('input', self.elementRef.nativeElement).bootstrapToggle('off')
     });
 
+
+
     setTimeout(function () {
-      
+        jQuery('input', self.elementRef.nativeElement).bootstrapToggle({
+          'on': onText,
+          'off': offText,
+          'onstyle': "on",
+          'offstyle': "off",
+          "width":"100%"
+        })
         jQuery('input', self.elementRef.nativeElement).change(function () {
           var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
           if (state && !self.value.value$.value)
@@ -58,6 +68,6 @@ export class SwitchButtonComponent implements OnInit {
             self.kerviService.spine.sendCommand(self.value.command, false);
         });
       
-    }, 0);
+    }, 1000);
   }
 }
