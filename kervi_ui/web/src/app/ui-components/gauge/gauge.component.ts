@@ -54,12 +54,12 @@ export class GaugeComponent implements OnInit {
       var dataHighlights=[];
       var fromLimit=self.value.minValue;
       
-      /*for(var range of self.sensor.ranges){
-        if (range.type == RangeType.error)
+      for(var range of self.value.ranges){
+        if (range.type == DynamicRangeType.error)
           dataHighlights.push({"from": range.start, "to": range.end, "color": fatalColor})
-        if (range.type == RangeType.warning)
+        if (range.type == DynamicRangeType.warning)
           dataHighlights.push({"from": range.start, "to": range.end, "color": warningColor})
-      }*/
+      }
       
       var nspan=(self.value.maxValue-self.value.minValue);
       var tickSpan=nspan/10;

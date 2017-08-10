@@ -104,6 +104,7 @@ export class DynamicNumberModel implements IComponent {
     public minValue: number;
     public command: string;
     public sparkline$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+    public ranges: DynamicRange[] = [];
 
     public id: string;
     public ui = {
@@ -129,6 +130,9 @@ export class DynamicNumberModel implements IComponent {
         for (var prop in message.ui) {
             if (this.ui[prop] != undefined)
                 this.ui[prop] = message.ui[prop];
+        }
+        for (var range of message.ranges){
+            this.ranges.push(new DynamicRange(range));
         }
     }
 
