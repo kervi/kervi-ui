@@ -1,1 +1,0 @@
-kerviSocketAddress = "192.168.43.130:9000"
