@@ -114,7 +114,7 @@ export class ChartComponent implements OnInit {
             zoom: {
               enabled: true,
               
-              mode: 'x'
+              mode: 'xy'
             },
             title: {
               display: true,
