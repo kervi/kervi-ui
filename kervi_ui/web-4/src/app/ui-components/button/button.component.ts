@@ -34,6 +34,7 @@ export class ButtonComponent implements OnInit {
     return this.templateService.getColor(style,selector);
   }
 
+  
   ngOnInit() {
     var self = this; 
     if (self.parameters){

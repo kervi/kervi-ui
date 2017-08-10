@@ -31,7 +31,9 @@
         "../lib/jquery.kontrol.js",
         "../node_modules/canvas-gauges/gauge.min",
         "../node_modules/moment/min/moment-with-locales.js",
-        "../node_modules/chart.js/dist/Chart.js"
+        "../node_modules/chart.js/dist/Chart.js",
+        "../node_modules/hammerjs/hammer.js",
+        "../node_modules/chartjs-plugin-zoom/chartjs-plugin-zoom.js"
         
       ],
       "environmentSource": "environments/environment.ts",

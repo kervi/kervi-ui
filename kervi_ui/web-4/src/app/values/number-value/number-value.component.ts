@@ -23,7 +23,7 @@ export class DynamicNumberComponent implements OnInit {
 	private unitSize:number=150;
 	private inSlide:boolean=false;
 
-	displayType:string="value";
+	displayType:string="";
 	gaugeType:string;
 	currentIcon:string=null;
 	private gaugeTypes:string[]=['radial_gauge','vertical_linear_gauge', 'horizontal_linear_gauge', 'compass']
@@ -63,6 +63,13 @@ export class DynamicNumberComponent implements OnInit {
 				
 			if (this.parameters.size)
 				this.size=this.parameters.size;
+		}
+
+		if (!this.displayType){
+			if (this.input.isInput)
+				this.displayType="slider"
+			else
+				this.displayType="value"
 		}
 
 		if (this.dashboardSection){

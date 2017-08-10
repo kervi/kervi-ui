@@ -41,7 +41,7 @@ export class KerviService {
                             if (component.componentType == "sensor"){
                               var dynamicValue = component as any;
                             
-                              dynamicValue.value.valueTS=new Date(this.timestamp*1000);
+                              dynamicValue.value.valueTS=new Date(this.timestamp + " utc");
                               dynamicValue.value.value$.next(value.value);
                               var spl=dynamicValue.value.sparkline$.value;
                               spl.push(value.value);
@@ -52,7 +52,7 @@ export class KerviService {
                               var dynamicValue = component as any;
                               
                               //console.log("dvc", value, dynamicValue);
-                              dynamicValue.valueTS=new Date(this.timestamp*1000);
+                              dynamicValue.valueTS=new Date(this.timestamp + " utc");
                               dynamicValue.value$.next(value.value);
                               /*var spl=dynamicValue.sparkline$.value;
                               spl.push(value.value);
@@ -140,7 +140,7 @@ export class KerviService {
         address = kerviSocketAddress
       }
     } catch(e) {
-      address = "localhost:9000";
+      address = "192.168.0.171:9000";
     }
     console.log("ks", address);
     this.spine = new KerviSpine({

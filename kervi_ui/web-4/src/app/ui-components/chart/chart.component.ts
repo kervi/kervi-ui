@@ -24,7 +24,11 @@ export class ChartComponent implements OnInit {
   canvasId:string="";
   private chart:any=null;
   private chartData = [];
-
+  selectedPeriodText:string = "Hour";
+  selectedPeriod:string = "hour";
+  periodStart: Date = null;
+  periodEnd: Date = null;
+  updateChart:boolean = true;
   constructor(private kerviService:KerviService, private templateService:TemplateService ) {  
   }
 
@@ -39,23 +43,29 @@ export class ChartComponent implements OnInit {
       this.value.value$.subscribe(function(v){
         if (self.chart){
           try{
-            var ds=self.chart.data.datasets[0].data;
-            ds.push({ x: self.value.valueTS, y: v })
-            if (ds.length>20)
-              ds.shift();
-            self.chart.render();  
-            self.chart.update();
+            if (self.updateChart){
+              var ds=self.chart.data.datasets[0].data;
+              ds.push({ x: self.value.valueTS, y: v })
+              if (ds.length>20)
+                ds.shift();
+              self.chart.render();  
+              self.chart.update();
+            }
           }catch(ex){
             console.log("cdx",ex);  
           }
         }
       });
 
+      self.periodEnd = new Date();
+      self.periodStart = new Date();
+      self.periodStart.setHours(self.periodEnd.getHours() - 1);
+
       setTimeout(function() {
       
-      jQuery("#"+self.canvasId).width(self.unitSize*self.size);
-      jQuery("#"+self.canvasId).height(self.unitSize);
-      self.kerviService.spine.sendQuery("getSensorData", self.value.id, function (results) {
+      //jQuery("#"+self.canvasId).width(self.unitSize*self.size);
+      //jQuery("#"+self.canvasId).height(self.unitSize);
+      self.kerviService.spine.sendQuery("getSensorData", self.value.id, self.periodStart.toISOString(), self.periodEnd.toISOString(), function (results) {
         //console.log("gsd", this, results);
         var sensorData = results;
         self.chartData = [];
@@ -68,6 +78,7 @@ export class ChartComponent implements OnInit {
         self.chart = new Chart(ctx, {
           type: 'line',
           responsive: true,
+          maintainAspectRatio : false,
           data: {
             datasets: [
               {
@@ -94,9 +105,20 @@ export class ChartComponent implements OnInit {
           },
           options: {
             responsive: true,
+            maintainAspectRatio: true,
+            pan: {
+              enabled: true,
+              mode: 'xy'
+              
+            },
+            zoom: {
+              enabled: true,
+              
+              mode: 'x'
+            },
             title: {
               display: true,
-              text: self.parameters.label
+              //text: self.parameters.label
             },
             elements:{
               point:{
@@ -141,6 +163,8 @@ export class ChartComponent implements OnInit {
               yAxes: [{
                 ticks: {
                     fontColor: "white",
+                    max: self.value.maxValue,
+                    min: self.value.minValue,
                     //fontSize: 18,
                     //stepSize: 1,
                     //beginAtZero:true
@@ -163,5 +187,117 @@ export class ChartComponent implements OnInit {
       }, 200);
     
   }
-  
+
+  public goLive(){
+    this.selectPeriod(this.selectedPeriod);
+  }
+
+  public movePeriod(movement:number){
+    this.updateChart = false;
+
+    
+    if (this.selectedPeriod=="5min"){
+      this.periodEnd.setMinutes(this.periodEnd.getMinutes() + 5 * movement)
+      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 5 );
+    }
+    
+    if (this.selectedPeriod=="15min"){
+      this.periodEnd.setMinutes(this.periodEnd.getMinutes() + 15 * movement)
+      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 15 );
+    }
+
+    if (this.selectedPeriod=="30min"){
+      this.periodEnd.setMinutes(this.periodEnd.getMinutes() + 30 * movement)
+      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 30 );
+    }
+
+    if (this.selectedPeriod=="hour"){
+      this.periodEnd.setHours(this.periodEnd.getHours() + movement)
+      this.periodStart.setHours(this.periodEnd.getHours() -1 );
+    }
+
+    if (this.selectedPeriod=="day"){
+      this.periodEnd.setHours(this.periodEnd.getDay() + 24 * movement)
+      this.periodStart.setHours(this.periodEnd.getDay() - 24);
+    }
+
+    if (this.selectedPeriod=="week"){
+      this.periodEnd.setHours(this.periodEnd.getDay() + 7 * 24 * movement)
+      this.periodStart.setHours(this.periodEnd.getDay() + 14 *  24 * movement);
+    }
+
+    if (this.selectedPeriod=="month"){
+      
+    }
+
+    if (this.selectedPeriod=="year"){
+      
+    }
+    this.loadPeriod();
+  }
+
+
+
+  public selectPeriod(period){
+    this.updateChart=true;
+    this.selectedPeriod = period;
+    this.periodEnd = new Date();
+    this.periodStart = new Date();
+
+    if (period=="5min"){
+      this.selectedPeriodText="5 min";
+      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 5);
+    }  
+
+    if (period=="15min"){
+      this.selectedPeriodText="15 min";
+      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 15);
+    }
+
+    if (period=="30min"){
+      this.selectedPeriodText="30 min";
+      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 30);
+    }
+
+    if (period=="hour"){
+      this.selectedPeriodText="Hour";
+      this.periodStart.setHours(this.periodEnd.getHours() - 1);
+    }
+
+    if (period=="day"){
+      this.selectedPeriodText="Day";
+      this.periodStart.setHours(this.periodEnd.getHours() - 24);
+    }
+
+    if (period=="week"){
+      this.selectedPeriodText="Week"
+      this.periodStart.setHours(this.periodEnd.getHours() - 7 * 24);
+    }
+
+    if (period=="month"){
+      this.selectedPeriodText="Month"
+    }
+
+    if (period=="year"){
+      this.selectedPeriodText="Year"
+    }
+    //console.log("sp", this.periodStart, this.periodEnd);
+    this.loadPeriod();
+  }
+
+  public loadPeriod(){
+    var self = this;
+    //console.log("lp", this.periodStart, this.periodEnd);
+    this.kerviService.spine.sendQuery("getSensorData", this.value.id, this.periodStart.toISOString(), this.periodEnd.toISOString(), function (results) {
+        console.log("gsd", results);
+        var sensorData = results;
+        self.chartData.length = 0;
+        for (var i = 0; (i < sensorData.length); i++) {
+          var dataItem = sensorData[i]
+          self.chartData.push({ x: Date.parse(dataItem.ts + " utc"), y: dataItem.value });
+        }
+        self.chart.render();  
+        self.chart.update();
+    });
+  }
 }
