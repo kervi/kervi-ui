@@ -15,7 +15,7 @@ export class KerviService {
   public  application$: BehaviorSubject<any>;
   private components : IComponent[] = [];
   private components$: BehaviorSubject<IComponent[]> = new  BehaviorSubject<IComponent[]>([]);
-  
+  doAuthenticate: boolean = false;
   connected$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   
 
@@ -140,18 +140,26 @@ export class KerviService {
         address = kerviSocketAddress
       }
     } catch(e) {
-      address = "192.168.0.172:9000";
+      address = "localhost:9000";
     }
     console.log("ks", address);
     this.spine = new KerviSpine({
-      address:"ws://" + address,
+      address: address,
       onOpen: this.onOpen,
       onClose:this.onClose,
+      onAuthenticate:this.onAuthenticate,
       targetScope:this,
      });
   }
 
-  
+  authenticate(userName, password){
+    this.spine.authenticate(userName, password);
+  }
+
+  private onAuthenticate(){
+    this.doAuthenticate = true;
+    this.onClose();
+  }
 
   private onOpen(){
     console.log("kervice service on open",this);

@@ -88,7 +88,7 @@ export class GaugeComponent implements OnInit {
           colorNumbers:this.color("color",".sensor-template .sensor-numbers"),
           colorNeedleStart:this.color("color",".sensor-template .sensor-needle-start"),
           colorNeedleEnd:this.color("color",".sensor-template .sensor-needle-end"),
-          valueBox:"true",
+          valueBox:false,
           animationRule:"bounce",
           animationDuration:"500",
           fontValue:"Led",

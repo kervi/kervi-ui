@@ -9,6 +9,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 @Injectable()
 export class ConnectedService {
   private isConnected:boolean = false;
+  public isAuthenticated: boolean = false;
+  
   private currentPage=null;
   constructor(private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private route:ActivatedRoute) { 
     console.log("connected service c");
@@ -18,7 +20,7 @@ export class ConnectedService {
       console.log("connected service state",connectedValue, self.isConnected, self);
       if (connectedValue){
         self.isConnected=true;
-        
+        self.isAuthenticated=true;
         if (self.currentPage)
           self.router.navigate([self.currentPage]);
         else {
@@ -43,6 +45,16 @@ export class ConnectedService {
         
       }
     })  
+  }
+
+  public connect(userName:string, password:string){
+    this.kerviService.authenticate(userName, password);
+  }
+
+
+  public logout(){
+    this.isAuthenticated = false;
+    //this.kerviService.disconnect();
   }
 
 }

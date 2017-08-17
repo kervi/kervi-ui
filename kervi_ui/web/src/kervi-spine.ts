@@ -21,9 +21,12 @@ export class  KerviSpine{
 	websocket = null;
 	
 	private options=  {
+			userName: null,
+			password: null,
 			address:null,
 			onOpen:null,
 			onClose:null,
+			onAuthenticate:null,
 			autoConnect:true,
 			targetScope:null
 	}
@@ -104,7 +107,7 @@ export class  KerviSpine{
 			return
 		}
 		var self=this;
-		this.websocket= new WebSocket(this.options.address);
+		this.websocket= new WebSocket("ws://" + this.options.userName + ":" + this.options.password + "@" +this.options.address);
 		this.websocket.onopen = function(evt) { 
 			self.onOpen(evt);
 		};
@@ -122,6 +125,7 @@ export class  KerviSpine{
 		};
 	}
 
+	
 
 	private onOpen(evt){
 		console.log("Kervi spine on open",this,evt);
@@ -129,8 +133,6 @@ export class  KerviSpine{
 		var self=this
 		this.isConnected=true;
 		
-		if (this.options.onOpen)
-			this.options.onOpen.call(this.options.targetScope,evt);
 			
 		console.log("Kervi spine ready")
 	}
@@ -146,11 +148,40 @@ export class  KerviSpine{
 		}
 	}
 
+	authenticate(userName, password){
+		this.options.userName = userName;
+		this.options.password = password;
+
+		var cmd={id:this.messageId++,"messageType":"authenticate","userName":this.options.userName, "password": this.options.password};
+		this.websocket.send(JSON.stringify(cmd));
+	}
+
 	onMessage(evt){
 		//console.log("on m",evt.data);
 		var message=JSON.parse(evt.data);
 		//console.log("on m",message);
-		if (message.messageType=="response")
+		
+		if (message.messageType=="authenticate"){
+			console.log("authenticate");
+			if (this.options.userName)
+				this.authenticate(this.options.userName, this.options.password)
+			else
+				this.options.onAuthenticate.call(this.options.targetScope,evt);
+		}
+		else if (message.messageType=="session_authenticated"){
+			console.log("session", message, this);
+			var date = new Date();
+        	date.setTime(date.getTime() + (2*60*60*1000));
+        	var expires = "; expires=" + date.toUTCString();
+			document.cookie = "kervisession" + "=" + message.session + expires + "; path=/";
+			
+			var self = this;
+			setTimeout(function(){
+				if (self.options.onOpen)
+					self.options.onOpen.call(self.options.targetScope,evt);
+			}, 100
+			);
+		} else if (message.messageType=="response")
 			this.handleRPCResponse(message);
 		else if (message.messageType=="event")
 			this.handleEvent(message);
