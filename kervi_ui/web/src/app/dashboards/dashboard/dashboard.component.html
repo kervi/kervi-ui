@@ -6,7 +6,10 @@
 				<!--<span class="dropdown-divider">&nbsp; Dashboards</span>-->
 				<div class="dropdown-submenu">
 					<a *ngFor="let dashboard of (dashboards$ | async)" class="dropdown-item" [routerLink]="['/dashboard', dashboard.id]">{{dashboard.name}}</a>
+					<div *ngIf="authenticated" class="dropdown-divider"></div>
+					<a *ngIf="authenticated" class="dropdown-item" >Log out</a>
 				</div>
+				
 				<!--<div class="dropdown-divider"></div>-->
 				<!--<a class="dropdown-item" href="#/charts">Charts</a>-->
 				<!--<a class="dropdown-item" href="#/about">About</a>-->

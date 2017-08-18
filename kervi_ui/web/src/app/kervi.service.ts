@@ -15,8 +15,9 @@ export class KerviService {
   public  application$: BehaviorSubject<any>;
   private components : IComponent[] = [];
   private components$: BehaviorSubject<IComponent[]> = new  BehaviorSubject<IComponent[]>([]);
-  doAuthenticate: boolean = false;
+  public doAuthenticate: boolean = false;
   connected$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
+  authenticationFailed$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   
 
   constructor() 
@@ -148,17 +149,24 @@ export class KerviService {
       onOpen: this.onOpen,
       onClose:this.onClose,
       onAuthenticate:this.onAuthenticate,
+      onAuthenticateFailed:this.onAuthenticateFailed,
       targetScope:this,
      });
   }
 
   authenticate(userName, password){
+    this.authenticationFailed$.next(false);
     this.spine.authenticate(userName, password);
   }
 
   private onAuthenticate(){
     this.doAuthenticate = true;
     this.onClose();
+  }
+
+  private onAuthenticateFailed(){
+    console.log("af");
+    this.authenticationFailed$.next(true);
   }
 
   private onOpen(){

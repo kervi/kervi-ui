@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public dashboardId:string;
   public dashboard:DashboardModel;
   public sections: DashboardSectionModel[] = [];
-
+  public authenticated:Boolean = false;
   public sectionRows: any[]=[];
   public cameraId: string = null;
   public cameraParameters:any = null;
@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         self.dashboards$.next(v);
       
     });
-
+    this.authenticated = this.kerviService.doAuthenticate;
     if (!this.kerviService.connected$.value)
       this.router.navigate(['/connect']);
     

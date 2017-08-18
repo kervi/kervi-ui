@@ -27,6 +27,7 @@ export class  KerviSpine{
 			onOpen:null,
 			onClose:null,
 			onAuthenticate:null,
+			onAuthenticateFailed:null,
 			autoConnect:true,
 			targetScope:null
 	}
@@ -167,6 +168,9 @@ export class  KerviSpine{
 				this.authenticate(this.options.userName, this.options.password)
 			else
 				this.options.onAuthenticate.call(this.options.targetScope,evt);
+		}
+		else if (message.messageType=="authentication_failed"){
+			this.options.onAuthenticateFailed.call(this.options.targetScope,evt);
 		}
 		else if (message.messageType=="session_authenticated"){
 			console.log("session", message, this);

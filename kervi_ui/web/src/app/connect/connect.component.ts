@@ -17,6 +17,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 export class ConnectComponent implements OnInit {
   private isConnected: boolean = false;
   private currentPage = null;
+  invalidUser:Boolean = false;
   private ts = new Date()
   loginForm: FormGroup;
   userName: AbstractControl;
@@ -47,7 +48,10 @@ export class ConnectComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+    var self=this;
+    this.kerviService.authenticationFailed$.subscribe(function(v){
+      self.invalidUser = v;
+    });
 
   }
 
