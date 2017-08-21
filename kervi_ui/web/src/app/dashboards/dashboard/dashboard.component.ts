@@ -47,6 +47,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private elementRef:ElementRef, private zone:NgZone, private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
       
    }
+    
+    logoff(){
+      this.kerviService.logoff();
+    }
 
    padPress(pad:string){
      if (pad=="left")

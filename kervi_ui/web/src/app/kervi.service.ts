@@ -159,6 +159,11 @@ export class KerviService {
     this.spine.authenticate(userName, password);
   }
 
+  logoff(){
+    this.authenticationFailed$.next(false);
+    this.onClose();
+  }
+
   private onAuthenticate(){
     this.doAuthenticate = true;
     this.onClose();
