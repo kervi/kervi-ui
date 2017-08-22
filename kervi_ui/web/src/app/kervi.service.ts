@@ -160,6 +160,7 @@ export class KerviService {
   }
 
   logoff(){
+    this.spine.logoff()
     this.authenticationFailed$.next(false);
     this.onClose();
   }

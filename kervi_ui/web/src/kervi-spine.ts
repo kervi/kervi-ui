@@ -4,7 +4,7 @@
 export class  KerviSpine{
 
 	public isConnected: Boolean = false;
-	
+	sessionId = null;
 	queryHandlers=[];
 	commandHandlers=[];
 	eventHandlers=[];
@@ -28,6 +28,7 @@ export class  KerviSpine{
 			onClose:null,
 			onAuthenticate:null,
 			onAuthenticateFailed:null,
+			onLogOff: null,
 			autoConnect:true,
 			targetScope:null
 	}
@@ -157,6 +158,15 @@ export class  KerviSpine{
 		this.websocket.send(JSON.stringify(cmd));
 	}
 
+	logoff(){
+		this.options.userName = null;
+		this.options.password = null;
+
+		var cmd={id:this.messageId++,"messageType":"logoff", "session": this.sessionId};
+		this.sessionId = null;
+		this.websocket.send(JSON.stringify(cmd));
+	}
+
 	onMessage(evt){
 		//console.log("on m",evt.data);
 		var message=JSON.parse(evt.data);
@@ -177,6 +187,7 @@ export class  KerviSpine{
 			var date = new Date();
         	date.setTime(date.getTime() + (2*60*60*1000));
         	var expires = "; expires=" + date.toUTCString();
+			self.sessionId = message.session;
 			document.cookie = "kervisession" + "=" + message.session + expires + "; path=/";
 			
 			var self = this;
@@ -185,6 +196,12 @@ export class  KerviSpine{
 					self.options.onOpen.call(self.options.targetScope,evt);
 			}, 100
 			);
+		} else if (message.messageType == "session_logoff"){ 
+			self.options.userName = null;
+			self.options.password = null;
+			self.sessionId = null;
+			if (self.options.onLogOff)
+				self.options.onLogOff.call(self.options.targetScope,evt);
 		} else if (message.messageType=="response")
 			this.handleRPCResponse(message);
 		else if (message.messageType=="event")
