@@ -33,7 +33,7 @@ export class CamViewerComponent implements OnInit {
     var self=this;
 
     this.camera$.subscribe(function(v){
-      console.log("cse",v);
+      //console.log("cse",v);
       if (self.panSubscription)
         self.panSubscription.unsubscribe();
 
@@ -88,7 +88,6 @@ export class CamViewerComponent implements OnInit {
 
   ngOnInit() {
     var self = this;
-    console.log("cw", this);
     if (this.cameraId){
       this.camera$.next(this.kerviService.getComponent(this.cameraId) as ControllerModel)  
     }
@@ -99,13 +98,11 @@ export class CamViewerComponent implements OnInit {
       var w = jQuery(".video",self.elementRef.nativeElement).width();
 
       if (w < self.padSize){
-        console.log("wp",w-10);
         self.padSize=w-10;
           //jQuery(".camPad", self.elementRef.nativeElement).css({ width: self.padSize, height:  self.padSize });
 
       }
-
-      console.log("cwp",h,w,self.padSize);
+      //console.log("cwp",h,w,self.padSize);
 
       var pan = null;
       var tilt = null
@@ -134,8 +131,6 @@ export class CamViewerComponent implements OnInit {
             clearTimeout(self.moveDelayTimer);
           }
           
-          
-          
           self.moveDelayTimer = setTimeout(function () {
             if (pan)
               self.kerviService.spine.sendCommand(pan.command, value[0]);
@@ -156,11 +151,8 @@ export class CamViewerComponent implements OnInit {
       });
     }, 500);
 
-    
-
-    self.kerviService.connected$.subscribe(function (connected) {
-
-      if (connected) {
+    self.kerviService.IPCReady$.subscribe(function(ready){
+      if (ready){
         self.kerviService.spine.addEventHandler("pointOfInterestChange", "", function () {
           console.log("poi change", this);
           if (this.action == "add") {
@@ -192,6 +184,13 @@ export class CamViewerComponent implements OnInit {
           self.updatePOI();
 
         });
+      }
+    });
+
+    self.kerviService.connected$.subscribe(function (connected) {
+
+      if (connected) {
+        
       }
     });
 

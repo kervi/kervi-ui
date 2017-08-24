@@ -7,7 +7,7 @@
 				<div class="dropdown-submenu">
 					<a *ngFor="let dashboard of (dashboards$ | async)" class="dropdown-item" [routerLink]="['/dashboard', dashboard.id]">{{dashboard.name}}</a>
 					<div *ngIf="authenticated" class="dropdown-divider"></div>
-					<a *ngIf="authenticated" href="#" (click)="logoff()" class="dropdown-item" >Log out</a>
+					<a *ngIf="authenticated" href="javascript: return false;" (click)="logoff($event)" class="dropdown-item" >Log out</a>
 				</div>
 			</div>
 		</li>

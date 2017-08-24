@@ -16,6 +16,8 @@ export class ConnectedService {
     console.log("connected service c");
     var self=this;
     this.kerviService.connect();
+    
+    
     var s=this.kerviService.connected$.subscribe(function(connectedValue){
       console.log("connected service state",connectedValue, self.isConnected, self);
       if (connectedValue){
@@ -37,6 +39,7 @@ export class ConnectedService {
           });
         }
       } else if (!connectedValue) {
+        self.isAuthenticated=false;
         if (self.isConnected){
           self.currentPage=self.router.url;
           self.router.navigate(['/connect']);

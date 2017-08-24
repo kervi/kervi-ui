@@ -29,7 +29,6 @@ export class DynamicBooleanComponent implements OnInit {
 
 	ngOnInit() {
 		var self = this;
-		console.log("ngi ni",this);
 		if (!this.parameters)
       		this.parameters = this.value.ui;
 

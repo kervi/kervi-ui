@@ -40,7 +40,6 @@ export class DynamicNumberComponent implements OnInit {
 
 	ngOnInit() {
 		var self = this;
-		console.log("ngi ni",this);
 		if (!this.parameters)
       		this.parameters = this.input.ui;
 
@@ -74,7 +73,6 @@ export class DynamicNumberComponent implements OnInit {
 
 		if (this.dashboardSection){
 			this.unitSize=this.dashboardSection.dashboard.unitSize;
-
 		}
 
 		if (self.input.isInput){
@@ -82,8 +80,5 @@ export class DynamicNumberComponent implements OnInit {
 			if (self.size==0)
 				sliderSize=self.unitSize;
 		}
-
-		
 	}
-
 }

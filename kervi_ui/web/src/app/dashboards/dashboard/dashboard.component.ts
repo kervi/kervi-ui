@@ -48,8 +48,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       
    }
     
-    logoff(){
+    logoff(event){
       this.kerviService.logoff();
+      event.stopPropagation();
     }
 
    padPress(pad:string){
@@ -154,8 +155,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           if (self.dashboard.LeftPadYSection.components[0].parameters.padAutoCenter)
             self.autoZeroLeftPad = true;
         }
-        console.log("lc",self.dashboard.LeftPadXSection, self.dashboard.LeftPadYSection,this.leftXValue,this.leftYValue)
-                
+        //console.log("lc",self.dashboard.LeftPadXSection, self.dashboard.LeftPadYSection,this.leftXValue,this.leftYValue)
 
         if (self.leftXValue){
           self.leftXValue.value$.subscribe(function (v) {
@@ -190,7 +190,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             jQuery("input[name='left-y']", self.elementRef.nativeElement).val(self.leftYValue.value$.value).change();
           
           var color = "rgba(255,255,255,.5)";
-          console.log("lpx", jQuery('#leftPad'));
           var p = jQuery('#leftPad').xy({
             displayPrevious: false
             , min: -100
@@ -205,7 +204,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
               
                 self.moveLeftDelayTimer = setTimeout(function () {
-                  console.log("lcx",self.leftXValue,self.leftYValue)
                   if (self.leftXValue && self.inLeftPadDrag)
                     self.kerviService.spine.sendCommand(self.leftXValue.command, value[0]);
                   if (self.leftYValue && self.inLeftPadDrag)
@@ -232,8 +230,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             self.autoZeroRightPad = true;
         }
         
-        console.log("lc",self.dashboard.RightPadXSection, self.dashboard.RightPadYSection, self.rightXValue, self.rightYValue)
-
         if (self.rightXValue){
           self.rightXValue.value$.subscribe(function (v) {
             if (!this.inLeftPadDrag)
@@ -252,7 +248,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         setTimeout(function() {
           var color = "rgba(255,255,255,.5)";
-          console.log("lpx", jQuery('#rightPad'));
           
           var h = window.innerHeight;
           var w = window.innerWidth;
@@ -283,7 +278,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
               
                 
                 self.moveRightDelayTimer = setTimeout(function () {
-                  console.log("rcx",self.rightXValue,self.rightYValue)
                   if (self.rightXValue)
                     self.kerviService.spine.sendCommand(self.rightXValue.command, value[0]);
                   if (self.rightYValue)
@@ -297,6 +291,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     }
 
-    console.log("dbbcx", this.cameraId, this.cameraParameters);
+    //console.log("dbbcx", this.cameraId, this.cameraParameters);
   }
 }

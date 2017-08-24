@@ -19,7 +19,8 @@ export class  KerviSpine{
 	pointOfInterests=[];
 	application=null;
 	allowAnonymous = true;
-		
+	firstOnOpen = true;
+
 	websocket = null;
 	
 	private options=  {
@@ -161,8 +162,8 @@ export class  KerviSpine{
 	}
 
 	logoff(){
-		this.options.userName = this.allowAnonymous ? "anonymous" : null;
-		this.options.password = null;
+		//this.options.userName = this.allowAnonymous ? "anonymous" : null;
+		//this.options.password = null;
 
 		var cmd={id:this.messageId++,"messageType":"logoff", "session": this.sessionId};
 		this.sessionId = null;
@@ -208,15 +209,22 @@ export class  KerviSpine{
 			
 			setTimeout(function(){
 				if (self.options.onOpen)
-					self.options.onOpen.call(self.options.targetScope,evt);
+					self.options.onOpen.call(self.options.targetScope, self.firstOnOpen,evt);
+					self.firstOnOpen = false;
 			}, 100
 			);
+			
 		} else if (message.messageType == "session_logoff"){ 
-			self.options.userName = this.allowAnonymous && this.options.userName != "anonymous" ? "anonymous" : null;
-			self.options.password = null;
-			self.sessionId = null;
-			if (self.options.onLogOff)
-				self.options.onLogOff.call(self.options.targetScope,evt);
+			if (this.allowAnonymous && this.options.userName != "anonymous"){
+				this.authenticate("anonymous", null)
+			} else {
+				self.options.userName = null;
+				self.options.password = null;
+				self.sessionId = null;
+			
+				if (self.options.onLogOff)
+					self.options.onLogOff.call(self.options.targetScope,evt);
+			}
 		} else if (message.messageType=="response")
 			this.handleRPCResponse(message);
 		else if (message.messageType=="event")

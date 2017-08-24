@@ -31,7 +31,7 @@ export class SparklineComponent implements OnInit {
     var fillColor=self.color("background-color",".sparkline-template");
     var height=self.color("height",".sparkline-template");
     var width=self.color("width",".sparkline-template");
-    console.log("sl", width, height);
+    //console.log("sl", width, height);
     this.value.sparkline$.subscribe(function(v){
       
     jQuery(self.elementRef.nativeElement).sparkline(v, { 

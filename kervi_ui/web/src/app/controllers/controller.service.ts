@@ -34,6 +34,6 @@ export class ControllersService {
                 }
             }
         }
-        console.log("rc", controllers);    
+        //console.log("rc", controllers);    
     }
 }

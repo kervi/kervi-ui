@@ -74,7 +74,7 @@ export class DashboardSectionModel{
     }
 
     public reload(source:DashboardSectionModel){
-        console.log("rl", this);
+        //console.log("rl", this);
         for(var sourceComponent of source.components){
             var found=false;
             for(var component of this.components){
@@ -83,7 +83,6 @@ export class DashboardSectionModel{
                 }
             }
             if (!found){
-                //component.component=self.getComponent(sectionComponent.componentId)
                 this.components.push(sourceComponent);
             }
         }
@@ -99,7 +98,7 @@ export class DashboardSectionModel{
             if (!found)
                 deleteComponents.push(component);
         }
-        console.log("dsc",deleteComponents);
+        //console.log("dsc",deleteComponents);
         for(var component of deleteComponents){
             this.components.splice( this.components.indexOf(component), 1 );
         }

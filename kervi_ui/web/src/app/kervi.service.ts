@@ -17,6 +17,7 @@ export class KerviService {
   private components$: BehaviorSubject<IComponent[]> = new  BehaviorSubject<IComponent[]>([]);
   public doAuthenticate: boolean = false;
   connected$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
+  IPCReady$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   authenticationFailed$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   
 
@@ -34,38 +35,32 @@ export class KerviService {
       }
     },10000);
 
-     var s1=this.connected$.subscribe(function(connected){
-            if (connected){
-                self.spine.addEventHandler("dynamicValueChanged","",function(id, value){
-                    for (let component of self.components){
-                        if (component.id==value.id){
-                            if (component.componentType == "sensor"){
-                              var dynamicValue = component as any;
-                            
-                              dynamicValue.value.valueTS=new Date(this.timestamp + " utc");
-                              dynamicValue.value.value$.next(value.value);
-                              var spl=dynamicValue.value.sparkline$.value;
-                              spl.push(value.value);
-                              if (spl.length>10)
-                                  spl.shift();
-                              dynamicValue.value.sparkline$.next(spl);  
-                            } else {
-                              var dynamicValue = component as any;
-                              
-                              //console.log("dvc", value, dynamicValue);
-                              dynamicValue.valueTS=new Date(this.timestamp + " utc");
-                              dynamicValue.value$.next(value.value);
-                              /*var spl=dynamicValue.sparkline$.value;
-                              spl.push(value.value);
-                              if (spl.length>10)
-                                  spl.shift();
-                              dynamicValue.sparkline$.next(spl);*/
-                            }
-                        }
-                    }
-                });
+     var s1=this.IPCReady$.subscribe(function(connected){
+        if (connected){
+          self.spine.addEventHandler("dynamicValueChanged","",function(id, value){
+            for (let component of self.components){
+              if (component.id==value.id){
+                if (component.componentType == "sensor"){
+                  var dynamicValue = component as any;
+                
+                  dynamicValue.value.valueTS=new Date(this.timestamp + " utc");
+                  dynamicValue.value.value$.next(value.value);
+                  var spl=dynamicValue.value.sparkline$.value;
+                  spl.push(value.value);
+                  if (spl.length>10)
+                      spl.shift();
+                  dynamicValue.value.sparkline$.next(spl);  
+                } else {
+                  var dynamicValue = component as any;
+                  
+                  dynamicValue.valueTS=new Date(this.timestamp + " utc");
+                  dynamicValue.value$.next(value.value);
+                }
+              }
             }
-        });
+          });
+        }
+      });
 
   }
 
@@ -166,23 +161,33 @@ export class KerviService {
 
   private onAuthenticate(){
     this.doAuthenticate = true;
-    this.onClose();
+    this.reset();
   }
 
   private onAuthenticateFailed(){
     this.authenticationFailed$.next(true);
+    
   }
 
   private onLogoff(){
     console.log("ol");
     this.doAuthenticate = true;
     //this.spine.logoff()
+    if (this.spine.firstOnOpen)
+      this.IPCReady$.next(true);
+    
     this.authenticationFailed$.next(false);
-    this.onClose();
+    this.reset();
   }
 
-  private onOpen(){
-    console.log("kervice service on open",this);
+  private reset(){
+    this.components = [];
+    this.components$.next(this.components);
+    this.connected$.next(false);
+  }
+
+  private onOpen(first){
+    console.log("kervice service on open", this.spine.firstOnOpen, first,this);
     var self=this;
     this.doAuthenticate = this.spine.doAuthenticate;
     this.spine.sendQuery("GetApplicationInfo",function(message){
@@ -196,27 +201,28 @@ export class KerviService {
         console.log("components",self.components); 
       });  
 	  });
-    this.spine.addEventHandler("moduleStarted","",function(){
-        console.log("module loaded",self.components); 
-        self.refreshComponents(); 
-    });           
-    
-    this.spine.addEventHandler("moduleStopped","",function(){
-        console.log("module unloaded"); 
-        setTimeout(function() {
-          console.log("module unloaded, refresh");
-        
-          self.refreshComponents()
-      }, 5000);           
-    });
+    if (self.spine.firstOnOpen){
+      this.IPCReady$.next(true);
+      this.spine.addEventHandler("moduleStarted","",function(){
+          console.log("module loaded",self.components); 
+          self.refreshComponents(); 
+      });           
+      
+      this.spine.addEventHandler("moduleStopped","",function(){
+          console.log("module unloaded"); 
+          setTimeout(function() {
+            console.log("module unloaded, refresh");
+          
+            self.refreshComponents()
+        }, 5000);           
+      });
+    }
     
   }
 
   private onClose(){
-    this.components = [];
-    this.components$.next(this.components);
-
-    this.connected$.next(false);
+    this.reset()
+    this.IPCReady$.next(false);
   }
 
   private onHeartbeat(){

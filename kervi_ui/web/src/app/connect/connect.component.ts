@@ -15,7 +15,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
   styleUrls: ['./connect.component.scss']
 })
 export class ConnectComponent implements OnInit {
-  private isConnected: boolean = false;
+  private isConnected: Boolean = false;
   private currentPage = null;
   invalidUser:Boolean = false;
   private ts = new Date()
@@ -51,6 +51,13 @@ export class ConnectComponent implements OnInit {
       
     });
 
+    this.kerviService.IPCReady$.subscribe(function(v){
+      self.isConnected = v;
+      self.isAuthenticated = self.connectedService.isAuthenticated;
+      self.doAuthenticate = self.kerviService.doAuthenticate;
+    });
+    
+
   }
 
   ngOnDestroy() {
@@ -58,7 +65,6 @@ export class ConnectComponent implements OnInit {
   }
 
   onSubmit(value: any): void {  
-    console.log('you submitted value: ', value);
     this.kerviService.authenticate(value.userName, value.password)  
   }
 }

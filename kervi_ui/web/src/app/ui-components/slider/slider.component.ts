@@ -33,12 +33,10 @@ export class SliderComponent implements OnInit {
 
 	ngOnInit() {
 		var self = this;
-		console.log("ngi ni",this);
 		
 		var sliderSize=self.unitSize*self.size;
 		if (self.size==0)
 			sliderSize=self.unitSize;
-		
 
 		var	color = this.color("color",".number-gauge-template");
 		setTimeout(function() {

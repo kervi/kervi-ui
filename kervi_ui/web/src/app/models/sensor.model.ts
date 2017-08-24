@@ -14,15 +14,8 @@ export class SensorModel implements IComponent {
     public type: string = null;
     public visible: boolean = true;
     public value:DynamicNumberModel = null;
-    //public max: number = null;
-    //public min: number = null;
-    //public unit: string = null;
-    //public ranges:SensorRange[] = []
-    //public valueTS:Date = null;
-    //public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     public dashboards: string[] = [];
-    //public sparkline$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-
+    
     updateReferences(){};
     reload(component:IComponent){};
     
@@ -33,16 +26,7 @@ export class SensorModel implements IComponent {
         this.visible=message.visible;
         this.dashboards=message.dashboards;
         this.value = new DynamicNumberModel(message);
-        //this.max=message.max;
-        //this.min=message.min;
-        
-        //for(var range of message.ranges){
-        //    this.ranges.push(new SensorRange(range));
-        //}
         this.type=message.type;
-        //this.unit=message.unit;
-        //this.value$.next(message.value);
-        //this.sparkline$.next(message.sparkline);
         for(var subSensor of message.subSensors){
             this.subSensors.push(new SensorModel(subSensor));
         }

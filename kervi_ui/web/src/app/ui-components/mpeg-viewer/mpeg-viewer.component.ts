@@ -27,7 +27,8 @@ export class MPEGViewerComponent implements OnInit {
   imageReady(){
     if (this.firstLoad){
         this.firstLoad=false;
-        this.camComponent.imageReady();
+        if (this.camComponent)
+          this.camComponent.imageReady();
     }
     
   }
