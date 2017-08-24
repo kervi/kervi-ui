@@ -4,6 +4,7 @@
 export class  KerviSpine{
 
 	public isConnected: Boolean = false;
+	public doAuthenticate:boolean = false;
 	sessionId = null;
 	queryHandlers=[];
 	commandHandlers=[];
@@ -17,11 +18,12 @@ export class  KerviSpine{
 	controllerTypes=[];
 	pointOfInterests=[];
 	application=null;
+	allowAnonymous = true;
 		
 	websocket = null;
 	
 	private options=  {
-			userName: null,
+			userName: "anonymous",
 			password: null,
 			address:null,
 			onOpen:null,
@@ -159,7 +161,7 @@ export class  KerviSpine{
 	}
 
 	logoff(){
-		this.options.userName = null;
+		this.options.userName = this.allowAnonymous ? "anonymous" : null;
 		this.options.password = null;
 
 		var cmd={id:this.messageId++,"messageType":"logoff", "session": this.sessionId};
@@ -170,34 +172,47 @@ export class  KerviSpine{
 	onMessage(evt){
 		//console.log("on m",evt.data);
 		var message=JSON.parse(evt.data);
-		//console.log("on m",message);
+		var self = this;
 		
 		if (message.messageType=="authenticate"){
 			console.log("authenticate");
+			this.doAuthenticate = true;
 			if (this.options.userName)
 				this.authenticate(this.options.userName, this.options.password)
 			else
 				this.options.onAuthenticate.call(this.options.targetScope,evt);
 		}
 		else if (message.messageType=="authentication_failed"){
-			this.options.onAuthenticateFailed.call(this.options.targetScope,evt);
+			console.log("authentication failed", this.options.userName);
+			if (this.options.userName == "anonymous") {
+				this.allowAnonymous = false;
+				this.options.userName = null;
+				this.options.password = null;
+				this.sessionId = null;
+				console.log("x", self.options)
+				if (self.options.onLogOff){
+					console.log("x1")
+					self.options.onLogOff.call(self.options.targetScope,evt);
+				}
+			} else
+				this.options.onAuthenticateFailed.call(this.options.targetScope,evt);
 		}
 		else if (message.messageType=="session_authenticated"){
-			console.log("session", message, this);
 			var date = new Date();
+			
         	date.setTime(date.getTime() + (2*60*60*1000));
         	var expires = "; expires=" + date.toUTCString();
-			self.sessionId = message.session;
+			this.sessionId = message.session;
 			document.cookie = "kervisession" + "=" + message.session + expires + "; path=/";
 			
-			var self = this;
+			
 			setTimeout(function(){
 				if (self.options.onOpen)
 					self.options.onOpen.call(self.options.targetScope,evt);
 			}, 100
 			);
 		} else if (message.messageType == "session_logoff"){ 
-			self.options.userName = null;
+			self.options.userName = this.allowAnonymous && this.options.userName != "anonymous" ? "anonymous" : null;
 			self.options.password = null;
 			self.sessionId = null;
 			if (self.options.onLogOff)

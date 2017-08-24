@@ -22,6 +22,8 @@ export class ConnectComponent implements OnInit {
   loginForm: FormGroup;
   userName: AbstractControl;
   password: AbstractControl;
+  isAuthenticated: boolean = false;
+  doAuthenticate: boolean = false;
   
   constructor(fb: FormBuilder, private kerviService: KerviService, private connectedService:ConnectedService, private router: Router, private route: ActivatedRoute) {
     var self = this;
@@ -35,22 +37,18 @@ export class ConnectComponent implements OnInit {
     
   }
 
-  private isAuthenticated(){
-    return this.connectedService.isAuthenticated;
-  }
-
-  private doAuthenticate(){
-    return this.kerviService.doAuthenticate;
-  }
-
+  
   private onConnectedChange(v) {
 
   }
 
   ngOnInit() {
     var self=this;
+    this.isAuthenticated = this.connectedService.isAuthenticated;
+    this.doAuthenticate = this.kerviService.doAuthenticate;
     this.kerviService.authenticationFailed$.subscribe(function(v){
       self.invalidUser = v;
+      
     });
 
   }

@@ -150,6 +150,7 @@ export class KerviService {
       onClose:this.onClose,
       onAuthenticate:this.onAuthenticate,
       onAuthenticateFailed:this.onAuthenticateFailed,
+      onLogOff: this.onLogoff,
       targetScope:this,
      });
   }
@@ -161,8 +162,6 @@ export class KerviService {
 
   logoff(){
     this.spine.logoff()
-    this.authenticationFailed$.next(false);
-    this.onClose();
   }
 
   private onAuthenticate(){
@@ -171,13 +170,21 @@ export class KerviService {
   }
 
   private onAuthenticateFailed(){
-    console.log("af");
     this.authenticationFailed$.next(true);
+  }
+
+  private onLogoff(){
+    console.log("ol");
+    this.doAuthenticate = true;
+    //this.spine.logoff()
+    this.authenticationFailed$.next(false);
+    this.onClose();
   }
 
   private onOpen(){
     console.log("kervice service on open",this);
     var self=this;
+    this.doAuthenticate = this.spine.doAuthenticate;
     this.spine.sendQuery("GetApplicationInfo",function(message){
 		  console.log("appinfo",message);
 		  this.spine.sendQuery("getComponentInfo",function(message){
