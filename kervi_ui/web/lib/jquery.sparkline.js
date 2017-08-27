@@ -2701,7 +2701,7 @@
                 target = target[0];
             }
             $.data(target, '_jqs_vcanvas', this);
-            $(this.canvas).css({ display: 'inline-block', width: width, height: height, verticalAlign: 'top' });
+            $(this.canvas).css({ display: 'inline-block', width: width, height: height, verticalAlign: 'middle' });
             this._insert(this.canvas, target);
             this._calculatePixelDims(width, height, this.canvas);
             this.canvas.width = this.pixelWidth;

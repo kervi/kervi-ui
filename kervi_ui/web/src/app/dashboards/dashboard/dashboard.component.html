@@ -1,13 +1,16 @@
 <nav class="navbar row navbar-toggleable-md navbar-fixed-top navbar-light bg-faded page-header">
 	<ul class="navbar-nav col-md-4">
-		<li class="nav-item dropdown" style="isplay: inline-block">
-			<a class="nav-link" title="Dashboards" style="padding-top:0;cursor: pointer" data-toggle="dropdown"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></a>
-			<div class="dropdown-menu  multi-leve ul.nav.navbar-nav.no-collapse">
+		<li class="nav-item dropdown">
+			<a *ngIf="showMenu" class="nav-link" title="Dashboards" style="padding-top:0;cursor: pointer" data-toggle="dropdown"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></a>
+			<div  class="dropdown-menu  multi-leve ul.nav.navbar-nav.no-collapse">
 				<!--<span class="dropdown-divider">&nbsp; Dashboards</span>-->
 				<div class="dropdown-submenu">
-					<a *ngFor="let dashboard of (dashboards$ | async)" class="dropdown-item" [routerLink]="['/dashboard', dashboard.id]">{{dashboard.name}}</a>
-					<div *ngIf="authenticated" class="dropdown-divider"></div>
-					<a *ngIf="authenticated" href="javascript: return false;" (click)="logoff($event)" class="dropdown-item" >Log out</a>
+					<ng-container *ngIf="dashboardCount > 1">
+					<a  *ngFor="let dashboard of (dashboards$ | async)" class="dropdown-item" [routerLink]="['/dashboard', dashboard.id]">{{dashboard.name}}</a>
+					</ng-container>
+					<div *ngIf="authenticated && dashboardCount > 1" class="dropdown-divider"></div>
+					<a *ngIf="authenticated && anonymous" href="javascript: return false;" (click)="logoff($event)" class="dropdown-item" >Log in</a>
+					<a *ngIf="authenticated && !anonymous" href="javascript: return false;" (click)="logoff($event)" class="dropdown-item" >Log out</a>
 				</div>
 			</div>
 		</li>
@@ -24,7 +27,7 @@
 <ng-container *ngIf="dashboard && dashboard.template">
 	<!--<dashboard-layout [dashboard]="dashboard"></dashboard-layout>-->
 </ng-container>
-<div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:25px;">
+<div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:20px;">
 	<kervi-cam-viewer *ngIf="cameraId" [isBackground]="true" [cameraId]="cameraId" [parameters]="cameraParameters"></kervi-cam-viewer>
 	<div id="controller-pads">
 		<div *ngIf="showLeftPad" class="left-pad-area" style="position:fixed;" (mousedown)="padPress('left')" (mouseup)="padRelease('left')">
@@ -40,7 +43,7 @@
 			</fieldset>
 		</div>
 	</div>
-	<div class="container-fluid" style="top:0;z-index:1999;position:absolute" >
+	<div class="container-fluid" style="top:0;padding-top:10px;z-index:1999;position:absolute" >
 		<div class="card-columns" [ngClass]="{'dashboard-sections-hidden' : dashboardSectionsHidden }">
 			<kervi-dashboard-section *ngFor="let section of dashboard.sections" [section]="section"></kervi-dashboard-section>
 		</div>  

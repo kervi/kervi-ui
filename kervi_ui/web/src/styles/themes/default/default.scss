@@ -30,7 +30,7 @@ $border-radius-base: .25rem;
 .sparkline-template{
 	color:#004400;
 	background-color:#55aa55;
-	height:25px;
+	height:16px;
 	width:35px;
 	.spot{
 		color:#116611;
@@ -112,6 +112,20 @@ $border-radius-base: .25rem;
 	}	
 }
 
+.navbar-nav>li, .navbar-nav {
+  float: left !important;
+}
+
+.card {
+  .card-header{
+    padding: .5rem 1rem;
+  }
+
+  h4{
+    font-size:1.1rem;
+    margin:0;
+  }
+}
 .footer {
   position: absolute;
   bottom: 0;

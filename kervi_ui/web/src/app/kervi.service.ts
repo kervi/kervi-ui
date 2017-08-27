@@ -150,8 +150,13 @@ export class KerviService {
      });
   }
 
+  isAnonymous(){
+    return this.spine.options.userName == "anonymous" 
+  }
+
   authenticate(userName, password){
     this.authenticationFailed$.next(false);
+    
     this.spine.authenticate(userName, password);
   }
 
@@ -161,6 +166,7 @@ export class KerviService {
 
   private onAuthenticate(){
     this.doAuthenticate = true;
+    
     this.reset();
   }
 

@@ -17,7 +17,7 @@ declare var jQuery: any;
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   public dashboards$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-  
+  public dashboardCount:Number = 0;
   public dashboardId:string;
   public dashboard:DashboardModel;
   public sections: DashboardSectionModel[] = [];
@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public cameraParameters:any = null;
   public dashboardSectionsHidden:boolean=false;
   public showSectionController:boolean;
+  private anonymous:Boolean = true;
   private routeSubscription;
   private padSize = 180;
   private moveLeftDelayTimer = null;
@@ -37,6 +38,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private inRightPadDrag:boolean = false;
   private autoZeroLeftPad:boolean = false;
   private autoZeroRightPad:boolean = false;
+  private showMenu:boolean = true;
 
   private leftXValue: DynamicNumberModel = null;
   private leftYValue: DynamicNumberModel = null;
@@ -90,8 +92,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     console.log("db init", this);
     var self = this;
     this.dashboardsService.getDashboards$().subscribe(function (v) {
+        self.dashboardCount = v.length 
+        self.showMenu = (self.dashboardCount > 1 || self.kerviService.doAuthenticate);
+        self.anonymous = self.kerviService.isAnonymous();
         self.dashboards$.next(v);
-      
+        
     });
     this.authenticated = this.kerviService.doAuthenticate;
     if (!this.kerviService.connected$.value)

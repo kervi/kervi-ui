@@ -23,7 +23,7 @@ export class  KerviSpine{
 
 	websocket = null;
 	
-	private options=  {
+	public options=  {
 			userName: "anonymous",
 			password: null,
 			address:null,
