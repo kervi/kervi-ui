@@ -58,7 +58,8 @@ export class SwitchButtonComponent implements OnInit {
           'off': offText,
           'onstyle': "on",
           'offstyle': "off",
-          "width":"100%"
+          "width":"100%",
+          "height":20
         })
         jQuery('input', self.elementRef.nativeElement).change(function () {
           var state = jQuery('input', self.elementRef.nativeElement).prop('checked');

@@ -33,7 +33,8 @@ export class  KerviSpine{
 			onAuthenticateFailed:null,
 			onLogOff: null,
 			autoConnect:true,
-			targetScope:null
+			targetScope:null,
+			protocol:"ws"
 	}
 	
 	constructor(public constructorOptions){
@@ -112,7 +113,7 @@ export class  KerviSpine{
 			return
 		}
 		var self=this;
-		this.websocket= new WebSocket("ws://" + this.options.userName + ":" + this.options.password + "@" +this.options.address);
+		this.websocket= new WebSocket(this.options.protocol + "://" + this.options.userName + ":" + this.options.password + "@" +this.options.address);
 		this.websocket.onopen = function(evt) { 
 			self.onOpen(evt);
 		};
@@ -145,9 +146,10 @@ export class  KerviSpine{
 	private onClose(evt){
 		console.log("Kervi spine on close",evt);
 		this.isConnected=false;
+		
 		if (this.options.onClose)
 			this.options.onClose.call(this.options.targetScope,evt);
-		
+		this.firstOnOpen=true;
 		if (this.options.autoConnect){
 			setTimeout(1000,this.connect());
 		}

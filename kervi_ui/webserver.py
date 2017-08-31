@@ -9,6 +9,7 @@ from socketserver import ThreadingMixIn
 import http.client
 from kervi.spine import Spine
 import kervi.utility.authorization as authorization
+import kervi.utility.encryption as encryption
 
 try:
     from SimpleHTTPServer import SimpleHTTPRequestHandler
@@ -46,10 +47,6 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            print("x")
-            print("h", self.headers)
-            #self.cookieHeader = self.headers.get('Cookie')
-            #self.send_header('Set-Cookie', 'A=LDJDSFLKSDJLDSF')
             if self.server.do_authorize() and self.headers['Authorization'] == None:
                 self.do_AUTHHEAD()
                 #self.wfile.write('no auth header received')
@@ -78,7 +75,10 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header('Content-type', 'text/javascript')
                     self.end_headers()
-                    response = bytes("kerviSocketAddress='" + str(self.server.ip_address) + ":" + str(self.server.ws_port) + "';", 'utf-8')
+                    if encryption.enabled():
+                        response = bytes("kerviSocketAddress='" + str(self.server.ip_address) + ":" + str(self.server.ws_port) + "';\n\rsocketProtocol='wss';", 'utf-8')
+                    else:
+                        response = bytes("kerviSocketAddress='" + str(self.server.ip_address) + ":" + str(self.server.ws_port) + "';\n\rsocketProtocol='ws';", 'utf-8')
                     self.wfile.write(response)
                 else:
                     path = self.server.docpath + self.path
@@ -150,7 +150,7 @@ class _HTTPServer(ThreadingMixIn, HTTPServer):
         self.docpath = os.path.join(kervipath, "web/dist")
     
     def do_authorize(self):
-        return authorization.active()
+        return False
 
     def authorize(self, authorize_header):
         if authorize_header is None and not self.do_authorize():
@@ -166,15 +166,25 @@ SERVER = None
 ASSET_PATH = ""
 def start(ip_address, http_port, ws_port):
     global SERVER
+
+    
     SERVER = _HTTPServer(ip_address, http_port, ws_port, _HTTPRequestHandler)
+
+    if encryption.enabled():
+        cert_file, key_file = encryption.get_cert()
+        
+        if key_file and cert_file:
+           import ssl
+           SERVER.socket = ssl.wrap_socket (SERVER.socket, keyfile=key_file, certfile=cert_file, server_side=True)
+
+
     thread = threading.Thread(target=SERVER.serve_forever)
     thread.daemon = True
     thread.start()
     time.sleep(2)
+     
 
 def stop():
     print("stop web server")
     SERVER.terminate = True
     SERVER.shutdown()
-
-

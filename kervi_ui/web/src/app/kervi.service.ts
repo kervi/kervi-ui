@@ -7,6 +7,7 @@ import {BehaviorSubject, Subject} from 'rxjs/Rx';
 import {IComponent} from './models/IComponent.model'
 import { ComponentFactory } from './models/factory'
 declare var kerviSocketAddress : any;
+declare var socketProtocol : any;
 
 @Injectable()
 export class KerviService {
@@ -130,10 +131,15 @@ export class KerviService {
 
   public connect(){
     var address = null;
+    var protocol = "ws"
     try{
       if (kerviSocketAddress)
       {
-        address = kerviSocketAddress
+        address = kerviSocketAddress;
+      }
+      if (socketProtocol)
+      {
+        protocol = socketProtocol;
       }
     } catch(e) {
       address = "localhost:9000";
@@ -228,6 +234,7 @@ export class KerviService {
 
   private onClose(){
     this.reset()
+    console.log("ks on close");
     this.IPCReady$.next(false);
   }
 
