@@ -142,7 +142,12 @@ export class KerviService {
         protocol = socketProtocol;
       }
     } catch(e) {
-      address = "localhost:9000";
+      //for testing with ng serve
+      var httpProtocol = location.protocol;
+      if (httpProtocol == "https")
+        protocol="wss"
+      var httpHost = window.location.hostname;
+      address = httpHost + ":9000";
     }
     console.log("ks", address);
     this.spine = new KerviSpine({

@@ -21,3 +21,7 @@ $slider-width: 20px !default;
 }
 
 @import "../../../../../../node_modules/bootstrap-slider/src/sass/bootstrap-slider.scss";
+
+.slider-handle{
+	background : $brand-primary;
+}
