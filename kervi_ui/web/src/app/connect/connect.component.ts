@@ -24,6 +24,7 @@ export class ConnectComponent implements OnInit {
   password: AbstractControl;
   isAuthenticated: boolean = false;
   doAuthenticate: boolean = false;
+  inAuthentication: Boolean = false;
   
   constructor(fb: FormBuilder, private kerviService: KerviService, private connectedService:ConnectedService, private router: Router, private route: ActivatedRoute) {
     var self = this;
@@ -46,9 +47,9 @@ export class ConnectComponent implements OnInit {
     var self=this;
     this.isAuthenticated = this.connectedService.isAuthenticated;
     this.doAuthenticate = this.kerviService.doAuthenticate;
+    this.inAuthentication = this.kerviService.inAuthentication$.value;
     this.kerviService.authenticationFailed$.subscribe(function(v){
       self.invalidUser = v;
-      
     });
 
     this.kerviService.IPCReady$.subscribe(function(v){
@@ -57,6 +58,12 @@ export class ConnectComponent implements OnInit {
       self.doAuthenticate = self.kerviService.doAuthenticate;
     });
     
+    this.kerviService.inAuthentication$.subscribe(function(v){
+      self.inAuthentication = v;
+      //self.isAuthenticated = self.connectedService.isAuthenticated;
+      //self.doAuthenticate = self.kerviService.doAuthenticate;
+    
+    });
 
   }
 

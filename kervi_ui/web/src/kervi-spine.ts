@@ -31,6 +31,7 @@ export class  KerviSpine{
 			onClose:null,
 			onAuthenticate:null,
 			onAuthenticateFailed:null,
+			onAuthenticateStart:null,
 			onLogOff: null,
 			autoConnect:true,
 			targetScope:null,
@@ -158,7 +159,8 @@ export class  KerviSpine{
 	authenticate(userName, password){
 		this.options.userName = userName;
 		this.options.password = password;
-
+		if (this.options.onAuthenticateStart)
+			this.options.onAuthenticateStart.call(this.options.targetScope);
 		var cmd={id:this.messageId++,"messageType":"authenticate","userName":this.options.userName, "password": this.options.password};
 		this.websocket.send(JSON.stringify(cmd));
 	}
@@ -217,6 +219,8 @@ export class  KerviSpine{
 			);
 			
 		} else if (message.messageType == "session_logoff"){ 
+			if (self.options.onLogOff)
+				self.options.onLogOff.call(self.options.targetScope,evt);
 			if (this.allowAnonymous && this.options.userName != "anonymous"){
 				this.authenticate("anonymous", null)
 			} else {
@@ -224,8 +228,7 @@ export class  KerviSpine{
 				self.options.password = null;
 				self.sessionId = null;
 			
-				if (self.options.onLogOff)
-					self.options.onLogOff.call(self.options.targetScope,evt);
+				
 			}
 		} else if (message.messageType=="response")
 			this.handleRPCResponse(message);

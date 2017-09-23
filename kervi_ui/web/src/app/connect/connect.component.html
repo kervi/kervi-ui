@@ -1,5 +1,5 @@
-{{isConnected}} {{doAuthenticate}} {{isAuthenticated}}
-<div *ngIf="isConnected && doAuthenticate && !isAuthenticated" style="line-height: 1;width:266px;height:200px;background:rgba(255,255,255,0);border-radius: 4px;position: absolute; top:40%;left:50%;margin: -133px 0 0 -128px;padding:10px">
+<!--{{isConnected}} {{doAuthenticate}} {{isAuthenticated}} {{inAuthentication}}-->
+<div *ngIf="isConnected && doAuthenticate && !isAuthenticated && !inAuthentication" style="line-height: 1;width:266px;height:200px;background:rgba(255,255,255,0);border-radius: 4px;position: absolute; top:40%;left:50%;margin: -133px 0 0 -128px;padding:10px">
   <form class="form" [formGroup]="loginForm"  
         (ngSubmit)="onSubmit(loginForm.value)"  
         class="form"  
@@ -12,7 +12,8 @@
              id="userNameInput"  
              placeholder="User name"  
              [formControl]="userName"
-             class="form-control">  
+             class="form-control"
+             autofocus>  
          
     </div>
 

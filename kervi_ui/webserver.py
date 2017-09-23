@@ -52,6 +52,7 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
                 #self.wfile.write('no auth header received')
                 pass
             elif self.server.authorize(self.headers['Authorization']):
+                    
                 if self.path.startswith("/cam"):
                     path = self.path.split("/")
                     cam_id = path[-1]
@@ -81,7 +82,10 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
                         response = bytes("kerviSocketAddress='" + str(self.server.ip_address) + ":" + str(self.server.ws_port) + "';\n\rsocketProtocol='ws';", 'utf-8')
                     self.wfile.write(response)
                 else:
-                    path = self.server.docpath + self.path
+                    if self.path.startswith("/dashboard/") or self.path.startswith("/connect"):
+                        path = self.server.docpath
+                    else:
+                        path = self.server.docpath + self.path
                     if os.path.exists(path) and os.path.isdir(path):
                         index_files = ['/index.html', '/index.htm', ]
                         for index_file in index_files:

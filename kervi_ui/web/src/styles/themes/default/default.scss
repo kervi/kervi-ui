@@ -27,6 +27,10 @@ $border-radius-base: .25rem;
 	overflow:hidden;
 }
 
+.dropdown-menu{
+  position:absolute !important;
+}
+
 .sparkline-template{
 	color:#004400;
 	background-color:#55aa55;
@@ -110,6 +114,10 @@ $border-radius-base: .25rem;
 	a.nav-link{
 		color:#ffffff !important;	
 	}	
+}
+
+.nav-link{
+  padding-left:.5rem !important;
 }
 
 .navbar-nav>li, .navbar-nav {

@@ -17,6 +17,7 @@ export class KerviService {
   private components : IComponent[] = [];
   private components$: BehaviorSubject<IComponent[]> = new  BehaviorSubject<IComponent[]>([]);
   public doAuthenticate: boolean = false;
+  public inAuthentication$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   connected$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   IPCReady$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   authenticationFailed$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
@@ -157,6 +158,7 @@ export class KerviService {
       onAuthenticate:this.onAuthenticate,
       onAuthenticateFailed:this.onAuthenticateFailed,
       onLogOff: this.onLogoff,
+      onAuthenticateStart: this.onAuthenticateStart,
       targetScope:this,
      });
   }
@@ -172,7 +174,12 @@ export class KerviService {
   }
 
   logoff(){
+    this.inAuthentication$.next(false);
     this.spine.logoff()
+  }
+
+  private onAuthenticateStart(){
+    this.inAuthentication$.next(true);
   }
 
   private onAuthenticate(){
@@ -183,12 +190,13 @@ export class KerviService {
 
   private onAuthenticateFailed(){
     this.authenticationFailed$.next(true);
-    
+    this.inAuthentication$.next(false);
   }
 
   private onLogoff(){
     console.log("ol");
     this.doAuthenticate = true;
+    this.inAuthentication$.next(false);
     //this.spine.logoff()
     if (this.spine.firstOnOpen)
       this.IPCReady$.next(true);
@@ -198,6 +206,7 @@ export class KerviService {
   }
 
   private reset(){
+    //this.inAuthentication$.next(false);
     this.components = [];
     this.components$.next(this.components);
     this.connected$.next(false);
@@ -206,6 +215,7 @@ export class KerviService {
   private onOpen(first){
     console.log("kervice service on open", this.spine.firstOnOpen, first,this);
     var self=this;
+    
     this.doAuthenticate = this.spine.doAuthenticate;
     this.spine.sendQuery("GetApplicationInfo",function(message){
 		  console.log("appinfo",message);
@@ -215,6 +225,7 @@ export class KerviService {
         self.components$.next(self.components);
         self.application$.next(message);
         self.connected$.next(true);
+        //self.inAuthentication$.next(false);
         console.log("components",self.components); 
       });  
 	  });
