@@ -1,15 +1,21 @@
-<div *ngIf="displayType=='slider' && !inline" class="block-component" style="vertical-align:middle;display:table;width:100%"> 
-    <div style="display:inline-block" [style.width.%]="100 - parameters.inputSize - parameters.valueSize" [style.max-width.%]="100 - parameters.inputSize - parameters.valueSize">
-        <span   *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
-        <span   *ngIf="parameters.label">{{parameters.label}}</span>
+<div *ngIf="displayType=='slider' && !inline" class="block-component"> 
+    <div class="label-section">
+        <div style="display:inline-block;float:left;">
+            <div class="value-label">
+                <span   *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+                <span   *ngIf="parameters.label">{{parameters.label}}</span>
+            </div>
+        </div>
+        <div class="value-value">
+            <span>{{(input.value$ | async)}}</span>
+        </div>
 	</div>
-    <div style="display:inline-block" [style.width.%]="parameters.inputSize" [style.max-width.%]="parameters.inputSize">
-        <ui-slider [value]="input" [parameters]="parameters"></ui-slider>
-	</div>
-    <div style="display:inline;float:right" [style.width.%]="parameters.valueSize" [style.max-width.%]="parameters.valueSize"    class="slider-value">
-        <span>{{(input.value$ | async)}}</span>
+    <div class="value-section">
+        <div class="value-input" >
+            <ui-slider [value]="input" [parameters]="parameters"></ui-slider>
+        </div>
+        
     </div>
-    
 </div>
 
 <div *ngIf="displayType=='slider' && inline" class="inline-component"> 
@@ -31,8 +37,12 @@
 		<span class="input-value">{{(input.value$ | async)}}{{input.unit}}</span>
 </span>
 
-<div *ngIf="displayType=='value' && !inline" class="input-block input-type-value">
-    <div style="display: inline-block" *ngIf="parameters.label">{{parameters.label}}:</div>
+<div *ngIf="displayType=='value' && !inline" class="block-component">
+    <div class="value-label" style="float: left">
+        <i *ngIf="parameters.labelIcon" class="fa fa-{{currentIcon}}"></i>
+		<ng-container *ngIf="parameters.label">{{parameters.label}}</ng-container>
+		
+    </div>
     <div style="display:inline-block; float: right">
         <i *ngIf="currentIcon" class="fa fa-{{currentIcon}}"></i>
         <value-sparkline *ngIf="parameters.showSparkline" [value]="input"></value-sparkline>

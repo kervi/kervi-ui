@@ -40,15 +40,15 @@ export class DashboardSectionComponentModel{
 
 export class DashboardSectionParametersModel{
     public title:string = null;
-    public columns:number = null;
-    public rows:number = null;
+    public width:number = null;
+    public height:number = null;
     public type:string = null;
     public userLog: boolean = null;
     
     constructor(messageParameters){
         this.title=messageParameters.title;
-        this.columns=messageParameters.columns;
-        this.rows=messageParameters.rows;
+        this.height=messageParameters.height;
+        this.width=messageParameters.width;
         this.userLog=messageParameters.userLog;
         
         if (messageParameters.type)
@@ -62,19 +62,33 @@ export class DashboardSectionModel{
     public parameters: DashboardSectionParametersModel;
     public components: DashboardSectionComponentModel[]=[];
     public dashboard: DashboardModel;
+    public type:string;
+    public subSections: DashboardSectionModel[] = [];
 
     constructor (dashboard, messageSection){
+        console.log("dhx", messageSection);
         this.dashboard=dashboard;
         this.id=messageSection.id;
         this.name=messageSection.name;
+        this.type=messageSection.type;
         this.parameters=new DashboardSectionParametersModel(messageSection.uiParameters);
-        for(var componentRef of messageSection.components){
-            this.components.push(new DashboardSectionComponentModel(componentRef))
-        }
+        if (messageSection.components)
+            for(var componentRef of messageSection.components){
+                this.components.push(new DashboardSectionComponentModel(componentRef))
+            }
+        
+        if (messageSection.panels)
+            for(var subMessageSection of messageSection.panels){
+                var section=new DashboardSectionModel(this, subMessageSection);
+                this.subSections.push(section);
+            }
     }
 
     public reload(source:DashboardSectionModel){
         //console.log("rl", this);
+        for(var subSection of source.subSections){
+            this.reload(subSection)
+        }
         for(var sourceComponent of source.components){
             var found=false;
             for(var component of this.components){

@@ -2,7 +2,7 @@ $slider-line-height: 20px !default;
 $slider-border-radius: 4px !default;
 $slider-horizontal-width: 100% !default;
 $slider-vertical-height: 210px !default;
-$slider-handle-color-start: $brand-primary;
+$slider-handle-color-start: theme-color("primary");
 $slider-handle-color-end: $card-cap-bg;
 $slider-handle-color-background: $input-group-addon-bg;
 $slider-height: 20px !default;
@@ -23,5 +23,5 @@ $slider-width: 20px !default;
 @import "../../../../../../node_modules/bootstrap-slider/src/sass/bootstrap-slider.scss";
 
 .slider-handle{
-	background : $brand-primary;
+	background : theme-color("primary");
 }

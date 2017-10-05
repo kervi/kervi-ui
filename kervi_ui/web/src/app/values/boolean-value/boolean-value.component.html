@@ -1,8 +1,16 @@
 <div *ngIf="!inline" class="block-component"> 
-    <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
-    <span  *ngIf="parameters.label"  >{{parameters.label}}</span>
-    <kervi-switchbutton [inline]="inline" [value]="value" [parameters]="parameters" *ngIf="displayType!='button'"></kervi-switchbutton>
-    <kervi-button [value]="value" [inline]="inline" [parameters]="parameters" *ngIf="displayType=='button'"></kervi-button>
+    <div class="label-section">
+        <div style="display:inline-block;float:left;">
+            <div class="value-label">
+                <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
+                <span  *ngIf="parameters.label"  >{{parameters.label}}</span>
+            </div>
+        </div>
+        <div class="value-value">
+            <kervi-switchbutton [inline]="inline" [value]="value" [parameters]="parameters" *ngIf="displayType!='button'"></kervi-switchbutton>
+            <kervi-button [value]="value" [inline]="inline" [parameters]="parameters" *ngIf="displayType=='button'"></kervi-button>
+        </div>
+    </div>
 </div>
 <div style="display:inline-block" *ngIf="inline" >
     <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>

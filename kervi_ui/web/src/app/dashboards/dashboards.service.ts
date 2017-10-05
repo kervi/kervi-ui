@@ -21,6 +21,14 @@ export class DashboardsService {
             for(var dashboard of self.dashboards){
                 //var dashboard = dashboardComponent as DashboardModel;
                 for(var section of dashboard.sections){
+                    
+                    for(var subSection of section.subSections){
+                        for (var sectionComponent of subSection.components ){
+                            if (!sectionComponent.component)
+                                sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
+                        }
+                    }
+
                     for (var sectionComponent of section.components ){
                         if (!sectionComponent.component)
                             sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)

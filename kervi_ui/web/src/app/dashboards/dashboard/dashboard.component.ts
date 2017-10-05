@@ -104,10 +104,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     
     this.routeSubscription = this.activatedRoute.params.subscribe(params => {
       this.dashboardId = params['name']; 
-      this.setupDashboard();
+      self.setupDashboard();
 
       this.dashboardsService.getDashboards$().subscribe(function(v){
-        this.setupDashboard()
+        self.setupDashboard()
       })
     });
   }

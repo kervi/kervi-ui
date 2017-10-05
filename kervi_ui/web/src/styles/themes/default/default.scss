@@ -1,8 +1,80 @@
-$brand-primary:             #116611 !default;
-$brand-success:             #5cb85c !default;
-$brand-info:                #5bc0de !default;
-$brand-warning:             #f0ad4e !default;
-$brand-danger:              #d9534f !default;
+$white:  #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #868e96 !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black:  #000 !default;
+
+$grays: (
+  100: $gray-100,
+  200: $gray-200,
+  300: $gray-300,
+  400: $gray-400,
+  500: $gray-500,
+  600: $gray-600,
+  700: $gray-700,
+  800: $gray-800,
+  900: $gray-900
+) !default;
+
+$blue:    #007bff !default;
+$indigo:  #6610f2 !default;
+$purple:  #6f42c1 !default;
+$pink:    #e83e8c !default;
+$red:     #dc3545 !default;
+$orange:  #fd7e14 !default;
+$yellow:  #ffc107 !default;
+$green:   #28a745 !default;
+$teal:    #20c997 !default;
+$cyan:    #17a2b8 !default;
+
+$colors: (
+  blue: $blue,
+  indigo: $indigo,
+  purple: $purple,
+  pink: $pink,
+  red: $red,
+  orange: $orange,
+  yellow: $yellow,
+  green: $green,
+  teal: $teal,
+  cyan: $cyan,
+  white: $white,
+  gray: $gray-600,
+  gray-dark: $gray-800
+) !default;
+
+
+$theme-colors: (
+  primary: #116611,
+  secondary: $gray-600,
+  success: #5cb85c,
+  info: $cyan,
+  warning: $yellow,
+  danger: $red,
+  light: $gray-100,
+  dark: $gray-800
+) !default;
+
+$sizes: (
+  10: 10%,
+  20: 20%,
+  25: 25%,
+  33: 33%,
+  40: 40%,
+  50: 50%,
+  66: 66%,
+  75: 75%,
+  100: 100%
+) !default;
+
+
+
 
 $input-group-addon-bg:           #116611;// $gray-lighter !default;
 $input-group-addon-border-color: #116611;// !default;
@@ -51,7 +123,7 @@ $border-radius-base: .25rem;
 }
 
 .number-gauge-template{
-	color: $brand-primary;
+	color: theme-color("primary");
 	border: 1px solid $gray-lightest
 }
 
@@ -124,7 +196,48 @@ $border-radius-base: .25rem;
   float: left !important;
 }
 
+.block-component{
+	border-bottom:1px solid rgba(255,255,255,.4);
+  padding-top:5px;
+  padding-bottom:5px;
+}
+
+.card-header .block-component{
+	width:100%;
+  clear:both;
+  border:0;
+  padding:0;
+}
+
+.value-label{
+  display: block;
+  white-space: nowrap;
+}
+
+.value-section{
+  display: block;
+}
+
+.label-section{
+  display: block;
+  
+}
+.value-input{
+  display: inline-block;
+  float:left;
+  width:75%
+}
+
+.value-value{
+  display: inline-block;
+  float:right;
+  width:25%;
+  text-align: right;
+}
+
+
 .card {
+  height:100%;
   .card-header{
     padding: .5rem 1rem;
   }
@@ -132,6 +245,9 @@ $border-radius-base: .25rem;
   h4{
     font-size:1.1rem;
     margin:0;
+  }
+  .card-body{
+    width:100%;
   }
 }
 .footer {
@@ -152,7 +268,25 @@ $border-radius-base: .25rem;
 }
 
 
-@include media-breakpoint-up(xs) {
+
+
+@include media-breakpoint-up(sm) {
+  .card-deck{
+    margin-bottom: 1%;
+  }
+  .card-deck-equal {
+    display:table;
+    table-layout:fixed;
+    width:100%;
+    margin-bottom:1%;
+  }
+  .card-deck-equal>.card-section {
+    display:inline-block;
+    float:none;
+    padding-left:1%;
+    padding-right:1%;
+  }
+  
   .dashboard-section-width-1 {
     width:150px !important;
   }
@@ -170,7 +304,27 @@ $border-radius-base: .25rem;
   }
 }
 
-@include media-breakpoint-down(xs) {
+@include media-breakpoint-down(sm) {
+  .card-section{
+    width:100% !important;
+    margin-bottom:1%;
+  }
+  
+  .card-deck-equal {
+    display:block;
+    table-layout:fixed;
+    width:100%;
+    
+  }
+  .card-deck-equal>.card-section {
+    display:inline-block;
+    width:100% !important;
+    //float:left;
+    padding-left:1%;
+    padding-right:1%;
+    margin-bottom:1%;
+  }
+  
   .container-fluid{
 		width:100%;
 	}

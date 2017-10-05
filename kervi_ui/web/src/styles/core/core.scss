@@ -20,7 +20,10 @@ body {
 
 .block-component{
 	width:100%;
-	clear:both;
+  clear:both;
+  vertical-align:middle;
+  display:table;
+  
 }
 
 .inline-component{

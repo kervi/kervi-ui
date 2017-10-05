@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { KerviService } from "../../kervi.service";
 import { DashboardsService } from "../dashboards.service";
 import { Router, ActivatedRoute } from '@angular/router';
@@ -24,7 +24,7 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     //sectionWidth:string;
     //sectionHeight:string;
     showHeader:boolean = false;
-    expanded:boolean = true;
+    expanded:boolean = false;
     title:string;
     components:Component[]=[];
     headerComponents: Component[] = [];
@@ -38,8 +38,8 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     ngOnInit() {
         var self=this;
         
-        this.sectionClassWidth="dashboard-section-width-"+ this.section.parameters.columns;
-        this.sectionClassHeight="dashboard-section-height-"+ this.section.parameters.rows;
+        this.sectionClassWidth="w-"+ this.section.parameters.width;
+        this.sectionClassHeight="h-"+ this.section.parameters.height;
         this.title = this.section.parameters.title;
         
         for( let component of this.section.components){

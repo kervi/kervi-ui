@@ -1,9 +1,15 @@
-<div *ngIf="!inline" [ngClass]="{'has-card-header': showHeader}"  class="card {{sectionClassWidth}} ">
+<div *ngIf="section.type=='group'" class="card-deck ">
+    <div class="card-section" [style.width.%]="subSection.parameters.width" *ngFor="let subSection of section.subSections">
+        <kervi-dashboard-section  [section]="subSection"></kervi-dashboard-section>
+    </div>
+</div>
+
+<div *ngIf="!inline && section.type!='group'" class="card" [ngClass]="{'has-card-header': showHeader}">
     <div class="card-header" *ngIf="showHeader">
-        <h4 class="text-right">
-            &nbsp;{{title}}
-            <a data-toggle="collapse" role="tab" href="#section-{{section.id}}" [attr.aria-expanded]="expanded" aria-control="" style="float:left"> <i class="fa fa-chevron-right" aria-hidden="true"></i> </a>
-            <div class="card-block" *ngIf="headerComponents.length>0" style="float:right;padding:0"    >
+        <h4 class="text-left">
+            {{title}}
+            <!-- <a data-toggle="collapse" role="tab" href="#section-{{section.id}}" [attr.aria-expanded]="expanded" aria-control="" style="float:left"> <i class="fa fa-chevron-right" aria-hidden="true"></i> </a> -->
+            <div class="card-body" *ngIf="headerComponents.length>0" style="float:right;padding:0"    >
                 <ng-container *ngFor="let sectionComponent of headerComponents">
                     <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
                     <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
@@ -12,8 +18,8 @@
             </div>
         </h4>
   </div>
-    <div id="section-{{section.id}}" role="tabpanel" [ngClass]="{'in': expanded}" class="collapse  {{sectionClassHeight}} " *ngIf="showHeader" style="overflow:auto">
-        <div class="card-block" *ngIf="components.length>0" >
+    <div id="section-{{section.id}}" role="tabpanel" [ngClass]="{'in': expanded}" class="   " *ngIf="showHeader" style="overflow:auto">
+        <div class="card-body" *ngIf="components.length>0" >
             <ng-container *ngFor="let sectionComponent of components">
                 <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
                 <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
@@ -21,7 +27,7 @@
             </ng-container>
         </div>
         
-        <div class="card-block" *ngIf="section.parameters.userLog"  >
+        <div class="card-body" *ngIf="section.parameters.userLog"  >
             <table class="table">
                 <thead>
                 <tr>
@@ -46,7 +52,7 @@
         </div>    
     </div>
     
-    <div class="card-block {{sectionClassHeight}} " *ngIf="!showHeader" style="overflow:auto">
+    <div class="card-body {{sectionClassHeight}} " *ngIf="!showHeader" style="overflow:auto">
         <ng-container *ngFor="let sectionComponent of components">
             <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.component && sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='controller'" ></kervi-controller>
             <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.component && sectionComponent.parameters"  *ngIf="sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
