@@ -1,6 +1,6 @@
 <div *ngIf="section.type=='group'" class="card-deck ">
     <div class="card-section" [style.width.%]="subSection.parameters.width" *ngFor="let subSection of section.subSections">
-        <kervi-dashboard-section  [section]="subSection"></kervi-dashboard-section>
+        <kervi-dashboard-section [defaultSizes]="defaultSizes"  [section]="subSection"></kervi-dashboard-section>
     </div>
 </div>
 
@@ -34,7 +34,7 @@
                     <th>&nbsp;</th>
                     <th>Time</th>
                     <th>component</th>
-                    <th>topic</th>
+                    <th style="width:100%">topic</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,7 +44,7 @@
                         </td>
                         <td>{{message.timestamp | date: 'HH:mm:ss'}}</td>
                         <td>{{message.sourceName}}</td>
-                        <td>{{message.topic}}</td>
+                        <td style="white-space:nowrap; overflow:hidden;text-overflow:ellipsis; max-width: 0;" title="{{message.topic}}">{{message.topic}}</td>
                     </tr>
                 </tbody>
             </table>

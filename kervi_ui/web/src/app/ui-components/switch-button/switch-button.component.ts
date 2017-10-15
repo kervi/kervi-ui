@@ -4,7 +4,7 @@
 import { Component, OnInit, Input, ElementRef, ViewEncapsulation } from '@angular/core';
 import { DynamicBooleanModel } from '../../models/dynamicValues.model'
 import { KerviService } from '../../kervi.service'
-import { DashboardSectionModel } from '../../models/dashboard.model'
+import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model'
 declare var jQuery: any;
 
 @Component({
@@ -18,8 +18,11 @@ export class SwitchButtonComponent implements OnInit {
   @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any;
   @Input() inline:boolean = false;
+  @Input() defaultSizes:DashboardSizes = new DashboardSizes();
   state:boolean = false
   private valueSubscription: any;
+  private width:string;
+  private height:string;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
   public press() {
@@ -33,8 +36,23 @@ export class SwitchButtonComponent implements OnInit {
   ngOnInit() {
     var self = this;
 
-    if (!this.parameters)
+    if (!this.parameters){
       this.parameters = this.value.ui;
+
+    if (!self.parameters.buttonWidth)
+      this.width = this.defaultSizes.switchWidth;
+    else
+      this.width = self.parameters.buttonWidth;
+
+    if (!self.parameters.buttonHeight)
+      this.height = this.defaultSizes.switchHeight;
+    else
+      this.height = self.parameters.buttonHeight;
+
+  } else{
+    this.width = this.defaultSizes.switchWidth;
+    this.height = this.defaultSizes.switchHeight;
+  }
 
     var onText= this.parameters && this.parameters.onIcon ? "<i class='fa fa-" + this.parameters.onIcon + "'></i> " : ""; 
     var offText= this.parameters && this.parameters.offIcon ? "<i class='fa fa-" + this.parameters.offIcon + "'></i> " : ""; 
@@ -58,8 +76,8 @@ export class SwitchButtonComponent implements OnInit {
           'off': offText,
           'onstyle': "on",
           'offstyle': "off",
-          "width":"100%",
-          "height":20
+          "width":self.width,
+          "height":self.height
         })
         jQuery('input', self.elementRef.nativeElement).change(function () {
           var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
@@ -69,6 +87,6 @@ export class SwitchButtonComponent implements OnInit {
             self.kerviService.spine.sendCommand(self.value.command, false);
         });
       
-    }, 1000);
+    }, 0);
   }
 }

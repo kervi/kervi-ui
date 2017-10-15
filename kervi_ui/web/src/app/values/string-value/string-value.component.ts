@@ -4,7 +4,7 @@
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { DynamicStringModel } from '../../models/dynamicValues.model';
 import { KerviService } from '../../kervi.service'
-import { DashboardSectionModel } from '../../models/dashboard.model'
+import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model'
 
 declare var jQuery:any;
 @Component({
@@ -16,7 +16,8 @@ export class DynamicStringComponent implements OnInit {
 	@Input() input: DynamicStringModel;
 	@Input() dashboardSection: DashboardSectionModel;
 	@Input() parameters:any;
-    @Input() inline:boolean = false;
+	@Input() inline:boolean = false;
+	@Input() defaultSizes:DashboardSizes = new DashboardSizes();
 	
 	constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 

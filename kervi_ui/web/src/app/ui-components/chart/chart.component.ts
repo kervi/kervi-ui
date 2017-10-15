@@ -3,7 +3,7 @@
 
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { DynamicNumberModel, DynamicRange, DynamicRangeType  } from '../../models/dynamicValues.model';
-import { DashboardSectionModel } from '../../models/dashboard.model';
+import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model';
 import { KerviService } from '../../kervi.service';
 import { TemplateService } from '../../template.service';
 declare var jQuery:any;
@@ -20,6 +20,7 @@ export class ChartComponent implements OnInit {
   @Input() parameters: any = null;
   @Input() type: string;
   @Input() size:number;
+  @Input() defaultSizes:DashboardSizes = new DashboardSizes();
   private  unitSize:number = 150;
   canvasId:string="";
   private chart:any=null;

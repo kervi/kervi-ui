@@ -3,7 +3,7 @@
 
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { DynamicBooleanModel, DynamicRange, DynamicRangeType  } from '../../models/dynamicValues.model';
-import { DashboardSectionModel } from '../../models/dashboard.model';
+import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model';
 import { KerviService } from '../../kervi.service';
 import { TemplateService } from '../../template.service';
 declare var jQuery:any;
@@ -21,6 +21,9 @@ export class ButtonComponent implements OnInit {
   @Input() type: string;
   @Input() size:number;
   @Input() inline:boolean = false;
+  @Input() defaultSizes:DashboardSizes = new DashboardSizes();
+  private width:string;
+  private height:string;
   //private  unitSize:number = 150;
   //state:boolean = false;
   //canvasId:string="";
@@ -36,11 +39,28 @@ export class ButtonComponent implements OnInit {
 
   
   ngOnInit() {
+
+
+
     var self = this; 
     if (self.parameters){
       if (!self.inline && self.parameters.inline)
         self.inline=true;
-    } 
+
+      if (!self.parameters.buttonWidth)
+        this.width = this.defaultSizes.buttonWidth;
+      else
+        this.width = self.parameters.buttonWidth;
+
+      if (!self.parameters.buttonHeight)
+        this.height = this.defaultSizes.buttonHeight;
+      else
+        this.height = self.parameters.buttonHeight;
+
+    } else{
+      this.width = this.defaultSizes.buttonWidth;
+      this.height = this.defaultSizes.buttonHeight;
+    }
   }
 
   public press() {

@@ -6,12 +6,37 @@ import { Router, ActivatedRoute } from '@angular/router';
 @Injectable()
 export class TemplateService {
 
+    private remUnit:number=20;
     constructor() 
   { 
     console.log("kervi service constructor");
         //console.log("ctemplate");
+        this.remUnit = parseFloat(getComputedStyle(document.documentElement).fontSize)
     }
     
+    public convertRemToPixels(rem) {    
+        return rem * this.remUnit;
+    }
+
+    public  getPixels(value, containerSize){
+        //console.log("gps", value, isNaN(value));
+        if (isNaN(value)){
+          if (value.lastIndexOf("px")>-1){
+            var px = parseFloat(value);
+            return px;
+          } else if (value.lastIndexOf("rem")>-1){
+            var rem = parseFloat(value);
+            var px = this.convertRemToPixels(rem);
+            console.log("remx",rem, px);
+            return px;
+          } else if (value.lastIndexOf("%")>-1){
+            var percentage = parseFloat(value)/100.0;
+            return containerSize * percentage;
+          }
+        } else 
+          return value;
+      }
+
     private getStyleRuleValue(style, selector, sheet) {
         var sheets = sheet!=null ? [sheet] : document.styleSheets;
         for (var i = 0, l = sheets.length; i < l; i++) {

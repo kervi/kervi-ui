@@ -3,6 +3,17 @@
 
 import { IComponent } from './IComponent.model'
 
+
+export class DashboardSizes{
+    public valueWidth:string ="3rem";
+    public buttonWidth:string = "";
+    public buttonHeight:string = "";
+    public switchWidth:string = "";
+    public switchHeight:string = "20px";
+    public gaugeWidth:string = "100px";
+    public gaugeHeight:string = "200px";
+}
+
 export class DashboardMessageModel{
     public sourceId:string;
     public sourceName:string;
@@ -44,12 +55,14 @@ export class DashboardSectionParametersModel{
     public height:number = null;
     public type:string = null;
     public userLog: boolean = null;
+    public logLength:number = 5;
     
     constructor(messageParameters){
         this.title=messageParameters.title;
         this.height=messageParameters.height;
         this.width=messageParameters.width;
         this.userLog=messageParameters.userLog;
+        this.logLength = messageParameters.logLength;
         
         if (messageParameters.type)
             this.type=messageParameters.type;
@@ -66,7 +79,6 @@ export class DashboardSectionModel{
     public subSections: DashboardSectionModel[] = [];
 
     constructor (dashboard, messageSection){
-        console.log("dhx", messageSection);
         this.dashboard=dashboard;
         this.id=messageSection.id;
         this.name=messageSection.name;

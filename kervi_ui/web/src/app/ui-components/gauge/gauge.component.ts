@@ -1,9 +1,9 @@
 // Copyright (c) 2016, Tim Wentzlau
 // Licensed under MIT
 
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { DynamicNumberModel, DynamicRange, DynamicRangeType  } from '../../models/dynamicValues.model';
-import { DashboardSectionModel } from '../../models/dashboard.model';
+import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model';
 import { KerviService } from '../../kervi.service';
 import { TemplateService } from '../../template.service';
 declare var LinearGauge:any;
@@ -21,17 +21,20 @@ export class GaugeComponent implements OnInit {
   @Input() parameters: any = null;
   @Input() type: string = "radial_gauge";
   @Input() size:number;
+  @Input() defaultSizes:DashboardSizes = new DashboardSizes();
   private  unitSize:number = 110;
   canvasId:string="";
 
   private gauge:any=null;
   private gaugeTypes:string[]=['radial_gauge','vertical_linear_gauge', 'horizontal_linear_gauge', 'compass']
-  constructor(private kerviService:KerviService, private templateService:TemplateService ) {  
+  constructor(private kerviService:KerviService, private elementRef:ElementRef, private templateService:TemplateService ) {  
   }
 
   private color(style,selector){
     return this.templateService.getColor(style,selector);
   }
+
+  
 
   ngOnInit() {
     var self = this;  
@@ -97,11 +100,31 @@ export class GaugeComponent implements OnInit {
       
       
       setTimeout(function() {
+        var container = jQuery(self.elementRef.nativeElement).closest(".card-body");
+        var containerWidth = jQuery(container).width();
+        var containerHeight = jQuery(container).height();
         
-        
+        var width = self.parameters.width;
+        if (width === 0){
+          width = self.defaultSizes.gaugeWidth;  
+        }
+        width = self.templateService.getPixels(width, containerWidth);
+
+        var height = self.parameters.height;
+        if (height === 0){
+          if (self.type=="radial_gauge")
+            height = self.defaultSizes.gaugeWidth;
+          else
+            height = self.defaultSizes.gaugeHeight;  
+        } 
+        height = self.templateService.getPixels(height, containerHeight);
+
         if (self.type=="radial_gauge"){
-          settings["width"]= self.unitSize*self.size;
-          settings["height"]= self.unitSize*self.size;
+
+
+          
+          settings["width"]= width;
+          settings["height"]= height;
           self.gauge = new RadialGauge(settings).draw();
         }
 
@@ -120,8 +143,10 @@ export class GaugeComponent implements OnInit {
           settings["barBeginCircle"]=false;
           //settings["numberSide"]="left";
 
-          settings["width"]= self.unitSize;
-          settings["height"]= self.unitSize*self.size;
+          
+
+          settings["width"]= width;
+          settings["height"]= height;
           self.gauge = new LinearGauge(settings).draw();
         }
 
@@ -139,15 +164,14 @@ export class GaugeComponent implements OnInit {
           settings["barWidth"]="10";
           settings["barBeginCircle"]=false;
 
-
-          settings["width"]= self.unitSize*self.size;
-          settings["height"]= self.unitSize;
+          settings["width"]= height;
+          settings["height"]= width;
           
           self.gauge = new LinearGauge(settings).draw();
         }
 
         
-      }, 1000);
+      }, 0);
     }
 
    

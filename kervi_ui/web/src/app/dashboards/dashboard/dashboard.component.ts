@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, NgZone, ElementRef } from '@angular/core'
 import { KerviService } from "../../kervi.service";
 import { DashboardsService } from "../dashboards.service";
 import { Router, ActivatedRoute } from '@angular/router';
-import { DashboardModel, DashboardSectionModel } from '../../models/dashboard.model'
+import { DashboardModel, DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model'
 import { ControllerModel } from '../../models/controller.model'
 import {  DynamicNumberModel } from '../../models/dynamicValues.model'
 import { BehaviorSubject, Subject, Observable } from 'rxjs/Rx';
@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private autoZeroLeftPad:boolean = false;
   private autoZeroRightPad:boolean = false;
   private showMenu:boolean = true;
+  private defaultSizes:DashboardSizes = new DashboardSizes();
 
   private leftXValue: DynamicNumberModel = null;
   private leftYValue: DynamicNumberModel = null;

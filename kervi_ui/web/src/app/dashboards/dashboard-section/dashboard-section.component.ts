@@ -2,7 +2,7 @@ import { Component, Input, Output, OnInit, OnDestroy, ViewEncapsulation, ChangeD
 import { KerviService } from "../../kervi.service";
 import { DashboardsService } from "../dashboards.service";
 import { Router, ActivatedRoute } from '@angular/router';
-import { DashboardModel, DashboardSectionModel, DashboardMessageModel } from '../../models/dashboard.model';
+import { DashboardModel, DashboardSectionModel, DashboardMessageModel, DashboardSizes } from '../../models/dashboard.model';
 //import { DashboardFactory } from '../models/factory';
 import { IComponent } from '../../models/IComponent.model';
 import {BehaviorSubject} from 'rxjs/Rx';
@@ -18,6 +18,7 @@ import {BehaviorSubject} from 'rxjs/Rx';
 export class DashboardSectionComponent implements OnInit, OnDestroy {
     @Input() section:DashboardSectionModel;
     @Input() inline:boolean = false;
+    @Input() defaultSizes:DashboardSizes = new DashboardSizes();
     sectionClassWidth:string = "dashboard-section-width-1"
     sectionClassHeight:string = "dashboard-section-height-1"
     
@@ -51,17 +52,16 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
         
         this.showHeader = (this.section.parameters.title != null && this.section.parameters.title.length>0) || (this.headerComponents.length > 0)
         if (this.section.parameters.userLog){
-            this.kerviService.spine.sendQuery("getLogItems",0,20,function(v){
-                console.log('lm', v);
+            this.kerviService.spine.sendQuery("getLogItems",0, this.section.parameters.logLength,function(v){
+                //console.log('lm', v);
                 //var messages = DashboardFactory.createLogMessages(v)
                 //self.messages$.next(messages);
                 
             });
             this.kerviService.spine.addEventHandler("userLogMessage", null, function(v){
-                console.log("um",this);
                 var messages = self.messages$.value
                 messages.unshift(new DashboardMessageModel(this));
-                if (messages.length>20)
+                if (messages.length>self.section.parameters.logLength)
                     messages.pop();
 
                  self.messages$.next(messages);   

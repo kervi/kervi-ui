@@ -4,6 +4,7 @@
 import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { DynamicNumberModel } from '../../models/dynamicValues.model';
 import { ControllerModel } from '../../models/controller.model';
+import { DashboardSizes } from '../../models/dashboard.model'
 import { KerviService } from '../../kervi.service';
 //import { ControllersService } from '../controllers.service';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
@@ -18,6 +19,7 @@ export class CamViewerComponent implements OnInit {
   @Input() cameraId: string = null;
   @Input() isBackground: boolean = false;
   @Input() parameters:any = null;
+  @Input() defaultSizes:DashboardSizes = new DashboardSizes();
   camera$: BehaviorSubject<ControllerModel> = new BehaviorSubject<ControllerModel>(null);
   cameraSource$: BehaviorSubject<string> = new BehaviorSubject<string>("");
   padSize:number=180;

@@ -95,8 +95,14 @@ $body-bg:    #2d882d !default;
 $body-color: #fff !default;
 $border-radius-base: .25rem;
 
+.navbar{
+  background:rgba(255,255,255,.1);
+}
+
 .btn{
-	overflow:hidden;
+  overflow:hidden;
+  font-size:.7rem !important;
+  padding: 0.2rem 0.3rem !important; 
 }
 
 .dropdown-menu{
@@ -202,6 +208,28 @@ $border-radius-base: .25rem;
   padding-bottom:5px;
 }
 
+dynamic-value:first-child .block-component{
+  padding-top: 0;
+  
+}
+
+kervi-sensor:first-child .block-component{
+  padding-top: 0;
+  
+}
+
+dynamic-value:last-child .block-component{
+  border-bottom:0;
+  padding-bottom: 0;
+  
+}
+
+kervi-sensor:last-child .block-component{
+  border-bottom:0;
+  padding-bottom: 0;
+  
+}
+
 .card-header .block-component{
 	width:100%;
   clear:both;
@@ -267,7 +295,22 @@ $border-radius-base: .25rem;
   
 }
 
+td {
+  padding:0.25rem !important;
+}
 
+td:first-child{
+  padding:0 !important;
+  vertical-align: middle;
+  .alert{
+    padding:0;
+  }
+}
+
+th{
+  border-top:0 !important;
+  padding-top:0 !important;
+}
 
 
 @include media-breakpoint-up(sm) {

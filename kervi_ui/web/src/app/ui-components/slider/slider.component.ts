@@ -5,7 +5,8 @@ import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { DynamicNumberModel } from '../../models/dynamicValues.model';
 import { KerviService } from '../../kervi.service'
 import { TemplateService } from '../../template.service'
-import { DashboardSectionModel } from '../../models/dashboard.model'
+import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model'
+
 declare var jQuery: any;
 
 @Component({
@@ -17,7 +18,8 @@ export class SliderComponent implements OnInit {
 	@Input() value: DynamicNumberModel;
     @Input() type: string = "horizontal_slider";
     @Input() tick:number;
-    @Input() parameters:any;
+	@Input() parameters:any;
+	@Input() defaultSizes:DashboardSizes = new DashboardSizes();
 	private moveDelayTimer = null;
 	private size:number = 0;
 	private unitSize:number=110;
