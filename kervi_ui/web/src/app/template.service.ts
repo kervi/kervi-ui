@@ -18,6 +18,18 @@ export class TemplateService {
         return rem * this.remUnit;
     }
 
+    public getSizeValue(value){
+        if (value==null)
+            return "100%"
+        else if (isNaN(value)){
+            return value;
+        } else
+            if (value>0)
+                return value + "%";
+            else
+                return "";
+    }
+
     public  getPixels(value, containerSize){
         //console.log("gps", value, isNaN(value));
         if (isNaN(value)){

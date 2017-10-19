@@ -1,11 +1,21 @@
-<div *ngIf="section.type=='group'" class="card-deck ">
-    <div class="card-section" [style.width.%]="subSection.parameters.width" *ngFor="let subSection of section.subSections">
-        <kervi-dashboard-section [defaultSizes]="defaultSizes"  [section]="subSection"></kervi-dashboard-section>
+<div *ngIf="!bodyOnly && section.type=='group'" class="card-deck ">
+    <div class="card-section" [style.width]="calcWidth(subSection, false)" *ngFor="let subSection of section.subSections">
+        <div class="card" [style.width]="calcWidth(section, inGroup)"  [ngClass]="{'has-card-header': showSectionHeader(subSection)}">
+            <kervi-dashboard-section [bodyOnly]="true" [inGroup]="true" [defaultSizes]="defaultSizes"  [section]="subSection"></kervi-dashboard-section>
+        </div>
     </div>
 </div>
+ 
+<ng-container *ngIf="!bodyOnly && !inline && section.type!='group'">
+    <div class="card-section card-non-group" [style.width]="calcWidth(section, false)">
+        <div class="card" [ngClass]="{'has-card-header': showSectionHeader(section)}">
+            <kervi-dashboard-section [bodyOnly]="true" [defaultSizes]="defaultSizes"  [section]="section"></kervi-dashboard-section>
+        </div>
+    </div>
+</ng-container>
 
-<div *ngIf="!inline && section.type!='group'" class="card" [ngClass]="{'has-card-header': showHeader}">
-    <div class="card-header" *ngIf="showHeader">
+<ng-container *ngIf="bodyOnly">
+    <div class="card-header" *ngIf="showHeader" >
         <h4 class="text-left">
             {{title}}
             <!-- <a data-toggle="collapse" role="tab" href="#section-{{section.id}}" [attr.aria-expanded]="expanded" aria-control="" style="float:left"> <i class="fa fa-chevron-right" aria-hidden="true"></i> </a> -->
@@ -17,40 +27,39 @@
                 </ng-container>
             </div>
         </h4>
-  </div>
-    <div id="section-{{section.id}}" role="tabpanel" [ngClass]="{'in': expanded}" class="   " *ngIf="showHeader" style="overflow:auto">
-        <div class="card-body" *ngIf="components.length>0" >
-            <ng-container *ngFor="let sectionComponent of components">
-                <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
-                <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
-                <kervi-sensor [dashboardSection]="section" [sensor]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='sensor'" ></kervi-sensor>
-            </ng-container>
-        </div>
-        
-        <div class="card-body" *ngIf="section.parameters.userLog"  >
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Time</th>
-                    <th>component</th>
-                    <th style="width:100%">topic</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let message of messages$ | async">
-                        <td>
-                            <span *ngIf="message.level<3" class="alert" [ngClass]="{'text-danger': message.level==1, 'text-warning': message.level==2}" >&#11044;</span>
-                        </td>
-                        <td>{{message.timestamp | date: 'HH:mm:ss'}}</td>
-                        <td>{{message.sourceName}}</td>
-                        <td style="white-space:nowrap; overflow:hidden;text-overflow:ellipsis; max-width: 0;" title="{{message.topic}}">{{message.topic}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-        </div>    
     </div>
+    <div class="card-body" *ngIf="components.length>0" >
+        <ng-container *ngFor="let sectionComponent of components">
+            <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
+            <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
+            <kervi-sensor [dashboardSection]="section" [sensor]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='sensor'" ></kervi-sensor>
+        </ng-container>
+    </div>
+    
+    <div class="card-body" *ngIf="section.parameters.userLog"  >
+        <table class="table">
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Time</th>
+                <th>component</th>
+                <th style="width:100%">topic</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let message of messages$ | async">
+                    <td>
+                        <span *ngIf="message.level<3" class="alert" [ngClass]="{'text-danger': message.level==1, 'text-warning': message.level==2}" >&#11044;</span>
+                    </td>
+                    <td>{{message.timestamp | date: 'HH:mm:ss'}}</td>
+                    <td>{{message.sourceName}}</td>
+                    <td style="white-space:nowrap; overflow:hidden;text-overflow:ellipsis; max-width: 0;" title="{{message.topic}}">{{message.topic}}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>    
+    
     
     <div class="card-body {{sectionClassHeight}} " *ngIf="!showHeader" style="overflow:auto">
         <ng-container *ngFor="let sectionComponent of components">
@@ -59,9 +68,8 @@
             <kervi-sensor [dashboardSection]="section" [sensor]="sectionComponent.component" [parameters]="sectionComponent.component && sectionComponent.parameters" *ngIf="sectionComponent.component.componentType=='sensor'" ></kervi-sensor>
         </ng-container>
     </div>
-    
-</div>
-<ng-template [ngIf]="inline && section.components.length>0" style="display:inline-block">
+</ng-container>
+<ng-template [ngIf]="!bodyOnly && inline && section.components.length>0" style="display:inline-block">
         <ng-container *ngFor="let sectionComponent of section.components" style="display:inline-block">
             <kervi-controller  [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
             <dynamic-value  [dashboardSection]="section" [inline]="inline" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>

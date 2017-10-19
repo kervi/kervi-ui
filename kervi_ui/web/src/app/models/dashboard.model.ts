@@ -51,8 +51,8 @@ export class DashboardSectionComponentModel{
 
 export class DashboardSectionParametersModel{
     public title:string = null;
-    public width:number = null;
-    public height:number = null;
+    public width:string = null;
+    public height:string = null;
     public type:string = null;
     public userLog: boolean = null;
     public logLength:number = 5;

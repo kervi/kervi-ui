@@ -264,8 +264,18 @@ kervi-sensor:last-child .block-component{
 }
 
 
+.card{
+  margin-left:5px !important;
+  margin-right:5px !important;
+}
+
+.card-non-group{
+  display:inline-block;
+}
+
 .card {
   height:100%;
+  margin-bottom:10px;
   .card-header{
     padding: .5rem 1rem;
   }
@@ -315,7 +325,8 @@ th{
 
 @include media-breakpoint-up(sm) {
   .card-deck{
-    margin-bottom: 1%;
+    margin:inherit;
+    margin-bottom: 10px;
   }
   .card-deck-equal {
     display:table;
@@ -323,6 +334,9 @@ th{
     width:100%;
     margin-bottom:1%;
   }
+
+  
+
   .card-deck-equal>.card-section {
     display:inline-block;
     float:none;
@@ -350,7 +364,11 @@ th{
 @include media-breakpoint-down(sm) {
   .card-section{
     width:100% !important;
-    margin-bottom:1%;
+    margin-bottom:10px;
+  }
+
+  .card {
+    width:100% !important;
   }
   
   .card-deck-equal {
@@ -365,7 +383,7 @@ th{
     //float:left;
     padding-left:1%;
     padding-right:1%;
-    margin-bottom:1%;
+    margin-bottom:10px;
   }
   
   .container-fluid{

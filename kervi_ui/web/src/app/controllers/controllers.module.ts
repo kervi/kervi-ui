@@ -8,11 +8,13 @@ import { ControllerComponent } from './controller/controller.component';
 import { ControllersService } from './controller.service'
 import { RouterModule } from '@angular/router';
 import { ValuesModule } from '../values/values.module'
+import { UIComponentsModule} from '../ui-components/ui-components.module'
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    ValuesModule
+    ValuesModule,
+    UIComponentsModule
   ],
   exports:[
     ControllerComponent,

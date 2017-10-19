@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit, OnDestroy, ViewEncapsulation, ChangeD
 import { KerviService } from "../../kervi.service";
 import { DashboardsService } from "../dashboards.service";
 import { Router, ActivatedRoute } from '@angular/router';
+import { TemplateService } from '../../template.service';
 import { DashboardModel, DashboardSectionModel, DashboardMessageModel, DashboardSizes } from '../../models/dashboard.model';
 //import { DashboardFactory } from '../models/factory';
 import { IComponent } from '../../models/IComponent.model';
@@ -19,11 +20,9 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     @Input() section:DashboardSectionModel;
     @Input() inline:boolean = false;
     @Input() defaultSizes:DashboardSizes = new DashboardSizes();
-    sectionClassWidth:string = "dashboard-section-width-1"
-    sectionClassHeight:string = "dashboard-section-height-1"
-    
-    //sectionWidth:string;
-    //sectionHeight:string;
+    @Input() inGroup:boolean = false;
+    @Input() bodyOnly:boolean = false;
+    width:string = "";
     showHeader:boolean = false;
     expanded:boolean = false;
     title:string;
@@ -33,14 +32,27 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     messages$: BehaviorSubject<DashboardMessageModel[]> = new BehaviorSubject<DashboardMessageModel[]>([]);
     //sectionComponents:IComponent[] = []
 
-    constructor (private kerviService:KerviService){
+    constructor (private kerviService:KerviService, private templateService:TemplateService){
+    }
+
+    calcWidth(section:DashboardSectionModel, inGroup){
+        return inGroup ? "" : this.templateService.getSizeValue(section.parameters.width);
+    }
+
+    showSectionHeader(section:DashboardSectionModel){
+        var hasHeaderComponents = false
+        for( let component of this.section.components){
+            if (component.parameters.linkToHeader)
+                hasHeaderComponents = true
+        }
+        
+        return (section.parameters.title != null && section.parameters.title.length>0) || hasHeaderComponents
+        
     }
 
     ngOnInit() {
         var self=this;
         
-        this.sectionClassWidth="w-"+ this.section.parameters.width;
-        this.sectionClassHeight="h-"+ this.section.parameters.height;
         this.title = this.section.parameters.title;
         
         for( let component of this.section.components){
@@ -67,6 +79,8 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
                  self.messages$.next(messages);   
             });
         }
+
+         this.width = this.inGroup ? "" : this.templateService.getSizeValue(self.section.parameters.width);
     }
 
     ngOnDestroy(){ 
