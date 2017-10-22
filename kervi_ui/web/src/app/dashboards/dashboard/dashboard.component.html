@@ -31,7 +31,7 @@
 <ng-container *ngIf="dashboard && dashboard.template">
 	<!--<dashboard-layout [dashboard]="dashboard"></dashboard-layout>-->
 </ng-container>
-<div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:20px;">
+<div *ngIf="dashboard && !dashboard.template" style="position:relative;margin-top:35px;">
 	<kervi-cam-viewer *ngIf="cameraId" [isBackground]="true" [cameraId]="cameraId" [parameters]="cameraParameters"></kervi-cam-viewer>
 	<div id="controller-pads">
 		<div *ngIf="showLeftPad" class="left-pad-area" style="position:fixed;" (mousedown)="padPress('left')" (mouseup)="padRelease('left')">

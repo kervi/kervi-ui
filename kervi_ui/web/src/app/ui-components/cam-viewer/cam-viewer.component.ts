@@ -29,6 +29,8 @@ export class CamViewerComponent implements OnInit {
   private tiltSubscription: any = null;
   private moveDelayTimer = null;
   private pointOfInterests = [];
+  private camWidth:number;
+  private camHeight:number;
   //private img = new Image();
   private firstLoad=true;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { 
@@ -93,6 +95,13 @@ export class CamViewerComponent implements OnInit {
     if (this.cameraId){
       this.camera$.next(this.kerviService.getComponent(this.cameraId) as ControllerModel)  
     }
+
+    var viewPortHeight = jQuery(window).height();
+    var viewPortWidth = jQuery(window).width();
+
+    this.camHeight = viewPortHeight - 65;
+    this.camWidth = viewPortWidth; 
+
     setTimeout(function() {
       self.timedRefresh();
     

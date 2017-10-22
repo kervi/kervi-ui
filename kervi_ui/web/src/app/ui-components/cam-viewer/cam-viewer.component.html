@@ -1,9 +1,9 @@
 <ng-container *ngIf="isBackground">
-	<div id="video-viewer" class="video video-background" style="positionx:relative;width:100%;">
-		<span class="camImage" style="top:0px;left:0px;height:100%;width:100%">
+	<div id="video-viewer" class="video video-background" style="text-align:center;position:fixed;top:60px;left:0px;height:100%;" [style.height.px]="camHeight" [style.width.px]="camWidth">
+		<span class="camImage" style="top:0px;left:0px;">
 			<kervi-mpeg-viewer   [cameraSource]="(cameraSource$ | async)" > </kervi-mpeg-viewer>
 		</span>
-		<canvas id="camCanvas" style="position:absolute;top:0px;left:0px;width:100%;height:100%"></canvas>
+		<canvas id="camCanvas" style="position:absolute;top:0px;left:0px;" [style.height.px]="camHeight" [style.width.px]="camWidth"></canvas>
 		<canvas id="poiCanvas" style="position:absolute;top:0px;left:0px;width:100%;height:100%"></canvas>
 		<div class="cam-pad-area" style="display:none">
 			<fieldset id="camPad" class="pad" [attr.data-width]="padSize" [attr.data-height]="padSize">

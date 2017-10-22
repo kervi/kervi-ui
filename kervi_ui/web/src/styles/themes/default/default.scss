@@ -288,13 +288,28 @@ kervi-sensor:last-child .block-component{
     width:100%;
   }
 }
+
+.page-header{
+  position:fixed !important;
+  z-index:2000;
+  top:0;
+  left:0;
+  width:100%;
+  background: $card-bg;
+
+  &.row{
+    margin:0;
+  }
+}
+
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 25px;
   background-color: $gray-lightest;
+  z-index:2000;
 }
 @import "../../core/core.scss";
 
@@ -342,6 +357,7 @@ th{
     float:none;
     padding-left:1%;
     padding-right:1%;
+    min-width:250px;
   }
   
   .dashboard-section-width-1 {
@@ -361,6 +377,10 @@ th{
   }
 }
 
+.card-section{
+  //min-width: 250px;
+}
+
 @include media-breakpoint-down(sm) {
   .card-section{
     width:100% !important;
@@ -377,6 +397,8 @@ th{
     width:100%;
     
   }
+
+
   .card-deck-equal>.card-section {
     display:inline-block;
     width:100% !important;
