@@ -20,6 +20,8 @@ export class MPEGViewerComponent implements OnInit {
   @Input() camComponent:CamViewerComponent = null
   @Input() cameraSource: string;
   @Input() defaultSizes:DashboardSizes = new DashboardSizes();
+  @Input() width:number = null;
+  @Input() height:number = null;
   private firstLoad=true;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { 
     var self=this;

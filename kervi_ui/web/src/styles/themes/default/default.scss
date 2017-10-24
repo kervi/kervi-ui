@@ -95,10 +95,6 @@ $body-bg:    #2d882d !default;
 $body-color: #fff !default;
 $border-radius-base: .25rem;
 
-.navbar{
-  background:rgba(255,255,255,.1);
-}
-
 .btn{
   overflow:hidden;
   font-size:.7rem !important;
@@ -295,7 +291,7 @@ kervi-sensor:last-child .block-component{
   top:0;
   left:0;
   width:100%;
-  background: $card-bg;
+  background: #013b05;
 
   &.row{
     margin:0;
@@ -308,7 +304,7 @@ kervi-sensor:last-child .block-component{
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 25px;
-  background-color: $gray-lightest;
+  background-color: #013b05;
   z-index:2000;
 }
 @import "../../core/core.scss";
@@ -343,6 +339,20 @@ th{
     margin:inherit;
     margin-bottom: 10px;
   }
+
+  .card-deck-section{
+    //display: inline-flex;
+    .card-deck{
+      //display:inline-block;
+    }
+  }
+
+  
+
+  .card-section{
+    display: inline-block;
+  }
+
   .card-deck-equal {
     display:table;
     table-layout:fixed;
@@ -359,22 +369,16 @@ th{
     padding-right:1%;
     min-width:250px;
   }
+
+  .card-deck-equal>.card-deck-section {
+    display:inline-block;
+    float:none;
+    padding-left:1%;
+    padding-right:1%;
+    min-width:250px;
+  }
   
-  .dashboard-section-width-1 {
-    width:150px !important;
-  }
-
-  .dashboard-section-width-2 {
-    width:300px !important;
-  }
-
-  .dashboard-section-width-3 {
-    width:450px !important;
-  }
-
-  .dashboard-section-width-4 {
-    width:600px !important;
-  }
+  
 }
 
 .card-section{
@@ -411,76 +415,5 @@ th{
   .container-fluid{
 		width:100%;
 	}
-	.dashboard-section-width-1 {
-    width:100% !important;
-  }
-
-  .dashboard-section-width-2 {
-    width:100% !important;
-  }
-
-  .dashboard-section-width-3 {
-    width:100% !important;
-  }
-
-  .dashboard-section-width-4 {
-    width:100%;
-  }
+	
 }
-
-
-@include media-breakpoint-up(xs) {
-  .dashboard-section-height-1 {
-    height:150px !important;
-  }
-
-  .dashboard-section-height-2 {
-    height:300px !important;
-  }
-
-  .dashboard-section-height-3 {
-    height:450px !important;
-  }
-
-  .dashboard-section-height-4 {
-    height:600px !important;
-  }
-
-	.has-card-header .dashboard-section-height-1 {
-    height:102px !important;
-  }
-
-  .has-card-header .dashboard-section-height-2 {
-    height:252px !important;
-  }
-
-  .has-card-header .dashboard-section-height-3 {
-    height:402px !important;
-  }
-
-  .has-card-header .dashboard-section-height-4 {
-    height:600px !important;
-  }
-
-
-}
-
-@include media-breakpoint-down(xs) {
-  .dashboard-section-height-1 {
-    height:default !important;
-  }
-
-  .dashboard-section-height-2 {
-    height:default !important;
-  }
-
-  .dashboard-section-height-3 {
-    height:default !important;
-  }
-
-  .dashboard-section-height-4 {
-    height:default !important;
-  }
-}
-
-

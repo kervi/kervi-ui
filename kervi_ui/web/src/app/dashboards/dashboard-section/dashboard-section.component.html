@@ -1,12 +1,19 @@
 <ng-container *ngIf="!bodyOnly && section.type=='group'">
-    <div class="card-deck-section">
-        <div class="card-deck">
-            <div class="card-section" [style.width]="calcWidth(subSection, false)" *ngFor="let subSection of section.subSections">
-                <div class="card" [style.width]="calcWidth(section, inGroup)"  [ngClass]="{'has-card-header': showSectionHeader(subSection)}">
-                    <kervi-dashboard-section [bodyOnly]="true" [inGroup]="true" [defaultSizes]="defaultSizes"  [section]="subSection"></kervi-dashboard-section>
+    <div class="card-deck">
+        <ng-container *ngFor="let subSection of section.subSections">
+            <ng-container *ngIf="subSection.type!='group'">
+                <div class="card-section" [style.width]="calcWidth(subSection, false)">
+                    <div class="card" [ngClass]="{'has-card-header': showSectionHeader(subSection)}">
+                        <kervi-dashboard-section [bodyOnly]="true" [inGroup]="true" [defaultSizes]="defaultSizes"  [section]="subSection"></kervi-dashboard-section>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </ng-container>
+            <ng-container *ngIf="subSection.type=='group'">
+                <div class="card-deck-section" [style.width]="calcWidth(subSection, inGroup)">
+                    <kervi-dashboard-section  [inGroup]="true" [defaultSizes]="defaultSizes"  [section]="subSection"></kervi-dashboard-section>
+                </div>
+            </ng-container>
+        </ng-container>
     </div>
 </ng-container>
  

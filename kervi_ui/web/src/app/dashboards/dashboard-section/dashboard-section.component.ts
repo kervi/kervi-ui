@@ -36,7 +36,13 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     }
 
     calcWidth(section:DashboardSectionModel, inGroup){
-        return inGroup ? "" : this.templateService.getSizeValue(section.parameters.width);
+        if (section.type=="group"){
+            if (section.parameters.width==null || section.parameters.width=="0")
+                return "100%"
+            else
+                return this.templateService.getSizeValue(section.parameters.width);
+        } else
+            return inGroup ? "" : this.templateService.getSizeValue(section.parameters.width);
     }
 
     showSectionHeader(section:DashboardSectionModel){
