@@ -97,6 +97,7 @@ export class DashboardsService {
         });
     }
 
+    
     private resolveSubSections(section:DashboardSectionModel){
         if (section.subSections){
             for(var subSection of section.subSections){

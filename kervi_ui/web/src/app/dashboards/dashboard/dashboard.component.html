@@ -47,7 +47,7 @@
 			</fieldset>
 		</div>
 	</div>
-	<div class="container-fluid" style="top:0;padding-top:10px;z-index:1999;position:absolute" >
+	<div class="container-fluid" style="top:0;padding-top:10px;z-index:1999;position:absolute;padding-bottom:30px;" >
 		<div  [ngClass]="{'dashboard-sections-hidden' : dashboardSectionsHidden }">
 			<kervi-dashboard-section  *ngFor="let section of dashboard.sections" [defaultSizes]="defaultSizes" [section]="section" class="w-{{section.width}}"></kervi-dashboard-section>
 		</div>  

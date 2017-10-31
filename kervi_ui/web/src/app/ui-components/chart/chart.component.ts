@@ -37,6 +37,8 @@ export class ChartComponent implements OnInit {
     return this.templateService.getColor(style,selector);
   }
 
+  
+
   ngOnInit() {
     var self = this;  
     this.canvasId=this.templateService.makeId();
@@ -47,8 +49,7 @@ export class ChartComponent implements OnInit {
             if (self.updateChart){
               var ds=self.chart.data.datasets[0].data;
               ds.push({ x: self.value.valueTS, y: v })
-              if (ds.length>20)
-                ds.shift();
+              self.cleanData();
               self.chart.render();  
               self.chart.update();
             }
@@ -58,23 +59,23 @@ export class ChartComponent implements OnInit {
         }
       });
 
-      self.periodEnd = new Date();
-      self.periodStart = new Date();
-      self.periodStart.setHours(self.periodEnd.getHours() - 1);
-
-      setTimeout(function() {
       
+      setTimeout(function() {
+        self.periodEnd = new Date();
+        self.periodStart = new Date();
+        self.periodStart.setHours(self.periodStart.getHours() - 1);
+  
       //jQuery("#"+self.canvasId).width(self.unitSize*self.size);
       //jQuery("#"+self.canvasId).height(self.unitSize);
       self.kerviService.spine.sendQuery("getSensorData", self.value.id, self.periodStart.toISOString(), self.periodEnd.toISOString(), function (results) {
-        //console.log("gsd", this, results);
+        console.log("gsd", this, results);
         var sensorData = results;
         self.chartData = [];
         for (var i = 0; (i < sensorData.length); i++) {
           var dataItem = sensorData[i]
-          self.chartData.push({ x: new Date(dataItem.ts), y: dataItem.value });
+          self.chartData.push({ x: new Date(dataItem.ts + " utc"), y: dataItem.value });
         }
-        //console.log("cd", chartData);
+        console.log("cd", self.chartData);
         var ctx = jQuery("#"+self.canvasId);
         self.chart = new Chart(ctx, {
           type: 'line',
@@ -118,7 +119,7 @@ export class ChartComponent implements OnInit {
               mode: 'xy'
             },
             title: {
-              display: true,
+              display: self.parameters.label!=null,
               //text: self.parameters.label
             },
             elements:{
@@ -155,7 +156,7 @@ export class ChartComponent implements OnInit {
                   display:true,
                   stepSize: 120,
                 },
-                display: true,
+                display: self.parameters.chartGrid,
                 scaleLabel: {
                   display: true,
                   //labelString: 'Date'
@@ -174,7 +175,7 @@ export class ChartComponent implements OnInit {
                   color:"rgba(255,255,255,0.5)",
                   zeroLineColor:"rgba(255,255,255,0.5)"
                 },
-                display: true,
+                display: self.parameters.chartGrid,
                 scaleLabel: {
                   display: true,
                   //labelString: 'value'
@@ -286,6 +287,43 @@ export class ChartComponent implements OnInit {
     this.loadPeriod();
   }
 
+  public getPeriodLimit(){
+    var periodStart = new Date();
+    if (this.selectedPeriod=="5min"){
+      periodStart.setMinutes(periodStart.getMinutes() - 5);
+    }  
+
+    if (this.selectedPeriod=="15min"){
+      periodStart.setMinutes(periodStart.getMinutes() - 15);
+    }
+
+    if (this.selectedPeriod=="30min"){
+      periodStart.setMinutes(periodStart.getMinutes() - 30);
+    }
+
+    if (this.selectedPeriod=="hour"){
+      periodStart.setHours(periodStart.getHours() - 1);
+    }
+
+    if (this.selectedPeriod=="day"){
+      periodStart.setHours(periodStart.getHours() - 24);
+    }
+
+    if (this.selectedPeriod=="week"){
+      periodStart.setHours(periodStart.getHours() - 7 * 24);
+    }
+
+    if (this.selectedPeriod=="month"){
+      periodStart.setHours(periodStart.getHours() - 7 * 24*31);
+    }
+
+    if (this.selectedPeriod=="year"){
+      periodStart.setHours(periodStart.getHours() - 7 * 24*365);
+    }
+    
+    return periodStart;
+  }
+
   public loadPeriod(){
     var self = this;
     //console.log("lp", this.periodStart, this.periodEnd);
@@ -295,10 +333,24 @@ export class ChartComponent implements OnInit {
         self.chartData.length = 0;
         for (var i = 0; (i < sensorData.length); i++) {
           var dataItem = sensorData[i]
-          self.chartData.push({ x: Date.parse(dataItem.ts + " utc"), y: dataItem.value });
+          self.chartData.push({ x: new Date(dataItem.ts + " utc"), y: dataItem.value });
         }
         self.chart.render();  
         self.chart.update();
     });
+  }
+
+  private cleanData(){
+    if(this.updateChart){
+      var doClean = true;
+      var limitTS = this.getPeriodLimit();
+      var ds = this.chart.data.datasets[0].data
+      while ( ds.length>0 && doClean){
+        if (ds[0].x < limitTS)
+          ds.shift();
+        else
+          doClean = false
+      }
+    }
   }
 }

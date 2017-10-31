@@ -77,7 +77,7 @@ export class DashboardSectionModel{
     public dashboard: DashboardModel;
     public type:string;
     public subSections: DashboardSectionModel[] = [];
-
+    
     constructor (dashboard, messageSection){
         this.dashboard=dashboard;
         this.id=messageSection.id;
@@ -89,11 +89,13 @@ export class DashboardSectionModel{
                 this.components.push(new DashboardSectionComponentModel(componentRef))
             }
         
-        if (messageSection.panels)
+        if (messageSection.panels){
+            console.log("spa",messageSection.panels);
             for(var subMessageSection of messageSection.panels){
                 var section=new DashboardSectionModel(this, subMessageSection);
                 this.subSections.push(section);
             }
+        }
     }
 
     public reload(source:DashboardSectionModel){
@@ -182,6 +184,7 @@ export class DashboardModel implements IComponent{
         //this.background=new DashboardBackgroundModel(message.background);
         this.sections=[];
         if (!this.template){
+            var currentSection:DashboardSectionModel = null;
             for (let messageSection of message.sections){
                 var section=new DashboardSectionModel(this, messageSection);
                 if (section.id=="header_center")
@@ -206,7 +209,37 @@ export class DashboardModel implements IComponent{
                     this.RightPadXSection=section;
                 else if (section.id=="right_pad_y")
                     this.RightPadYSection=section;
-                else this.sections.push(section);        
+                else{
+                    console.log("sp",section)
+                    if (section.type!="group"){
+                        if(currentSection==null){
+                            currentSection = new DashboardSectionModel(
+                            this,
+                            {
+                                "id":null,
+                                "name": "",
+                                "type":"group",
+                                "components":[],
+                                "panels":[],
+                                "uiParameters":{
+                                    "title":"",
+                                    "width":0,
+                                    "height":0,
+                                    "userLog":false,
+                                    "logLength":0
+                                }    
+                            });
+                            currentSection.subSections.push(section);
+                            this.sections.push(currentSection);
+                        } else {
+                            currentSection.subSections.push(section)
+                        }
+                    }   
+                    else{
+                        this.sections.push(section);
+                        currentSection=null;
+                    }
+                }        
             }
         }
     }
