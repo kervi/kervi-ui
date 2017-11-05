@@ -15,7 +15,7 @@
 </ng-container>
 
 <ng-container *ngIf="!isBackground">
-	<div id="video-viewer" class="video" style="position:relative;width:100%">
+	<div id="video-viewer" class="video" style="overflow:hidden;position:relative;width:100%">
 		<span class="camImage" style="top:0px;left:0px;height:100%;width:100%">
 			<kervi-mpeg-viewer [width]=100  [cameraSource]="(cameraSource$ | async)" > </kervi-mpeg-viewer>
 		</span>

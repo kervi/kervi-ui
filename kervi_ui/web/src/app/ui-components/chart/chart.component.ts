@@ -25,7 +25,7 @@ export class ChartComponent implements OnInit {
   canvasId:string="";
   private chart:any=null;
   private chartData = [];
-  selectedPeriodText:string = "Hour";
+  selectedPeriodText:string = "Hourx";
   selectedPeriod:string = "hour";
   periodStart: Date = null;
   periodEnd: Date = null;
@@ -40,7 +40,8 @@ export class ChartComponent implements OnInit {
   
 
   ngOnInit() {
-    var self = this;  
+    var self = this;
+    this.setSelectedPeriodText(self.parameters.chartInterval);
     this.canvasId=this.templateService.makeId();
       
       this.value.value$.subscribe(function(v){
@@ -48,6 +49,7 @@ export class ChartComponent implements OnInit {
           try{
             if (self.updateChart){
               var ds=self.chart.data.datasets[0].data;
+              self.periodEnd = self.value.valueTS;
               ds.push({ x: self.value.valueTS, y: v })
               self.cleanData();
               self.chart.render();  
@@ -61,20 +63,9 @@ export class ChartComponent implements OnInit {
 
       
       setTimeout(function() {
-        self.periodEnd = new Date();
-        self.periodStart = new Date();
-        self.periodStart.setHours(self.periodStart.getHours() - 1);
-  
-      //jQuery("#"+self.canvasId).width(self.unitSize*self.size);
-      //jQuery("#"+self.canvasId).height(self.unitSize);
-      self.kerviService.spine.sendQuery("getSensorData", self.value.id, self.periodStart.toISOString(), self.periodEnd.toISOString(), function (results) {
-        console.log("gsd", this, results);
-        var sensorData = results;
-        self.chartData = [];
-        for (var i = 0; (i < sensorData.length); i++) {
-          var dataItem = sensorData[i]
-          self.chartData.push({ x: new Date(dataItem.ts + " utc"), y: dataItem.value });
-        }
+        
+        
+        
         console.log("cd", self.chartData);
         var ctx = jQuery("#"+self.canvasId);
         self.chart = new Chart(ctx, {
@@ -183,10 +174,13 @@ export class ChartComponent implements OnInit {
               }]
             }
           }
+          
         });
-        console.log("sc",self.chart,self.chart.data.datasets[0].data);  
-      });
-      }, 200);
+        setTimeout(function(){
+          self.selectPeriod(self.parameters.chartInterval);
+        },0)
+
+      }, 0);
     
   }
 
@@ -197,35 +191,37 @@ export class ChartComponent implements OnInit {
   public movePeriod(movement:number){
     this.updateChart = false;
 
-    
+    var periodStart = this.periodStart;
+    var periodEnd = this.periodEnd;
+
     if (this.selectedPeriod=="5min"){
-      this.periodEnd.setMinutes(this.periodEnd.getMinutes() + 5 * movement)
-      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 5 );
+      periodEnd.setMinutes(periodEnd.getMinutes() + 5 * movement)
+      periodStart.setMinutes(periodEnd.getMinutes() - 5 );
     }
     
     if (this.selectedPeriod=="15min"){
-      this.periodEnd.setMinutes(this.periodEnd.getMinutes() + 15 * movement)
-      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 15 );
+      periodEnd.setMinutes(periodEnd.getMinutes() + 15 * movement)
+      periodStart.setMinutes(periodEnd.getMinutes() - 15 );
     }
 
     if (this.selectedPeriod=="30min"){
-      this.periodEnd.setMinutes(this.periodEnd.getMinutes() + 30 * movement)
-      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 30 );
+      periodEnd.setMinutes(periodEnd.getMinutes() + 30 * movement)
+      periodStart.setMinutes(periodEnd.getMinutes() - 30 );
     }
 
     if (this.selectedPeriod=="hour"){
-      this.periodEnd.setHours(this.periodEnd.getHours() + movement)
-      this.periodStart.setHours(this.periodEnd.getHours() -1 );
+      periodEnd.setHours(periodEnd.getHours() + movement)
+      periodStart.setHours(periodEnd.getHours() -1 );
     }
 
     if (this.selectedPeriod=="day"){
-      this.periodEnd.setHours(this.periodEnd.getDay() + 24 * movement)
-      this.periodStart.setHours(this.periodEnd.getDay() - 24);
+      periodEnd.setHours(this.periodEnd.getDay() + 24 * movement)
+      periodStart.setHours(this.periodEnd.getDay() - 24);
     }
 
     if (this.selectedPeriod=="week"){
-      this.periodEnd.setHours(this.periodEnd.getDay() + 7 * 24 * movement)
-      this.periodStart.setHours(this.periodEnd.getDay() + 14 *  24 * movement);
+      periodEnd.setHours(this.periodEnd.getDay() + 7 * 24 * movement)
+      periodStart.setHours(this.periodEnd.getDay() + 14 *  24 * movement);
     }
 
     if (this.selectedPeriod=="month"){
@@ -235,6 +231,9 @@ export class ChartComponent implements OnInit {
     if (this.selectedPeriod=="year"){
       
     }
+    this.periodStart = periodStart;
+    this.periodEnd = periodEnd;
+    
     this.loadPeriod();
   }
 
@@ -243,37 +242,70 @@ export class ChartComponent implements OnInit {
   public selectPeriod(period){
     this.updateChart=true;
     this.selectedPeriod = period;
-    this.periodEnd = new Date();
-    this.periodStart = new Date();
+    var periodEnd = new Date();
+    var periodStart = new Date();
 
     if (period=="5min"){
+      periodStart.setMinutes(periodEnd.getMinutes() - 5);
+    }  
+
+    if (period=="15min"){
+      periodStart.setMinutes(periodEnd.getMinutes() - 15);
+    }
+
+    if (period=="30min"){
+      periodStart.setMinutes(periodEnd.getMinutes() - 30);
+    }
+
+    if (period=="hour"){
+      periodStart.setHours(periodEnd.getHours() - 1);
+    }
+
+    if (period=="day"){
+      periodStart.setHours(periodEnd.getHours() - 24);
+    }
+
+    if (period=="week"){
+      periodStart.setHours(periodEnd.getHours() - 7 * 24);
+    }
+
+    if (period=="month"){
+      
+    }
+
+    if (period=="year"){
+      
+    }
+    this.periodStart = periodStart;
+    this.periodEnd = periodEnd;
+    this.setSelectedPeriodText(period);
+    //console.log("sp", this.periodStart, this.periodEnd);
+    this.loadPeriod();
+  }
+
+  public setSelectedPeriodText(period){
+    if (period=="5min"){
       this.selectedPeriodText="5 min";
-      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 5);
     }  
 
     if (period=="15min"){
       this.selectedPeriodText="15 min";
-      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 15);
     }
 
     if (period=="30min"){
       this.selectedPeriodText="30 min";
-      this.periodStart.setMinutes(this.periodEnd.getMinutes() - 30);
     }
 
     if (period=="hour"){
       this.selectedPeriodText="Hour";
-      this.periodStart.setHours(this.periodEnd.getHours() - 1);
     }
 
     if (period=="day"){
       this.selectedPeriodText="Day";
-      this.periodStart.setHours(this.periodEnd.getHours() - 24);
     }
 
     if (period=="week"){
       this.selectedPeriodText="Week"
-      this.periodStart.setHours(this.periodEnd.getHours() - 7 * 24);
     }
 
     if (period=="month"){
@@ -283,8 +315,7 @@ export class ChartComponent implements OnInit {
     if (period=="year"){
       this.selectedPeriodText="Year"
     }
-    //console.log("sp", this.periodStart, this.periodEnd);
-    this.loadPeriod();
+    
   }
 
   public getPeriodLimit(){
