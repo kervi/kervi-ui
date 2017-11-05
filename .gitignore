@@ -1,5 +1,4 @@
 *.pyc
 /roboSys.log
 /robosys.db
-dist
 kervi_ui.egg-info
