@@ -125,8 +125,11 @@ export class CamViewerComponent implements OnInit {
 
       }    
 
-      jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();
-      jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();  
+      if (pan)
+        jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();
+      
+      if (tilt)
+        jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();  
 
       var color = "rgba(255,255,255,.5)";
       var p = jQuery('fieldset', self.elementRef.nativeElement).xy({

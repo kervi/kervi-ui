@@ -3047,6 +3047,8 @@ var KerviSpine = (function () {
             var h = this.eventHandlers[n];
             if (h.eventName == eventPath)
                 h.callback.call(value, id, value);
+            else if (h.eventName == eventName)
+                h.callback.call(value, id, value);
         }
     };
     KerviSpine.prototype.handleCommand = function (message) {
@@ -3068,7 +3070,7 @@ var KerviSpine = (function () {
             return;
         }
         var self = this;
-        this.websocket = new WebSocket(this.options.protocol + "://" + this.options.userName + ":" + this.options.password + "@" + this.options.address);
+        this.websocket = new WebSocket(this.options.protocol + "://" + this.options.address);
         this.websocket.onopen = function (evt) {
             self.onOpen(evt);
         };
@@ -4886,8 +4888,10 @@ var CamViewerComponent = (function () {
                 else if (i.id.endsWith(".tilt"))
                     tilt = i;
             }
-            jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();
-            jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();
+            if (pan)
+                jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();
+            if (tilt)
+                jQuery("input[name='y']", self.elementRef.nativeElement).val(tilt.value$.value).change();
             var color = "rgba(255,255,255,.5)";
             var p = jQuery('fieldset', self.elementRef.nativeElement).xy({
                 displayPrevious: false,

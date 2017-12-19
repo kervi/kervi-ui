@@ -88,6 +88,8 @@ export class  KerviSpine{
 			var h=this.eventHandlers[n];
 			if (h.eventName==eventPath)
 				h.callback.call(value,id,value);
+			else if (h.eventName==eventName)
+				h.callback.call(value,id,value);
 		}
 	}
 
@@ -114,7 +116,7 @@ export class  KerviSpine{
 			return
 		}
 		var self=this;
-		this.websocket= new WebSocket(this.options.protocol + "://" + this.options.userName + ":" + this.options.password + "@" +this.options.address);
+		this.websocket= new WebSocket(this.options.protocol + "://" + this.options.address);
 		this.websocket.onopen = function(evt) { 
 			self.onOpen(evt);
 		};
