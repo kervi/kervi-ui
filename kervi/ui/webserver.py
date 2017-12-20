@@ -41,7 +41,7 @@ except:
 
 import socket
 import threading
-import kervi_ui
+import kervi.ui
 import os
 
 class _HTTPRequestHandler(SimpleHTTPRequestHandler):
@@ -168,7 +168,7 @@ class _HTTPServer(ThreadingMixIn, HTTPServer):
         self.ip_address = address
         self.terminate = False
         self.ws_port = ws_port
-        kervipath = os.path.dirname(kervi_ui.__file__)
+        kervipath = os.path.dirname(kervi.ui.__file__)
         self.docpath = os.path.join(kervipath, "web/dist")
     
     def do_authorize(self):

@@ -1,6 +1,10 @@
 from distutils.core import setup
 import distutils
-from kervi_ui.version import VERSION
+
+try:
+    from kervi.ui.version import VERSION
+except:
+    VERSION = "0.0"
 
 try:
     distutils.dir_util.remove_tree("dist")
@@ -9,7 +13,7 @@ except:
 
 setup(
     name='kervi-ui',
-    packages=['kervi_ui'],
+    packages=['kervi.ui'],
     version=VERSION,
     description='UI module for the kervi framework. It is included as dependency when kervi in installed.',
     author='Tim Wentzlau',
@@ -18,8 +22,9 @@ setup(
     download_url='https://github.com/wentzlau/kervi-ui/archive/v1.0-alpha.tar.gz',
     keywords=['ui', 'robotic', 'automation'],
     classifiers=[],
+    include_package_data=True,
     package_data={
-        'kervi_ui': [
+        'kervi.ui': [
             'web/dist/*.html',
             'web/dist/*.js',
             'web/dist/*.css',
@@ -31,7 +36,6 @@ setup(
             'web/dist/*.woff',
             'web/dist/*.woff2',
             'web/dist/*.ttf'
-            ],
+        ],
     },
 )
-
