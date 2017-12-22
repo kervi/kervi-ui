@@ -57,7 +57,7 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
         return
 
     def do_AUTHHEAD(self):
-        print ("send header")
+        print("send header")
         self.send_response(401)
         self.send_header('WWW-Authenticate', 'Basic realm=\"Test\"')
         self.send_header('Content-type', 'text/html')
@@ -170,7 +170,7 @@ class _HTTPServer(ThreadingMixIn, HTTPServer):
         self.ws_port = ws_port
         kervipath = os.path.dirname(kervi.ui.__file__)
         self.docpath = os.path.join(kervipath, "web/dist")
-    
+
     def do_authorize(self):
         return False
 
@@ -190,24 +190,22 @@ SERVER_THREAD = None
 def start(ip_address, http_port, ws_port):
     global SERVER, SERVER_THREAD
 
-    
     SERVER = _HTTPServer(ip_address, http_port, ws_port, _HTTPRequestHandler)
-
     if encryption.enabled():
         cert_file, key_file = encryption.get_cert()
-        
-        if key_file and cert_file:
-           import ssl
-           SERVER.socket = ssl.wrap_socket (SERVER.socket, keyfile=key_file, certfile=cert_file, server_side=True)
 
+        if key_file and cert_file:
+            import ssl
+            SERVER.socket = ssl.wrap_socket (SERVER.socket, keyfile=key_file, certfile=cert_file, server_side=True)
 
     SERVER_THREAD = threading.Thread(target=SERVER.serve_forever)
     SERVER_THREAD.daemon = True
     SERVER_THREAD.start()
-    
+
 def stop():
-    print("stop web server")
+    #print("stop web server")
     SERVER.terminate = True
     SERVER.shutdown()
-    SERVER_THREAD.join()
-    print("ws terminated")
+    if not SERVER_THREAD.join(5):
+        print("")
+    #print("ws terminated")
