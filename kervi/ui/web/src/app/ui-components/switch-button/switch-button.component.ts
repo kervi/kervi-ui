@@ -68,7 +68,7 @@ export class SwitchButtonComponent implements OnInit {
         jQuery('input', self.elementRef.nativeElement).bootstrapToggle('off')
     });
 
-
+    
 
     setTimeout(function () {
         jQuery('input', self.elementRef.nativeElement).bootstrapToggle({
@@ -79,6 +79,12 @@ export class SwitchButtonComponent implements OnInit {
           "width":self.width,
           "height":self.height
         })
+
+        if (self.value.value$.value)
+          jQuery('input', self.elementRef.nativeElement).bootstrapToggle('on')
+        else
+          jQuery('input', self.elementRef.nativeElement).bootstrapToggle('off')
+
         jQuery('input', self.elementRef.nativeElement).change(function () {
           var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
           if (state && !self.value.value$.value)

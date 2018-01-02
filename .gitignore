@@ -2,4 +2,6 @@
 /roboSys.log
 /robosys.db
 kervi_ui.egg-info
-/dist
+/dist/*.js
+kervi/ui/web/dist/*.js
+kervi/ui/web/dist/inline.bundle.js
