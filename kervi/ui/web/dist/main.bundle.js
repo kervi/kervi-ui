@@ -2420,6 +2420,10 @@ var SwitchButtonComponent = (function () {
                 "width": self.width,
                 "height": self.height
             });
+            if (self.value.value$.value)
+                jQuery('input', self.elementRef.nativeElement).bootstrapToggle('on');
+            else
+                jQuery('input', self.elementRef.nativeElement).bootstrapToggle('off');
             jQuery('input', self.elementRef.nativeElement).change(function () {
                 var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
                 if (state && !self.value.value$.value)
@@ -4208,7 +4212,7 @@ var KerviService = (function () {
             this.IPCReady$.next(true);
             this.spine.addEventHandler("moduleStarted", "", function () {
                 console.log("module loaded", self.components);
-                self.refreshComponents();
+                setTimeout(self.refreshComponents(), 2000);
             });
             this.spine.addEventHandler("moduleStopped", "", function () {
                 console.log("module unloaded");
