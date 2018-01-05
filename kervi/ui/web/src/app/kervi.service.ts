@@ -233,7 +233,7 @@ export class KerviService {
       this.IPCReady$.next(true);
       this.spine.addEventHandler("moduleStarted","",function(){
           console.log("module loaded",self.components); 
-          self.refreshComponents(); 
+          setTimeout(self.refreshComponents(), 2000); 
       });           
       
       this.spine.addEventHandler("moduleStopped","",function(){
