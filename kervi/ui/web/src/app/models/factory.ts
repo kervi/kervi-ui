@@ -3,6 +3,7 @@ import  * as DynamicValues from './dynamicValues.model'
 import { ControllerModel } from './controller.model'
 import { SensorModel } from './sensor.model'
 import { DashboardModel } from './dashboard.model'
+import { ActionModel } from './action.model'
 export class ComponentFactory{
 
     public static createComponents(message: any){
@@ -13,9 +14,11 @@ export class ComponentFactory{
             }
         } else {
             var component:any=null;
-            if (message.componentType=="dashboard")
+            if (message.componentType=="KerviAction")
+                component = new ActionModel(message);
+            else if (message.componentType=="dashboard")
                 component = new DashboardModel(message);
-            if (message.componentType=="sensor")
+            else if (message.componentType=="sensor")
                 component = new SensorModel(message);
             else if (message.componentType=="controller")
                 component = new ControllerModel(message);

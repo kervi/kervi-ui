@@ -35,6 +35,7 @@
                     <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
                     <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
                     <kervi-sensor [dashboardSection]="section" [sensor]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='sensor'" ></kervi-sensor>
+                    <kervi-action [dashboardSection]="section" [action]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='action'" ></kervi-action>
                 </ng-container>
             </div>
         </h4>
@@ -44,6 +45,7 @@
             <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
             <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
             <kervi-sensor [dashboardSection]="section" [sensor]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='sensor'" ></kervi-sensor>
+            <kervi-action [dashboardSection]="section" [action]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='action'" ></kervi-action>
         </ng-container>
     </div>
     
@@ -85,5 +87,6 @@
             <kervi-controller  [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
             <dynamic-value  [dashboardSection]="section" [inline]="inline" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
             <kervi-sensor  [dashboardSection]="section" [inline]="inline" [sensor]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='sensor'" ></kervi-sensor>
+            <kervi-action [dashboardSection]="section" [action]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='action'" ></kervi-action>
         </ng-container>
 </ng-template>

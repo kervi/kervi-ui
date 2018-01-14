@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardsService } from './dashboards.service'
 import { SensorsModule } from '../sensors/sensors.module';
+import { ActionsModule } from '../actions/actions.module';
 import { ControllersModule } from '../controllers/controllers.module';
 import { ValuesModule} from '../values/values.module';
 import { DashboardComponent } from './dashboard/dashboard.component'; 
@@ -20,8 +21,8 @@ import { UIComponentsModule} from '../ui-components/ui-components.module'
     SensorsModule,
     ControllersModule,
     ValuesModule,
-    UIComponentsModule
-    
+    UIComponentsModule,
+    ActionsModule
   ],
   exports:[
     DashboardComponent,

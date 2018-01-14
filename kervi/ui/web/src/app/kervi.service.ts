@@ -61,8 +61,27 @@ export class KerviService {
               }
             }
           });
-        }
-      });
+        
+        self.spine.addEventHandler("actionStarted","",function(id){
+          for (let component of self.components){
+            if (component.id==id){
+              var action = component as any;
+              action.running$.next(true)
+            }
+          }
+              
+        });
+
+        self.spine.addEventHandler("actionDone","",function(id){
+          for (let component of self.components){
+            if (component.id==id){
+              var action = component as any;
+              action.running$.next(false)
+            }
+          }
+        });
+      }
+    });
 
   }
 
