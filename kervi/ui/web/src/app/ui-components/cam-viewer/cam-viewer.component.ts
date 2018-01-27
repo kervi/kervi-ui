@@ -117,13 +117,15 @@ export class CamViewerComponent implements OnInit {
 
       var pan = null;
       var tilt = null
-      for(var i of self.camera$.value.inputs){
-        if (i.id.endsWith(".pan"))
-          pan=i as DynamicNumberModel;
-        else if (i.id.endsWith(".tilt"))
-          tilt=i as DynamicNumberModel
+      if (self.camera$.value){
+        for(var i of self.camera$.value.inputs){
+          if (i.id.endsWith(".pan"))
+            pan=i as DynamicNumberModel;
+          else if (i.id.endsWith(".tilt"))
+            tilt=i as DynamicNumberModel
 
-      }    
+        } 
+      }
 
       if (pan)
         jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();

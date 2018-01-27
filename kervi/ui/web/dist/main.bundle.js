@@ -108,12 +108,14 @@ var CamViewerComponent = (function () {
             //console.log("cwp",h,w,self.padSize);
             var pan = null;
             var tilt = null;
-            for (var _i = 0, _a = self.camera$.value.inputs; _i < _a.length; _i++) {
-                var i = _a[_i];
-                if (i.id.endsWith(".pan"))
-                    pan = i;
-                else if (i.id.endsWith(".tilt"))
-                    tilt = i;
+            if (self.camera$.value) {
+                for (var _i = 0, _a = self.camera$.value.inputs; _i < _a.length; _i++) {
+                    var i = _a[_i];
+                    if (i.id.endsWith(".pan"))
+                        pan = i;
+                    else if (i.id.endsWith(".tilt"))
+                        tilt = i;
+                }
             }
             if (pan)
                 jQuery("input[name='x']", self.elementRef.nativeElement).val(pan.value$.value).change();
@@ -346,6 +348,9 @@ var ActionComponent = (function () {
         var _a;
     };
     ActionComponent.prototype.release = function () {
+        if (this.action.running$.value)
+            (_a = this.kerviService.spine).sendCommand.apply(_a, [this.action.ui.interuptCommand].concat(this.parameters.interuptParameters));
+        var _a;
     };
     return ActionComponent;
 }());
@@ -4632,6 +4637,10 @@ var DashboardModel = (function () {
             var currentSection = null;
             for (var _i = 0, _a = message.sections; _i < _a.length; _i++) {
                 var messageSection = _a[_i];
+                if (!messageSection) {
+                    console.log("dashboard with null section", this.id);
+                    continue;
+                }
                 var section = new DashboardSectionModel(this, messageSection);
                 if (section.id == "header_center")
                     this.headerSection = section;

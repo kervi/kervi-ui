@@ -80,6 +80,7 @@ export class DashboardSectionModel{
     
     constructor (dashboard, messageSection){
         this.dashboard=dashboard;
+        
         this.id=messageSection.id;
         this.name=messageSection.name;
         this.type=messageSection.type;
@@ -186,6 +187,10 @@ export class DashboardModel implements IComponent{
         if (!this.template){
             var currentSection:DashboardSectionModel = null;
             for (let messageSection of message.sections){
+                if (!messageSection){
+                    console.log("dashboard with null section", this.id);
+                    continue;
+                }
                 var section=new DashboardSectionModel(this, messageSection);
                 if (section.id=="header_center")
                     this.headerSection=section;
