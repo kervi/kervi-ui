@@ -15,8 +15,10 @@ export class ControllerModel implements IComponent {
     public parameters: any;
     public inputs: IComponent[] = [];
     public outputs: IComponent[] = [];
+    public actions: IComponent[] = [];
     public inputReferences: ComponentRef[] = [];
     public outputReferences: ComponentRef[] = [];
+    public actionsReferences: ComponentRef[] = [];
     public dashboards: string[];
     public template:string;
 
@@ -35,6 +37,10 @@ export class ControllerModel implements IComponent {
 
         for(var ref of message.outputs){
             this.outputReferences.push( new ComponentRef(ref));
+        }
+
+        for(var ref of message.actions){
+            this.actionsReferences.push( new ComponentRef(ref));
         }
     }
 

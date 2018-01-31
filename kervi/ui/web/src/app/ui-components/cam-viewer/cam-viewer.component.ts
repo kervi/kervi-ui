@@ -31,6 +31,7 @@ export class CamViewerComponent implements OnInit {
   private pointOfInterests = [];
   private camWidth:number;
   private camHeight:number;
+  private actions:any = null;
   //private img = new Image();
   private firstLoad=true;
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { 
@@ -38,6 +39,7 @@ export class CamViewerComponent implements OnInit {
 
     this.camera$.subscribe(function(v){
       //console.log("cse",v);
+      
       if (self.panSubscription)
         self.panSubscription.unsubscribe();
 
@@ -45,7 +47,7 @@ export class CamViewerComponent implements OnInit {
         self.tiltSubscription.unsubscribe();
 
       if (v) {
-
+        self.actions = v.actions;
         var pan = null;
         var tilt = null;
         for(var i of v.inputs){

@@ -193,7 +193,6 @@ def start(ip_address, http_port, ws_port):
     SERVER = _HTTPServer(ip_address, http_port, ws_port, _HTTPRequestHandler)
     if encryption.enabled():
         cert_file, key_file = encryption.get_cert()
-
         if key_file and cert_file:
             import ssl
             SERVER.socket = ssl.wrap_socket (SERVER.socket, keyfile=key_file, certfile=cert_file, server_side=True)

@@ -62,4 +62,12 @@ export class DynamicBooleanComponent implements OnInit {
 		
 	}
 
+	public press() {
+		 this.kerviService.spine.sendCommand(this.value.command, true);
+	  }
+	
+	  public release() {
+		this.kerviService.spine.sendCommand(this.value.command, false);
+	  }
+
 }

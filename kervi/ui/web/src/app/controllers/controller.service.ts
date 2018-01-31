@@ -33,6 +33,11 @@ export class ControllersService {
                     controller.outputs.push(this.kerviService.getComponent(ref.id))
                 }
             }
+            if (controller.actions.length==0){
+                for(var ref of controller.actionsReferences){
+                    controller.actions.push(this.kerviService.getComponent(ref.id))
+                }
+            }
         }
         //console.log("rc", controllers);    
     }

@@ -2,9 +2,9 @@
 // Licensed under MIT
 
 import { Component, OnInit, Input, ElementRef, ViewEncapsulation } from '@angular/core';
-import { DynamicBooleanModel } from '../../models/dynamicValues.model'
 import { KerviService } from '../../kervi.service'
 import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model'
+import { BehaviorSubject } from 'rxjs/Rx';
 declare var jQuery: any;
 
 @Component({
@@ -14,11 +14,12 @@ declare var jQuery: any;
   encapsulation: ViewEncapsulation.None
 })
 export class SwitchButtonComponent implements OnInit {
-  @Input() value: DynamicBooleanModel;
+  @Input() value: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   @Input() dashboardSection: DashboardSectionModel;
   @Input() parameters:any;
   @Input() inline:boolean = false;
   @Input() defaultSizes:DashboardSizes = new DashboardSizes();
+  @Input() parent:any;
   state:boolean = false
   private valueSubscription: any;
   private width:string;
@@ -26,18 +27,20 @@ export class SwitchButtonComponent implements OnInit {
   constructor(private kerviService: KerviService, private elementRef: ElementRef) { }
 
   public press() {
-     this.kerviService.spine.sendCommand(this.value.command, true);
+    this.parent.press()
+     //this.kerviService.spine.sendCommand(this.value.command, true);
   }
 
   public release() {
-     this.kerviService.spine.sendCommand(this.value.command, false);
+    this.parent.release() 
+    //this.kerviService.spine.sendCommand(this.value.command, false);
   }
 
   ngOnInit() {
     var self = this;
 
     if (!this.parameters){
-      this.parameters = this.value.ui;
+    //  this.parameters = this.value.ui;
 
     if (!self.parameters.buttonWidth)
       this.width = this.defaultSizes.switchWidth;
@@ -60,7 +63,7 @@ export class SwitchButtonComponent implements OnInit {
     onText+= this.parameters && this.parameters.onText ? this.parameters.onText : ""; 
     offText+= this.parameters && this.parameters.offText ? this.parameters.offText : ""; 
 
-    self.valueSubscription = self.value.value$.subscribe(function (v) {
+    self.valueSubscription = self.value.subscribe(function (v) {
       self.state = v;
       if (v)
         jQuery('input', self.elementRef.nativeElement).bootstrapToggle('on')
@@ -80,17 +83,18 @@ export class SwitchButtonComponent implements OnInit {
           "height":self.height
         })
 
-        if (self.value.value$.value)
+        if (self.value.value)
           jQuery('input', self.elementRef.nativeElement).bootstrapToggle('on')
         else
           jQuery('input', self.elementRef.nativeElement).bootstrapToggle('off')
 
         jQuery('input', self.elementRef.nativeElement).change(function () {
           var state = jQuery('input', self.elementRef.nativeElement).prop('checked');
-          if (state && !self.value.value$.value)
-            self.kerviService.spine.sendCommand(self.value.command, true);
-          else if (!state && self.value.value$.value)
-            self.kerviService.spine.sendCommand(self.value.command, false);
+          console.log("z", state, self.value.value);
+          if (state && !self.value.value)
+            self.press()
+          else if (!state && self.value.value)
+            self.release();
         });
       
     }, 0);

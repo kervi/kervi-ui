@@ -6,6 +6,8 @@ import { DynamicBooleanModel, DynamicRange, DynamicRangeType  } from '../../mode
 import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model';
 import { KerviService } from '../../kervi.service';
 import { TemplateService } from '../../template.service';
+import { BehaviorSubject } from 'rxjs/Rx';
+
 declare var jQuery:any;
 //declare var Chart:any;
 @Component({
@@ -16,12 +18,13 @@ declare var jQuery:any;
 })
 
 export class ButtonComponent implements OnInit {
-  @Input() value: DynamicBooleanModel = null;
+  @Input() value: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   @Input() parameters: any = null;
   @Input() type: string;
   @Input() size:number;
   @Input() inline:boolean = false;
   @Input() defaultSizes:DashboardSizes = new DashboardSizes();
+  @Input() parent:any; 
   private width:string;
   private height:string;
   //private  unitSize:number = 150;
@@ -64,10 +67,12 @@ export class ButtonComponent implements OnInit {
   }
 
   public press() {
-    this.kerviService.spine.sendCommand(this.value.command, true);
+    this.parent.press();
+    //this.kerviService.spine.sendCommand(this.value.command, true);
   }
 
   public release() {
-    this.kerviService.spine.sendCommand(this.value.command, false);
+    this.parent.release();
+    //this.kerviService.spine.sendCommand(this.value.command, false);
   }
 }

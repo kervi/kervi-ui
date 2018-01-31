@@ -8,6 +8,7 @@ import { SwitchButtonComponent} from './switch-button/switch-button.component'
 import { ButtonComponent} from './button/button.component'
 import { CamViewerComponent } from './cam-viewer/cam-viewer.component'
 import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component' 
+import { ActionComponent } from './action/action.component' 
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component'
     SwitchButtonComponent,
     ButtonComponent,
     CamViewerComponent,
-    MPEGViewerComponent
+    MPEGViewerComponent,
+    ActionComponent
   ],
   exports:[
       SparklineComponent,
@@ -27,7 +29,8 @@ import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component'
       ChartComponent,
       SwitchButtonComponent,
       ButtonComponent,
-      CamViewerComponent
+      CamViewerComponent,
+      ActionComponent
   ],
   imports: [
     CommonModule

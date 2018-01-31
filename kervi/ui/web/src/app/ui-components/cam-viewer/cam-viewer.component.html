@@ -12,6 +12,11 @@
 			</fieldset>
 		</div>
 	</div>
+	<div>
+		<ng-container  *ngFor="let component of actions">
+			<kervi-action *ngIf="component.visible" [dashboardSection]="dashboardSection" [action]="component" ></kervi-action>
+		</ng-container>
+	</div>
 </ng-container>
 
 <ng-container *ngIf="!isBackground">
@@ -27,5 +32,6 @@
 				pan : <input id="cam-servo-pan" name="x" value="0"> tilt : <input id="cam-servo-tilt" name="y" value="0">
 			</fieldset>
 		</div>
+		
 	</div>
 </ng-container>

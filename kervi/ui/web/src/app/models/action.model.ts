@@ -9,6 +9,8 @@ export class ActionModel implements IComponent {
     public id: string = null;
     public name: string = null;
     public componentType = "action";
+    public runCommand:string = "";
+    public interuptCommand:string = "";
     public ui:any = {}
     public type: string = null;
     public visible: boolean = true;
@@ -25,5 +27,8 @@ export class ActionModel implements IComponent {
         this.visible=message.visible;
         this.dashboards=message.dashboards;
         this.type=message.type;
+        this.runCommand = message.runCommand;
+        this.interuptCommand = message.interuptCommand;
+        this.running$.next(message.running);
     }
 }

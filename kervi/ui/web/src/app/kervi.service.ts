@@ -172,6 +172,7 @@ export class KerviService {
     console.log("ks", address);
     this.spine = new KerviSpine({
       address: address,
+      protocol: protocol,
       onOpen: this.onOpen,
       onClose:this.onClose,
       onAuthenticate:this.onAuthenticate,
