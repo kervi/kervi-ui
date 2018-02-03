@@ -25,7 +25,8 @@ export class ActionComponent implements OnInit {
     private size:number = 0;
     private unitSize:number=150;
     private state: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    
+    private actionParameters: any = null;
+    private interuptParameters:any = null;
 	displayType:string="switch";
   constructor(private kerviService:KerviService, private templateService:TemplateService ) { 
     
@@ -58,12 +59,18 @@ export class ActionComponent implements OnInit {
 
   public press() {
     if (!this.action.running$.value)
-        this.kerviService.spine.sendCommand(this.action.runCommand, ...this.parameters.actionParameters);
+        if (this.parameters.actionParameters)
+            this.kerviService.spine.sendCommand(this.action.runCommand, ...this.parameters.actionParameters);
+        else
+            this.kerviService.spine.sendCommand(this.action.runCommand);
   }
 
   public release() {
     if (this.action.running$.value)
-        this.kerviService.spine.sendCommand(this.action.interuptCommand, ...this.parameters.interuptParameters);    
+        if (this.parameters.interuptParameters)
+            this.kerviService.spine.sendCommand(this.action.interuptCommand, ...this.parameters.interuptParameters);    
+        else
+            this.kerviService.spine.sendCommand(this.action.interuptCommand);    
   }
   
 }

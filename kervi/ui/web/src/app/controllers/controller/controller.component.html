@@ -12,7 +12,6 @@
     <ng-container *ngIf="component.visible">
       <ng-container [ngSwitch]="component.type">
         <ng-template ngSwitchCase="dynamic-number">
-          <dynamic-value [dashboardSection]="dashboardSection" [value]="component"></dynamic-value>
           <kervi-action [dashboardSection]="dashboardSection" [action]="component" ></kervi-action>
         </ng-template>
       </ng-container>

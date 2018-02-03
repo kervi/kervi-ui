@@ -82,7 +82,6 @@ export class  KerviSpine{
 		if(message.args && message.args.length){
 			value=message.args[0];
 		}
-		
 		for(var n=0;(n<this.eventHandlers.length);n++)
 		{
 			var h=this.eventHandlers[n];

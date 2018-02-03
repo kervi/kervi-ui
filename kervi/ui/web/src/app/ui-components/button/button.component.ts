@@ -67,6 +67,7 @@ export class ButtonComponent implements OnInit {
   }
 
   public press() {
+    console.log("x")
     this.parent.press();
     //this.kerviService.spine.sendCommand(this.value.command, true);
   }

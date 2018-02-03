@@ -81,8 +81,7 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
                 messages.unshift(new DashboardMessageModel(this));
                 if (messages.length>self.section.parameters.logLength)
                     messages.pop();
-
-                 self.messages$.next(messages);   
+                self.messages$.next(messages);   
             });
         }
 
