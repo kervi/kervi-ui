@@ -22,15 +22,15 @@ export class ComponentFactory{
                 component = new SensorModel(message);
             else if (message.componentType=="controller")
                 component = new ControllerModel(message);
-            else if (message.componentType == "dynamic-boolean")
+            else if (message.componentType == "boolean-value")
                 component = new DynamicValues.DynamicBooleanModel(message);
-            else if (message.componentType == "dynamic-number")
+            else if (message.componentType == "number-value")
                 component = new DynamicValues.DynamicNumberModel(message);
-            else if (message.componentType == "dynamic-string")
+            else if (message.componentType == "string-value")
                 component = new DynamicValues.DynamicStringModel(message);
-            else if (message.componentType == "dynamic-enum")
+            else if (message.componentType == "enum-value")
                 component = new DynamicValues.DynamicEnumModel(message);
-            else if (message.componentType == "dynamic-datetime")
+            else if (message.componentType == "datetime-value")
                 component = new DynamicValues.DynamicDateTimeModel(message);
             
             if (component)

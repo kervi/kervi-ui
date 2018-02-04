@@ -39,7 +39,7 @@ export class KerviService {
 
      var s1=this.IPCReady$.subscribe(function(connected){
         if (connected){
-          self.spine.addEventHandler("dynamicValueChanged","",function(id, value){
+          self.spine.addEventHandler("valueChanged","",function(id, value){
             for (let component of self.components){
               if (component.id==value.id){
                 if (component.componentType == "sensor"){
