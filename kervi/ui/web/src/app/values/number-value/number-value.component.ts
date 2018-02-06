@@ -22,6 +22,7 @@ export class DynamicNumberComponent implements OnInit {
 	private size:number = 0;
 	private unitSize:number=150;
 	private inSlide:boolean=false;
+	private numberFormat = "1.2-2"
 	@Input() defaultSizes:DashboardSizes = new DashboardSizes();
 
 	displayType:string="";
@@ -45,6 +46,8 @@ export class DynamicNumberComponent implements OnInit {
       		this.parameters = this.input.ui;
 
 		if (this.parameters){
+			this.numberFormat = this.parameters.minIntegerDigits + "." + this.parameters.minFractionDigits + "-" + this.parameters.maxFractionDigits
+			
 			if (this.parameters.type){
 				if (this.gaugeTypes.indexOf(this.parameters.type) > -1 ){
 					this.displayType = "gauge";
