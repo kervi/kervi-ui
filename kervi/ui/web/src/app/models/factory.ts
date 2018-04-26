@@ -14,13 +14,15 @@ export class ComponentFactory{
             }
         } else {
             var component:any=null;
+            var subComponents:any[] = [];
             if (message.componentType=="KerviAction")
                 component = new ActionModel(message);
             else if (message.componentType=="dashboard")
                 component = new DashboardModel(message);
-            else if (message.componentType=="sensor")
+            else if (message.componentType=="sensor"){
                 component = new SensorModel(message);
-            else if (message.componentType=="controller")
+                subComponents = component.subSensors;
+            }else if (message.componentType=="controller")
                 component = new ControllerModel(message);
             else if (message.componentType == "boolean-value")
                 component = new DynamicValues.DynamicBooleanModel(message);
@@ -35,6 +37,12 @@ export class ComponentFactory{
             
             if (component)
                 result.push(component);
+            
+            if (subComponents){
+                for(let subComponent of subComponents){
+                    result.push(subComponent);
+                }
+            }
         }
         return result;    
     }

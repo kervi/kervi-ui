@@ -141,7 +141,9 @@ export class  KerviSpine{
 		var self=this
 		this.isConnected=true;
 		
-			
+		this.eventHandlers = [];
+		this.commandHandlers = [];
+		this.queryHandlers = [];	
 		console.log("Kervi spine ready")
 	}
 
