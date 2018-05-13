@@ -47,7 +47,21 @@ export class DynamicNumberComponent implements OnInit {
 
 		if (this.parameters){
 			this.numberFormat = this.parameters.minIntegerDigits + "." + this.parameters.minFractionDigits + "-" + this.parameters.maxFractionDigits
-			
+			if (!this.parameters.valueIcon)
+				this.currentIcon = null;
+			else if (typeof(this.parameters.valueIcon) == "string" )
+				this.currentIcon = this.parameters.valueIcon;
+			else {
+				this.input.value$.subscribe(function(v){
+					for(let iconSection of self.parameters.valueIcon){
+						if (v >= iconSection.range[0] && v <= iconSection.range[1]){
+							self.currentIcon = iconSection.icon;
+							break;
+						}
+					}
+				})
+			}		
+
 			if (this.parameters.type){
 				if (this.gaugeTypes.indexOf(this.parameters.type) > -1 ){
 					this.displayType = "gauge";
