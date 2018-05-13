@@ -62,7 +62,7 @@
             <tbody>
                 <tr *ngFor="let message of messages$ | async">
                     <td>
-                        <span *ngIf="message.level<3" class="alert" [ngClass]="{'text-danger': message.level==1, 'text-warning': message.level==2}" >&#11044;</span>
+                        <span *ngIf="message.level<=3" class="alert" [ngClass]="{'text-danger': message.level==1, 'text-warning': message.level==2, 'text-normal': message.level==3}" >&#11044;</span>
                     </td>
                     <td>{{message.timestamp | date: 'HH:mm:ss'}}</td>
                     <td>{{message.sourceName}}</td>
