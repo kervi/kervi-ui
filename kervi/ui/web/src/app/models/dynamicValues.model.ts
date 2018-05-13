@@ -1,6 +1,6 @@
 // Copyright (c) 2016, Tim Wentzlau
 // Licensed under MIT
-import { IComponent } from "./IComponent.model"
+import { IComponent, DashboardLink } from "./IComponent.model"
 import { ComponentRef } from "./ComponentRef"
 import { BehaviorSubject } from 'rxjs/Rx';
 //import { ControllersFactory } from './factory' 
@@ -48,7 +48,7 @@ export class DynamicEnumModel implements IComponent{
     public visible: boolean;
     public ui:any = {}
     public id: string;
-    public dashboards: string[] = [];
+    public dashboards: DashboardLink[] = [];
     public type:string;
     public command:string;
     public options:DynamicEnumOptionModel[] = [];
@@ -64,6 +64,10 @@ export class DynamicEnumModel implements IComponent{
        
         for (let option of message.options){
             this.options.push( new DynamicEnumOptionModel(option)); 
+        }
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
         }
     }
 
@@ -95,7 +99,7 @@ export class DynamicNumberModel implements IComponent {
     public isInput:boolean;
     public type: string;
     public visible: boolean;
-    public dashboards: string[] = [];
+    public dashboards: DashboardLink[] = [];
     public orientation: string;
     public unit: string;
     public valueTS:Date;
@@ -134,6 +138,10 @@ export class DynamicNumberModel implements IComponent {
         for (var range of message.ranges){
             this.ranges.push(new DynamicRange(range));
         }
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
+        }
     }
 
     updateReferences(){};
@@ -145,7 +153,7 @@ export class DynamicStringModel implements IComponent {
     public componentType = "DynamicValue"
     public type: string;
     public visible: boolean;
-    public dashboards: string[] = [];
+    public dashboards: DashboardLink[] = [];
     public orientation: string;
     public unit: string;
     public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -175,6 +183,10 @@ export class DynamicStringModel implements IComponent {
             if (this.ui[prop] != undefined)
                 this.ui[prop] = message.ui[prop];
         }
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
+        }
     }
 
     updateReferences(){};
@@ -189,7 +201,7 @@ export class DynamicBooleanModel implements IComponent {
     public ui:any = {}
     public type: string;
     public visible: boolean;
-    public dashboards: string[] = [];
+    public dashboards: DashboardLink[] = [];
     public command: string;
     public valueTS:Date;
     public value$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -203,6 +215,10 @@ export class DynamicBooleanModel implements IComponent {
         this.visible = message.visible;
         this.command = message.command;
         this.value$.next(message.value);
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
+        }
 
     }
 
@@ -245,7 +261,7 @@ export class DynamicDateTimeModel implements IComponent {
     public name: string;
     public componentType = "DynamicValue"
     public ui:any = {}
-    public dashboards: string[] = [];
+    public dashboards: DashboardLink[] = [];
     public type: string;
     public visible: boolean;
     public subType: string;
@@ -261,6 +277,10 @@ export class DynamicDateTimeModel implements IComponent {
         this.subType = message.inputType;
         this.value$.next(message.value);
         this.changeCommand = message.command;
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
+        }
     }
 
     updateReferences(){};

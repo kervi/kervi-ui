@@ -1,6 +1,6 @@
 // Copyright (c) 2016, Tim Wentzlau
 // Licensed under MIT
-import { IComponent } from "./IComponent.model"
+import { IComponent, DashboardLink } from "./IComponent.model"
 import { ComponentRef } from "./ComponentRef"
 import { BehaviorSubject } from 'rxjs/Rx';
 //import { ControllersFactory } from './factory' 
@@ -19,7 +19,7 @@ export class ControllerModel implements IComponent {
     public inputReferences: ComponentRef[] = [];
     public outputReferences: ComponentRef[] = [];
     public actionsReferences: ComponentRef[] = [];
-    public dashboards: string[];
+    public dashboards: DashboardLink[]=[];
     public template:string;
 
     constructor(message: any) {
@@ -28,7 +28,6 @@ export class ControllerModel implements IComponent {
         this.type = message.type;
         this.ui = message.ui;
         this.visible = message.visible;
-        this.dashboards = message.dashboards;
         this.parameters = message.parameters;
         this.template=message.template;
         for(var ref of message.inputs){
@@ -41,6 +40,10 @@ export class ControllerModel implements IComponent {
 
         for(var ref of message.actions){
             this.actionsReferences.push( new ComponentRef(ref));
+        }
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
         }
     }
 
