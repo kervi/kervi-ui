@@ -265,7 +265,7 @@ export class  KerviSpine{
 		else
 			this.eventHandlers.push({"eventName":eventName,callback:callback});
 		var cmd={id:this.messageId++,"messageType":"registerEventHandler","event":eventName,"eventId":id};
-		console.log("add event handler",cmd);
+		//console.log("add event handler",cmd);
 		this.websocket.send(JSON.stringify(cmd));
 	};
 
@@ -310,7 +310,7 @@ export class  KerviSpine{
 		 
 		var cmd={id:this.messageId++,"messageType":"query","query":query,"args":args};
 		this.addRPCCallback(cmd.id.toString(),callback);
-		console.log("sendQuery",p,this,callback,cmd);
+		console.log("sendQuery", callback,cmd);
 		this.websocket.send(JSON.stringify(cmd));
 	};
 

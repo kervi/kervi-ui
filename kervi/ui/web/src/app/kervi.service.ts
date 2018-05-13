@@ -89,12 +89,12 @@ export class KerviService {
 
         self.spine.addEventHandler("userLogMessage", null, function(v){
           var messages = self.logMessages$.value
-          console.log("lm", this);
+          //console.log("lm", this);
           messages.unshift(new DashboardMessageModel(this));
           if (messages.length>10)
               messages.pop();
           self.logMessages$.next(messages);   
-      });
+       });
 
       }
     });
