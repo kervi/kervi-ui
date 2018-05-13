@@ -22,6 +22,7 @@ export class CamViewerComponent implements OnInit {
   @Input() defaultSizes:DashboardSizes = new DashboardSizes();
   camera$: BehaviorSubject<ControllerModel> = new BehaviorSubject<ControllerModel>(null);
   cameraSource$: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  cameraName$: BehaviorSubject<string> = new BehaviorSubject<string>("");
   padSize:number=180;
   private camSubscription: any;
   private currentCamSubscription: any;
@@ -47,6 +48,7 @@ export class CamViewerComponent implements OnInit {
         self.tiltSubscription.unsubscribe();
 
       if (v) {
+        self.cameraName$.next(v.name);
         self.actions = v.actions;
         var pan = null;
         var tilt = null;
@@ -234,5 +236,9 @@ export class CamViewerComponent implements OnInit {
         context.stroke();
       }
     }
+  }
+
+  private browsePress(){
+    
   }
 }
