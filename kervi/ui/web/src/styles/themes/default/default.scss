@@ -124,6 +124,10 @@ $border-radius-base: .25rem;
 	}
 }
 
+.text-normal{
+  color:rgba(85, 180, 85, .5);
+}
+
 .number-gauge-template{
 	color: theme-color("primary");
 	border: 1px solid $gray-lightest
@@ -132,6 +136,8 @@ $border-radius-base: .25rem;
 .sensor-template{
 	background:rgba(128,128,128,0);
 	color:#ff0000;
+
+  
 
 	.sensor-warning{
 		color:rgba(255, 166, 24, .5);
@@ -319,7 +325,8 @@ kervi-sensor:last-child .block-component{
 
 @media only screen {
     @import "./components/switch/toggle.scss";
-	@import "./components/slider/slider.scss";
+  @import "./components/slider/slider.scss";
+ 
  //   @import "./components/switch/candy";
   
 }
