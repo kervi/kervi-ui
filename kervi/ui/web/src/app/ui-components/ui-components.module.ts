@@ -8,6 +8,7 @@ import { SwitchButtonComponent} from './switch-button/switch-button.component'
 import { ButtonComponent} from './button/button.component'
 import { CamViewerComponent } from './cam-viewer/cam-viewer.component'
 import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component' 
+import { ImageViewerComponent } from './image-viewer/image-viewer.component' 
 import { ActionComponent } from './action/action.component' 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { ActionComponent } from './action/action.component'
     ButtonComponent,
     CamViewerComponent,
     MPEGViewerComponent,
+    ImageViewerComponent,
     ActionComponent
   ],
   exports:[
