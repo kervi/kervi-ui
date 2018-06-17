@@ -30,7 +30,6 @@ export class DynamicRange{
 export class DynamicEnumOptionModel{
     public value:string;
     public text:string;
-    public selected:boolean;
     public selected$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(messageOption:any){
@@ -44,7 +43,7 @@ export class DynamicEnumOptionModel{
 
 export class DynamicEnumModel implements IComponent{
     public name: string;
-    public componentType = "dynamicValue"
+    public componentType = "DynamicValue"
     public visible: boolean;
     public ui:any = {}
     public id: string;
@@ -52,23 +51,31 @@ export class DynamicEnumModel implements IComponent{
     public type:string;
     public command:string;
     public options:DynamicEnumOptionModel[] = [];
+    public lastSelected$:BehaviorSubject<DynamicEnumOptionModel> = new BehaviorSubject<DynamicEnumOptionModel>(null); 
+    public value$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
     
     constructor (message:any){
+        var self = this;
         this.name =message.name;
         this.id = message.id;
         this.visible = message.visible;
         this.ui = message.ui;
         this.type = message.componentType;
         this.command = message.command;
-        this.options = [] 
+        this.options = []
+        this.value$.next(message.value);
        
         for (let option of message.options){
-            this.options.push( new DynamicEnumOptionModel(option)); 
+            this.options.push( new DynamicEnumOptionModel(option) );
         }
 
         for (let dashboardLink of message.dashboardLinks){
             this.dashboards.push( new DashboardLink(this, dashboardLink)); 
         }
+        this.selectOptions(this.value$.value);
+        this.value$.subscribe(function(v){
+            self.selectOptions(v);
+        });
     }
 
     updateReferences(){};
@@ -76,17 +83,20 @@ export class DynamicEnumModel implements IComponent{
 
     public selectOptions(selectedOptions:any){
         console.log("soc");
+        if (!selectedOptions)
+            return;
         for (let option of this.options){
             option.selected$.next(false);
         }
         for (let selectedOption of selectedOptions){
-            if (selectedOption.selected){
-                for(let option of this.options){
-                    if (option.value == selectedOption.value){
-                        option.selected$.next(true);
-                        console.log("os",option.selected$.value);
-                    }
-
+            console.log("so", selectedOption)
+            for(let option of this.options){
+                console.log("sox", option )
+                if (option.value == selectedOption){
+                    option.selected$.next(true);
+                    this.lastSelected$.next(option);
+                    console.log("os", option.text, option.selected$.value);
+                    break;
                 }
             }
         }
@@ -152,6 +162,7 @@ export class DynamicStringModel implements IComponent {
     public name: string;
     public componentType = "DynamicValue"
     public type: string;
+    public isInput:boolean;
     public visible: boolean;
     public dashboards: DashboardLink[] = [];
     public orientation: string;
@@ -169,6 +180,7 @@ export class DynamicStringModel implements IComponent {
     constructor(message: any) {
         this.name = message.name;
         this.type = message.componentType;
+        this.isInput = message.isInput;
         this.ui = message.ui;
         this.orientation = message.orientation;
         this.visible = message.visible;
@@ -259,13 +271,14 @@ export class DynamicBooleanModel implements IComponent {
 export class DynamicDateTimeModel implements IComponent {
     public id: string;
     public name: string;
-    public componentType = "DynamicValue"
+    public componentType = "DynamicValue";
+    public isInput:boolean;
     public ui:any = {}
     public dashboards: DashboardLink[] = [];
     public type: string;
     public visible: boolean;
     public subType: string;
-    public changeCommand: string;
+    public command: string;
     public value$: BehaviorSubject<Date> = new BehaviorSubject<Date>(null);
 
     constructor(message) {
@@ -273,10 +286,11 @@ export class DynamicDateTimeModel implements IComponent {
         this.name = message.name;
         this.type = message.componentType;
         this.ui = message.ui;
+        this.isInput = message.isInput;
         this.visible = message.visible;
         this.subType = message.inputType;
         this.value$.next(message.value);
-        this.changeCommand = message.command;
+        this.command = message.command;
 
         for (let dashboardLink of message.dashboardLinks){
             this.dashboards.push( new DashboardLink(this, dashboardLink)); 

@@ -24,8 +24,10 @@ export class DynamicStringComponent implements OnInit {
 	ngOnInit(){
 		var self=this;
 		if (!this.parameters)
-      		this.parameters = this.input.ui;
-		
+			  this.parameters = this.input.ui;
+			  
+		if (self.input.isInput){
+		}
 		this.input.value$.subscribe(function(v){
 			jQuery("input", self.elementRef.nativeElement).val(v).change();
 		})

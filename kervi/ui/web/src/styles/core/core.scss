@@ -3,8 +3,7 @@
 $fa-font-path: "~font-awesome/fonts";
 @import "../../../node_modules/font-awesome/scss/font-awesome.scss";
 @import "../../../node_modules/photoswipe/src/css/main.scss";
-
-
+@import "../components/tempusdominus-bootstrap-4.scss";
 html {
   position: relative;
   min-height: 100%;

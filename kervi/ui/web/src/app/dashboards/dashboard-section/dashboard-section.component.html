@@ -41,6 +41,7 @@
         </h4>
     </div>
     <div class="card-body" *ngIf="components.length>0" >
+        
         <ng-container *ngFor="let sectionComponent of components">
             <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
             <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>

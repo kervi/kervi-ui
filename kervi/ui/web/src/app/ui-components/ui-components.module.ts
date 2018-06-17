@@ -10,6 +10,7 @@ import { CamViewerComponent } from './cam-viewer/cam-viewer.component'
 import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component' 
 import { ImageViewerComponent } from './image-viewer/image-viewer.component' 
 import { ActionComponent } from './action/action.component' 
+import { DateTimeComponent } from './datetimepicker/datetimepicker.component' 
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ActionComponent } from './action/action.component'
     CamViewerComponent,
     MPEGViewerComponent,
     ImageViewerComponent,
-    ActionComponent
+    ActionComponent,
+    DateTimeComponent
   ],
   exports:[
       SparklineComponent,
@@ -32,7 +34,8 @@ import { ActionComponent } from './action/action.component'
       SwitchButtonComponent,
       ButtonComponent,
       CamViewerComponent,
-      ActionComponent
+      ActionComponent,
+      DateTimeComponent
   ],
   imports: [
     CommonModule

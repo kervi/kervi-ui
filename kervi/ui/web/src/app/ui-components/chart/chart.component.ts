@@ -76,9 +76,14 @@ export class ChartComponent implements OnInit {
             datasets: [
               {
                 data: self.chartData,
-                fill: true,
-                lineTension: 0.1,
-            //backgroundColor: "rgba(75,192,192,0.4)",
+                fill: self.parameters.chartFill,
+                //lineTension: 0.5,
+                //borderColor: self.color("border-color",".sensor-chart"),
+                pointBorderWidth: 1,
+                pointRadius: self.parameters.chartPoint,
+                //backgroundColor: "rgba(75,192,192,0.1)",
+                borderColor: "rgba(0,0,0,0.1)",
+                borderWidth:3
             /*borderColor: self.color("border-color",".sensor-chart"),
             borderCapStyle: 'butt',
             borderDash: [],
@@ -98,19 +103,19 @@ export class ChartComponent implements OnInit {
           },
           options: {
             responsive: true,
-            maintainAspectRatio: true,
+            //maintainAspectRatio: true,
             pan: {
-              enabled: true,
+              enabled: false,
               mode: 'xy'
               
             },
             zoom: {
-              enabled: true,
+              enabled: false,
               
               mode: 'xy'
             },
             title: {
-              display: self.parameters.label!=null,
+              display: false,//self.parameters.label!=null,
               //text: self.parameters.label
             },
             elements:{
@@ -124,8 +129,8 @@ export class ChartComponent implements OnInit {
             scales: {
               xAxes: [{
                 gridLines:{
-                  color:"rgba(255,255,255,0.5)",
-                  zeroLineColor:"rgba(255,255,255,0.5)"
+                  //color:"rgba(255,255,255,0.7)",
+                  //zeroLineColor:"rgba(255,255,255,0.5)"
                 },
                 type: "time",
                 unit:'second',
@@ -155,15 +160,15 @@ export class ChartComponent implements OnInit {
               }],
               yAxes: [{
                 ticks: {
-                    fontColor: "white",
-                    max: self.value.maxValue,
-                    min: self.value.minValue,
+                    //fontColor: "white",
+                    //max: self.value.maxValue,
+                    //min: self.value.minValue,
                     //fontSize: 18,
                     //stepSize: 1,
                     //beginAtZero:true
                 },
                 gridLines:{
-                  color:"rgba(255,255,255,0.5)",
+                  //color:"rgba(255,255,255,0.5)",
                   zeroLineColor:"rgba(255,255,255,0.5)"
                 },
                 display: self.parameters.chartGrid,
