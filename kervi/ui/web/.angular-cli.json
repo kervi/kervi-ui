@@ -36,8 +36,8 @@
         "../node_modules/hammerjs/hammer.js",
         "../node_modules/chartjs-plugin-zoom/chartjs-plugin-zoom.js",
         "../node_modules/photoswipe/dist/photoswipe.js",
-        "../node_modules/photoswipe/dist/photoswipe-ui-default.js"
-        
+        "../node_modules/photoswipe/dist/photoswipe-ui-default.js",
+        "../node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
