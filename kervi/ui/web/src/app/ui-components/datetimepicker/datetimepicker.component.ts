@@ -7,7 +7,7 @@ import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.mo
 import { KerviService } from '../../kervi.service';
 import { TemplateService } from '../../template.service';
 import { BehaviorSubject } from 'rxjs/Rx';
-
+declare var moment;
 declare var jQuery:any;
 //declare var Chart:any;
 @Component({
@@ -56,36 +56,35 @@ export class DateTimeComponent implements OnInit {
     }
     if (self.value.value)
       self.datetimevalue = self.value.value.toLocaleString();
-    this.value.subscribe(function(v){
-      console.log("dvl", v);
-      if (v){
-        self.datetimevalue = v.toLocaleString();
-      }
-    })
+    
     setTimeout(function(){
-      console.log("dp", self.parent.value.id);
-      var options = {};
+      var mdate = moment(self.value.value);
+      console.log("dp", self.parent.value.id, self.value.value, mdate.toDate());
+      var options = {
+        date:moment(self.value.value).toDate(),
+        buttons:{
+          showToday: true,
+          showClear:true,
+          showClose:true
+        }
+      };
       if (self.parameters.type=="time")
         options["format"] = self.kerviService.application$.value.display.datetime.time;
       else if (self.parameters.type=="date")
         options["format"] = self.kerviService.application$.value.display.datetime.date;
       else
-      options["format"] = self.kerviService.application$.value.display.datetime.datetime;
+        options["format"] = self.kerviService.application$.value.display.datetime.datetime;
       jQuery('.date', self.elementRef.nativeElement).datetimepicker(options);
       jQuery('.date', self.elementRef.nativeElement).on("change.datetimepicker", function(e){
         self.parent.change(e);
       })
+      self.value.subscribe(function(v){
+        console.log("dvl", v);
+        if (v){
+          jQuery('.date', self.elementRef.nativeElement).data("datetimepicker").date(moment(v).toDate());
+        }
+      })
     },0);
   }
 
-  public press() {
-    console.log("x")
-    //this.parent.press();
-    //this.kerviService.spine.sendCommand(this.value.command, true);
-  }
-
-  public release() {
-    //this.parent.release();
-    //this.kerviService.spine.sendCommand(this.value.command, false);
-  }
 }

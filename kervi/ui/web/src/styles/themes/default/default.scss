@@ -95,6 +95,10 @@ $body-bg:    #2d882d !default;
 $body-color: #fff !default;
 $border-radius-base: .25rem;
 
+.form-group{
+  margin-bottom:0 !important;
+}
+
 .btn{
   overflow:hidden;
   font-size:.7rem !important;
