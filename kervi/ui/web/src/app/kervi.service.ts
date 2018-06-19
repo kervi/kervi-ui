@@ -256,13 +256,13 @@ export class KerviService {
     var self=this;
     
     this.doAuthenticate = this.spine.doAuthenticate;
-    this.spine.sendQuery("GetApplicationInfo",function(message){
-		  console.log("appinfo",message);
-		  this.spine.sendQuery("getComponentInfo",function(message){
+    this.spine.sendQuery("GetApplicationInfo",function(appInfo){
+      console.log("appinfo",appInfo);
+      this.spine.sendQuery("getComponentInfo",function(message){
         console.log("component info",message);
+        self.application$.next(appInfo);
         self.components = ComponentFactory.createComponents(message);
         self.components$.next(self.components);
-        self.application$.next(message);
         self.connected$.next(true);
         //self.inAuthentication$.next(false);
         console.log("components",self.components); 
