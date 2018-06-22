@@ -65,7 +65,8 @@ export class DynamicDateTimeComponent implements OnInit {
 
 	public change(value) {
 		var time = moment.utc(value.date).format()
-		console.log("dtvc", value.date, time) 
+		
+		console.log("dtvc", value.date,  time) 
 		this.kerviService.spine.sendCommand(this.value.command, time);
 	}
 	

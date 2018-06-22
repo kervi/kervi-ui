@@ -69,11 +69,11 @@ export class DateTimeComponent implements OnInit {
         }
       };
       if (self.parameters.type=="time")
-        options["format"] = self.kerviService.application$.value.display.datetime.time;
+        options["format"] = self.kerviService.application$.value.display.unit_system.datetime.time;
       else if (self.parameters.type=="date")
-        options["format"] = self.kerviService.application$.value.display.datetime.date;
+        options["format"] = self.kerviService.application$.value.display.unit_system.datetime.date;
       else
-        options["format"] = self.kerviService.application$.value.display.datetime.datetime;
+        options["format"] = self.kerviService.application$.value.display.unit_system.datetime.datetime;
       jQuery('.date', self.elementRef.nativeElement).datetimepicker(options);
       jQuery('.date', self.elementRef.nativeElement).on("change.datetimepicker", function(e){
         self.parent.change(e);
