@@ -1,4 +1,4 @@
-$white:  #fff !default;
+$white:  #fafff8 !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default;
@@ -16,13 +16,13 @@ $grays: (
   300: $gray-300,
   400: $gray-400,
   500: $gray-500,
-  600: $gray-600,
+  600: #5d765d,
   700: $gray-700,
   800: $gray-800,
   900: $gray-900
 ) !default;
 
-$blue:    #007bff !default;
+$blue:    #116611 !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
 $pink:    #e83e8c !default;
@@ -79,8 +79,9 @@ $input-group-addon-color:  #fff;
 $input-group-addon-bg:           #116611;// $gray-lighter !default;
 $input-group-addon-border-color: #116611;// !default;
 
-$card-cap-bg:              #004400 !default;
+$card-cap-bg:              rgba(6,19,3,.57) !default;
 $card-bg:                  #88cc88 !default;
+$card-border-width: 0px;
 
 $card-link-hover-color:    #fff !default;
 
@@ -91,9 +92,9 @@ $navbar-light-hover-color:          rgba(0,0,0,.7) !default;
 $navbar-light-active-color:         rgba(0,0,0,.9) !default;
 $navbar-light-disabled-color:       rgba(0,0,0,.3) !default;
 
-$body-bg:    #2d882d !default;
-$body-color: #fff !default;
-$border-radius-base: .25rem;
+$body-bg:    #011001 !default;
+$body-color: #67b16b !default;
+$border-radius-base: .15rem;
 
 .form-group{
   margin-bottom:0 !important;
@@ -214,6 +215,7 @@ $border-radius-base: .25rem;
 
 .navbar-nav>li, .navbar-nav {
   float: left !important;
+  color:#fafff8;
 }
 
 .block-component{
@@ -292,6 +294,7 @@ kervi-sensor:last-child .block-component{
   margin-bottom:10px;
   .card-header{
     padding: .5rem 1rem;
+    color:#fff !important;
   }
 
   h4{
@@ -300,6 +303,7 @@ kervi-sensor:last-child .block-component{
   }
   .card-body{
     width:100%;
+    color:#fafff8;
   }
 }
 
