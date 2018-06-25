@@ -26,8 +26,8 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     showHeader:boolean = false;
     expanded:boolean = false;
     title:string;
-    components:Component[]=[];
-    headerComponents: Component[] = [];
+    components:any[]=[];
+    headerComponents: any[] = [];
     //messages: DashboardMessageModel[] = [];
     messages$: Observable<DashboardMessageModel[]> = null;
     //sectionComponents:IComponent[] = []
