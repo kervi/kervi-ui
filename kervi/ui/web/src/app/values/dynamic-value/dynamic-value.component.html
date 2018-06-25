@@ -1,4 +1,3 @@
-
 <ng-container [ngSwitch]="value.type">
     <ng-template ngSwitchCase="number-value">
         <dynamic-value-number [defaultSizes]="defaultSizes" [parameters]="parameters" [dashboardSection]="dashboardSection" [inline]="inline" [input]="value"></dynamic-value-number>
@@ -8,5 +7,11 @@
     </ng-template>
     <ng-template ngSwitchCase="string-value">
         <dynamic-value-string [defaultSizes]="defaultSizes" [parameters]="parameters" [dashboardSection]="dashboardSection" [inline]="inline" [input]="value"></dynamic-value-string>
+    </ng-template>
+    <ng-template ngSwitchCase="enum-value">
+        <dynamic-value-enum [defaultSizes]="defaultSizes" [parameters]="parameters" [dashboardSection]="dashboardSection" [inline]="inline" [input]="value"></dynamic-value-enum>
+    </ng-template>
+    <ng-template ngSwitchCase="datetime-value">
+        <dynamic-value-datetime [defaultSizes]="defaultSizes" [parameters]="parameters" [dashboardSection]="dashboardSection" [inline]="inline" [value]="value"></dynamic-value-datetime>
     </ng-template>
 </ng-container>

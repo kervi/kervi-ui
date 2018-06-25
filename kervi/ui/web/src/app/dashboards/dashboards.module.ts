@@ -28,7 +28,7 @@ import { UIComponentsModule} from '../ui-components/ui-components.module'
     DashboardSectionComponent,
     ValuesModule
   ],
-  providers: [ DashboardsService, /*DashboardDynamicTypeBuilder,COMPILER_PROVIDERS*/ ],
+  providers: [ DashboardsService, /*DashboardDynamicTypeBuilder*/ ],
   declarations: [
     DashboardComponent,
     PageHeaderComponent,

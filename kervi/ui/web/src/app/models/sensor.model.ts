@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { BehaviorSubject } from 'rxjs/Rx';
-import { IComponent } from './IComponent.model'
+import { IComponent, DashboardLink } from './IComponent.model'
 import { DynamicNumberModel } from './dynamicValues.model'
 
 export class SensorModel implements IComponent {
@@ -14,7 +14,7 @@ export class SensorModel implements IComponent {
     public type: string = null;
     public visible: boolean = true;
     public value:DynamicNumberModel = null;
-    public dashboards: string[] = [];
+    public dashboards: DashboardLink[] = [];
     
     updateReferences(){};
     reload(component:IComponent){};
@@ -24,11 +24,14 @@ export class SensorModel implements IComponent {
         this.name=message.name;
         this.ui=message.ui;
         this.visible=message.visible;
-        this.dashboards=message.dashboards;
         this.value = new DynamicNumberModel(message);
         this.type=message.type;
         for(var subSensor of message.subSensors){
             this.subSensors.push(new SensorModel(subSensor));
+        }
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push(new DashboardLink(this, dashboardLink)); 
         }
     }
 }

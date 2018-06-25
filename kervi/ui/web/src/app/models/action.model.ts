@@ -2,7 +2,7 @@
 // Licensed under MIT
 
 import { BehaviorSubject } from 'rxjs/Rx';
-import { IComponent } from './IComponent.model'
+import { IComponent, DashboardLink } from './IComponent.model'
 import { DynamicNumberModel } from './dynamicValues.model'
 
 export class ActionModel implements IComponent {
@@ -14,7 +14,7 @@ export class ActionModel implements IComponent {
     public ui:any = {}
     public type: string = null;
     public visible: boolean = true;
-    public dashboards: string[] = [];
+    public dashboards: DashboardLink[] = [];
     public running$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     
     updateReferences(){};
@@ -25,10 +25,15 @@ export class ActionModel implements IComponent {
         this.name=message.name;
         this.ui=message.ui;
         this.visible=message.visible;
-        this.dashboards=message.dashboards;
         this.type=message.type;
         this.runCommand = message.runCommand;
         this.interuptCommand = message.interuptCommand;
         this.running$.next(message.running);
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push(new DashboardLink(this, dashboardLink)); 
+        }
     }
+
+    
 }

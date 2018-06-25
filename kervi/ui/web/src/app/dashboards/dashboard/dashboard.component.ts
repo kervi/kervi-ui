@@ -32,8 +32,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private padSize = 180;
   private moveLeftDelayTimer = null;
   private moveRightDelayTimer = null;
-  private showLeftPad = false
-  private showRightPad = false
+  private showLeftPad = false;
+  private showRightPad = false;
   private inLeftPadDrag:boolean = false;
   private inRightPadDrag:boolean = false;
   private autoZeroLeftPad:boolean = false;
@@ -132,8 +132,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         {
           this.dashboardSectionsHidden=true;
           this.showSectionController=true;
-          this.cameraId=this.dashboard.backgroundSection.components[0].componentId;
+          this.cameraId=this.dashboard.backgroundSection.components[0].component.id;
           this.cameraParameters=this.dashboard.backgroundSection.components[0].parameters;
+          console.log("cam", this.cameraId, this.cameraParameters);
         }
       }
 

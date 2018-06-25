@@ -1,7 +1,7 @@
 // Copyright (c) 2016, Tim Wentzlau
 // Licensed under MIT
 
-import { IComponent } from './IComponent.model'
+import { IComponent, DashboardLink } from './IComponent.model'
 
 
 export class DashboardSizes{
@@ -45,6 +45,7 @@ export class DashboardSectionComponentModel{
     constructor(private message: any){
         this.linkId = message.linkId;
         this.componentId = message.componentId;
+        this.component = message.component;
         this.parameters = message.parameters;
     }
 }
@@ -58,7 +59,7 @@ export class DashboardSectionParametersModel{
     public logLength:number = 5;
     
     constructor(messageParameters){
-        this.title=messageParameters.title;
+        this.title=messageParameters.label;
         this.height=messageParameters.height;
         this.width=messageParameters.width;
         this.userLog=messageParameters.userLog;
@@ -80,18 +81,17 @@ export class DashboardSectionModel{
     
     constructor (dashboard, messageSection){
         this.dashboard=dashboard;
-        
         this.id=messageSection.id;
         this.name=messageSection.name;
         this.type=messageSection.type;
         this.parameters=new DashboardSectionParametersModel(messageSection.uiParameters);
-        if (messageSection.components)
+        /*if (messageSection.components)
             for(var componentRef of messageSection.components){
                 this.components.push(new DashboardSectionComponentModel(componentRef))
-            }
+            }*/
         
         if (messageSection.panels){
-            console.log("spa",messageSection.panels);
+            //console.log("spa",messageSection.panels);
             for(var subMessageSection of messageSection.panels){
                 var section=new DashboardSectionModel(this, subMessageSection);
                 this.subSections.push(section);
@@ -153,6 +153,7 @@ export class DashboardModel implements IComponent{
     public isDefault:Boolean;
     public template:string;
     public sections:DashboardSectionModel[];
+    public sysSections:DashboardSectionModel[];
     public headerSection: DashboardSectionModel=null;
     public footerCenterSection: DashboardSectionModel=null;
     public footerLeftSection: DashboardSectionModel=null;
@@ -170,7 +171,7 @@ export class DashboardModel implements IComponent{
     //not used in dashboards
     public visible:boolean;
     public ui:any;
-    public dashboards:any;
+    public dashboards:any[] = [];
 
 
 
@@ -184,6 +185,7 @@ export class DashboardModel implements IComponent{
         this.unitSize=message.unitSize;
         //this.background=new DashboardBackgroundModel(message.background);
         this.sections=[];
+        this.sysSections=[];
         if (!this.template){
             var currentSection:DashboardSectionModel = null;
             for (let messageSection of message.sections){
@@ -191,7 +193,8 @@ export class DashboardModel implements IComponent{
                     console.log("dashboard with null section", this.id);
                     continue;
                 }
-                var section=new DashboardSectionModel(this, messageSection);
+                var section = new DashboardSectionModel(this, messageSection);
+                var sysSection = true;
                 if (section.id=="header_center")
                     this.headerSection=section;
                 else if (section.id=="footer_left")
@@ -215,7 +218,7 @@ export class DashboardModel implements IComponent{
                 else if (section.id=="right_pad_y")
                     this.RightPadYSection=section;
                 else{
-                    console.log("sp",section)
+                    sysSection=false;
                     if (section.type!="group"){
                         if(currentSection==null){
                             currentSection = new DashboardSectionModel(
@@ -244,7 +247,9 @@ export class DashboardModel implements IComponent{
                         this.sections.push(section);
                         currentSection=null;
                     }
-                }        
+                }
+                if (sysSection)
+                    this.sysSections.push(section);      
             }
         }
     }
@@ -329,4 +334,46 @@ export class DashboardModel implements IComponent{
         else if (this.controllerSection)
             this.controllerSection.reload(source.controllerSection)
     };
+
+    private getDashboardSectionById(id:string, sections:DashboardSectionModel[]){
+        for(let section of sections){
+            if (section.id == id)
+                return section; 
+            else{
+                var res = this.getDashboardSectionById(id, section.subSections);
+                if (res)
+                    return res;
+            }
+        } 
+        return null;
+    }
+
+    public addDashboardLink(link:DashboardLink){
+        if (link.dashboardId == "*" || link.dashboardId == this.id || (link.dashboardId=="**default**" && this.isDefault)){
+            var sectionFound = false;
+            var section = this.getDashboardSectionById(link.sectionId, this.sections);
+            if (!section)
+                section = this.getDashboardSectionById(link.sectionId, this.sysSections);
+            if (section){
+                section.components.push(new DashboardSectionComponentModel(link));
+            } else {
+                console.log("adh",link);
+                var messageSection ={
+                    id:link.sectionId,
+                    name:link.sectionName,
+                    type:"panel",
+                    uiParameters:{
+                        "title":"",
+                        "width":0,
+                        "height":0,
+                        "userLog":false,
+                        "logLength":0
+                    }
+                }
+                var newSection = new DashboardSectionModel(this, messageSection);
+                this.sections.push(newSection);
+                newSection.components.push(new DashboardSectionComponentModel(link));
+            }
+        }
+    }
 }

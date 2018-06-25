@@ -4,8 +4,10 @@
 import { Injectable , EventEmitter} from '@angular/core';
 import {KerviSpine} from "../kervi-spine";
 import {BehaviorSubject, Subject} from 'rxjs/Rx';
-import {IComponent} from './models/IComponent.model'
-import { ComponentFactory } from './models/factory'
+import {IComponent} from './models/IComponent.model';
+import { ComponentFactory } from './models/factory';
+import { DashboardMessageModel } from './models/dashboard.model';
+
 declare var kerviSocketAddress : any;
 declare var socketProtocol : any;
 
@@ -18,6 +20,9 @@ export class KerviService {
   private components$: BehaviorSubject<IComponent[]> = new  BehaviorSubject<IComponent[]>([]);
   public doAuthenticate: boolean = false;
   public inAuthentication$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
+  private logMessages:DashboardMessageModel[] = [];
+  private logMessages$: BehaviorSubject<DashboardMessageModel[]> = new  BehaviorSubject<DashboardMessageModel[]>([]);
+  
   connected$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   IPCReady$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   authenticationFailed$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
@@ -39,6 +44,7 @@ export class KerviService {
 
      var s1=this.IPCReady$.subscribe(function(connected){
         if (connected){
+          console.log("kervi service ipc ready (connected)")
           self.spine.addEventHandler("valueChanged","",function(id, value){
             for (let component of self.components){
               if (component.id==value.id){
@@ -80,6 +86,16 @@ export class KerviService {
             }
           }
         });
+
+        self.spine.addEventHandler("userLogMessage", null, function(v){
+          var messages = self.logMessages$.value
+          //console.log("lm", this);
+          messages.unshift(new DashboardMessageModel(this));
+          if (messages.length>10)
+              messages.pop();
+          self.logMessages$.next(messages);   
+       });
+
       }
     });
 
@@ -131,6 +147,9 @@ export class KerviService {
     return this.components$.asObservable();
   }
 
+  public getLogMessages$(){
+    return this.logMessages$.asObservable();
+  }
 
   public getComponent(id:string){
     for (var component of this.components){
@@ -237,13 +256,13 @@ export class KerviService {
     var self=this;
     
     this.doAuthenticate = this.spine.doAuthenticate;
-    this.spine.sendQuery("GetApplicationInfo",function(message){
-		  console.log("appinfo",message);
-		  this.spine.sendQuery("getComponentInfo",function(message){
+    this.spine.sendQuery("GetApplicationInfo",function(appInfo){
+      console.log("appinfo",appInfo);
+      this.spine.sendQuery("getComponentInfo",function(message){
         console.log("component info",message);
+        self.application$.next(appInfo);
         self.components = ComponentFactory.createComponents(message);
         self.components$.next(self.components);
-        self.application$.next(message);
         self.connected$.next(true);
         //self.inAuthentication$.next(false);
         console.log("components",self.components); 

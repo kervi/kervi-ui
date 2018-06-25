@@ -21,10 +21,6 @@ export class DashboardsService {
             for(var dashboard of self.dashboards){
                 //var dashboard = dashboardComponent as DashboardModel;
                 for(var section of dashboard.sections){
-                    
-                    self.resolveSubSections(section);
-                    
-
                     for (var sectionComponent of section.components ){
                         if (!sectionComponent.component)
                             sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
@@ -98,7 +94,7 @@ export class DashboardsService {
     }
 
     
-    private resolveSubSections(section:DashboardSectionModel){
+    /*private resolveSubSections(section:DashboardSectionModel){
         if (section.subSections){
             for(var subSection of section.subSections){
                 this.resolveSubSections(subSection);
@@ -108,7 +104,7 @@ export class DashboardsService {
                 }
             }
         }
-    }
+    }*/
 
     private refreshDashboards(){
         var self=this;

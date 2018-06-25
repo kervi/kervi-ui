@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { DynamicNumberComponent} from './number-value/number-value.component'
 import { DynamicBooleanComponent} from './boolean-value/boolean-value.component'
 import { DynamicStringComponent} from './string-value/string-value.component'
+import { DynamicDateTimeComponent} from './datetime-value/datetime-value.component'
+import { DynamicEnumComponent} from './enum-value/enum-value.component'
 import { DynamicValueComponent} from './dynamic-value/dynamic-value.component'
 import { UIComponentsModule} from '../ui-components/ui-components.module'
 @NgModule({
@@ -10,13 +12,17 @@ import { UIComponentsModule} from '../ui-components/ui-components.module'
     DynamicNumberComponent,
     DynamicValueComponent,
     DynamicBooleanComponent,
-    DynamicStringComponent
+    DynamicStringComponent,
+    DynamicEnumComponent,
+    DynamicDateTimeComponent
   ],
   exports:[
       DynamicNumberComponent,
       DynamicValueComponent,
       DynamicBooleanComponent,
-      DynamicStringComponent
+      DynamicStringComponent,
+      DynamicEnumComponent,
+      DynamicDateTimeComponent
   ],
   imports: [
     UIComponentsModule,

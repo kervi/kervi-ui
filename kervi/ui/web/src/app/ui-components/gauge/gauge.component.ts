@@ -24,7 +24,7 @@ export class GaugeComponent implements OnInit {
   @Input() defaultSizes:DashboardSizes = new DashboardSizes();
   private  unitSize:number = 110;
   canvasId:string="";
-
+  dataHighlights:any={};
   private gauge:any=null;
   private gaugeTypes:string[]=['radial_gauge','vertical_linear_gauge', 'horizontal_linear_gauge', 'compass']
   constructor(private kerviService:KerviService, private elementRef:ElementRef, private templateService:TemplateService ) {  
@@ -42,28 +42,22 @@ export class GaugeComponent implements OnInit {
 
     
     this.canvasId=this.templateService.makeId();
-    if (this.gaugeTypes.indexOf(this.type)>-1){
-      
-      
-      this.value.value$.subscribe(function(v){
-        if (self.gauge)
-          self.gauge.update({value:v});
+    
+    var warningColor=this.color("color",".sensor-template .sensor-warning");
+    var fatalColor=this.color("color",".sensor-template .sensor-fatal");
 
-      });
-
-      var warningColor=this.color("color",".sensor-template .sensor-warning");
-      var fatalColor=this.color("color",".sensor-template .sensor-fatal");
-
-      var dataHighlights=[];
-      var fromLimit=self.value.minValue;
+    
+    var fromLimit=self.value.minValue;
       
-      for(var range of self.value.ranges){
-        if (range.type == DynamicRangeType.error)
-          dataHighlights.push({"from": range.start, "to": range.end, "color": fatalColor})
-        if (range.type == DynamicRangeType.warning)
-          dataHighlights.push({"from": range.start, "to": range.end, "color": warningColor})
-      }
-      
+    for(var range of self.value.ranges){
+      if (range.type == DynamicRangeType.error)
+        this.dataHighlights[range.start]={color: fatalColor};
+      else if (range.type == DynamicRangeType.warning)
+        this.dataHighlights[range.start]={color:warningColor};
+      else
+        this.dataHighlights[range.start]={color:this.color("color",".sensor-template .sensor-major-ticks")};
+    }
+      console.log("dr", self.value.ranges, this.dataHighlights);
       var nspan=(self.value.maxValue-self.value.minValue);
       var tickSpan=nspan/10;
       var ticks=[];
@@ -77,7 +71,7 @@ export class GaugeComponent implements OnInit {
           title: self.parameters.label,
           minValue: self.value.minValue,
           maxValue: self.value.maxValue,
-          highlights: dataHighlights,
+          highlights: this.dataHighlights,
           majorTicks:ticks,
           colorPlate:this.color("background-color",".sensor-template"),
           borders:false,
@@ -99,81 +93,7 @@ export class GaugeComponent implements OnInit {
       }
       
       
-      setTimeout(function() {
-        var container = jQuery(self.elementRef.nativeElement).closest(".card-body");
-        var containerWidth = jQuery(container).width();
-        var containerHeight = jQuery(container).height();
-        
-        var width = self.parameters.width;
-        if (width === 0){
-          width = self.defaultSizes.gaugeWidth;  
-        }
-        width = self.templateService.getPixels(width, containerWidth);
-
-        var height = self.parameters.height;
-        if (height === 0){
-          if (self.type=="radial_gauge")
-            height = self.defaultSizes.gaugeWidth;
-          else
-            height = self.defaultSizes.gaugeHeight;  
-        } 
-        height = self.templateService.getPixels(height, containerHeight);
-
-        if (self.type=="radial_gauge"){
-
-
-          
-          settings["width"]= width;
-          settings["height"]= height;
-          self.gauge = new RadialGauge(settings).draw();
-        }
-
-        if (self.type=="vertical_linear_gauge"){
-          settings["colorBarProgress"]= self.color("color",".sensor-template .sensor-bar-progress"),
-          settings["colorBar"]= self.color("color",".sensor-template .sensor-bar"),
-          settings["borders"]=false;
-          settings["needleType"]="arrow";
-          settings["needleWidth"]="2";
-          settings["needleCircleSize"]="7";
-          settings["needleCircleOuter"]="true";
-          settings["needleCircleInner"]="false";
-          settings["animationDuration"]="1500";
-          settings["animationRule"]="linear";
-          settings["barWidth"]="10";
-          settings["barBeginCircle"]=false;
-          //settings["numberSide"]="left";
-
-          
-
-          settings["width"]= width;
-          settings["height"]= height;
-          self.gauge = new LinearGauge(settings).draw();
-        }
-
-        if (self.type=="horizontal_linear_gauge"){
-          settings["colorBarProgress"]= self.color("color",".sensor-template .sensor-bar-progress"),
-          settings["colorBar"]= self.color("color",".sensor-template .sensor-bar"),
-          settings["borders"]=false;
-          settings["needleType"]="arrow";
-          settings["needleWidth"]="2";
-          settings["needleCircleSize"]="7";
-          settings["needleCircleOuter"]="true";
-          settings["needleCircleInner"]="false";
-          settings["animationDuration"]="1500";
-          settings["animationRule"]="linear";
-          settings["barWidth"]="10";
-          settings["barBeginCircle"]=false;
-
-          settings["width"]= height;
-          settings["height"]= width;
-          
-          self.gauge = new LinearGauge(settings).draw();
-        }
-
-        
-      }, 0);
-    }
-
+      
    
     
   }

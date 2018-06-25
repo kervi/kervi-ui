@@ -3,7 +3,6 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { COMPILER_PROVIDERS } from '@angular/compiler';
 import { ActionComponent } from './action/action.component';
 import { RouterModule } from '@angular/router';
 import { ValuesModule } from '../values/values.module'

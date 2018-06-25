@@ -6,7 +6,7 @@ import { TemplateService } from '../../template.service';
 import { DashboardModel, DashboardSectionModel, DashboardMessageModel, DashboardSizes } from '../../models/dashboard.model';
 //import { DashboardFactory } from '../models/factory';
 import { IComponent } from '../../models/IComponent.model';
-import {BehaviorSubject} from 'rxjs/Rx';
+import {BehaviorSubject, Observable} from 'rxjs/Rx';
 
 @Component({
   selector: 'kervi-dashboard-section',
@@ -26,13 +26,15 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
     showHeader:boolean = false;
     expanded:boolean = false;
     title:string;
-    components:Component[]=[];
-    headerComponents: Component[] = [];
+    components:any[]=[];
+    headerComponents: any[] = [];
     //messages: DashboardMessageModel[] = [];
-    messages$: BehaviorSubject<DashboardMessageModel[]> = new BehaviorSubject<DashboardMessageModel[]>([]);
+    messages$: Observable<DashboardMessageModel[]> = null;
     //sectionComponents:IComponent[] = []
 
     constructor (private kerviService:KerviService, private templateService:TemplateService){
+        
+        this.messages$ = this.kerviService.getLogMessages$(); 
     }
 
     calcWidth(section:DashboardSectionModel, inGroup){
@@ -76,13 +78,14 @@ export class DashboardSectionComponent implements OnInit, OnDestroy {
                 //self.messages$.next(messages);
                 
             });
-            this.kerviService.spine.addEventHandler("userLogMessage", null, function(v){
+            /*this.kerviService.spine.addEventHandler("userLogMessage", null, function(v){
                 var messages = self.messages$.value
+                console.log("lm", this);
                 messages.unshift(new DashboardMessageModel(this));
                 if (messages.length>self.section.parameters.logLength)
                     messages.pop();
                 self.messages$.next(messages);   
-            });
+            });*/
         }
 
          this.width = this.inGroup ? "" : this.templateService.getSizeValue(self.section.parameters.width);

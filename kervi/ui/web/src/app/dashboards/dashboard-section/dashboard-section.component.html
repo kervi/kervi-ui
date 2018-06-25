@@ -41,6 +41,7 @@
         </h4>
     </div>
     <div class="card-body" *ngIf="components.length>0" >
+        
         <ng-container *ngFor="let sectionComponent of components">
             <kervi-controller [dashboardSection]="section" [controller]="sectionComponent.component" [parameters]="sectionComponent.parameters" *ngIf="sectionComponent.component && sectionComponent.component.componentType=='controller'" ></kervi-controller>
             <dynamic-value [dashboardSection]="section" [value]="sectionComponent.component" [parameters]="sectionComponent.parameters"  *ngIf="sectionComponent.component && sectionComponent.component.componentType=='DynamicValue'" ></dynamic-value>
@@ -62,7 +63,7 @@
             <tbody>
                 <tr *ngFor="let message of messages$ | async">
                     <td>
-                        <span *ngIf="message.level<3" class="alert" [ngClass]="{'text-danger': message.level==1, 'text-warning': message.level==2}" >&#11044;</span>
+                        <span *ngIf="message.level<=3" class="alert" [ngClass]="{'text-danger': message.level==1, 'text-warning': message.level==2, 'text-normal': message.level==3}" >&#11044;</span>
                     </td>
                     <td>{{message.timestamp | date: 'HH:mm:ss'}}</td>
                     <td>{{message.sourceName}}</td>

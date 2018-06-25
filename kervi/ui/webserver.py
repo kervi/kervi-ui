@@ -70,7 +70,7 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
                 #self.wfile.write('no auth header received')
                 pass
             elif self.server.authorize(self.headers['Authorization']):
-                    
+                
                 if self.path.startswith("/cam"):
                     path = self.path.split("/")
                     cam_id = path[-1]
