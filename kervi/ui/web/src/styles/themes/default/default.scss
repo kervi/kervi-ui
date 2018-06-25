@@ -421,6 +421,26 @@ th{
   //margin-bottom: 0;
 }
 
+.gauge-width {
+  width: 100% !important;
+  height: unset !important;
+  canvas {
+    width: 80% !important;
+    //height: 100% !important;
+  }
+  .reading-block{
+    line-height: unset !important;
+    font-size:3.5vw !important;
+  }
+  .reading-label {
+    width: 80% !important;
+    line-height: unset !important;
+    position: absolute;
+    bottom:0;
+    //height: 100% !important;
+  }
+}
+
 @include media-breakpoint-down(sm) {
   .card-section{
     width:100% !important;

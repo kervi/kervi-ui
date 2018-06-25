@@ -11,6 +11,7 @@ import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component'
 import { ImageViewerComponent } from './image-viewer/image-viewer.component' 
 import { ActionComponent } from './action/action.component' 
 import { DateTimeComponent } from './datetimepicker/datetimepicker.component' 
+import { NgxGaugeModule } from 'ngx-gauge';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { DateTimeComponent } from './datetimepicker/datetimepicker.component'
       DateTimeComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    NgxGaugeModule
   ],
   providers: [],
   bootstrap: []
