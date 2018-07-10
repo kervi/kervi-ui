@@ -6,10 +6,10 @@ import { IComponent, DashboardLink } from './IComponent.model'
 
 export class DashboardSizes{
     public valueWidth:string ="3rem";
-    public buttonWidth:string = "";
+    public buttonWidth:string = "25px";
     public buttonHeight:string = "";
-    public switchWidth:string = "";
-    public switchHeight:string = "20px";
+    public switchWidth:string = "25px";
+    public switchHeight:string = "25px";
     public gaugeWidth:string = "100px";
     public gaugeHeight:string = "200px";
 }

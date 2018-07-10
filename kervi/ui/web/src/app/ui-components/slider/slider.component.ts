@@ -77,4 +77,8 @@ export class SliderComponent implements OnInit {
 		},0);
 	}
 
+	step(v){
+		this.kerviService.spine.sendCommand(this.value.command,this.value.value$.value + v);
+	}
+
 }

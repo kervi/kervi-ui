@@ -1,4 +1,4 @@
-<a *ngIf="!inline" class="btn btn-primary pull-right" [style.width]="width" [style.height]="height" [ngClass]="{'btn-primary-hover': (value.value$ | async)}" (mousedown)="press()" (mouseup)="release()" [attr.title]="value.name">
+<a *ngIf="!inline" class="btn btn-primary pull-right" [style.min.width]="width" [style.height]="height" [ngClass]="{'btn-primary-hover': (value.value$ | async)}" (mousedown)="press()" (mouseup)="release()" [attr.title]="value.name">
     <i *ngIf="parameters.buttonIcon" class='fa fa-{{parameters.buttonIcon}}'></i>
     <ng-container *ngIf="parameters.buttonText" >{{ parameters.buttonText}}</ng-container>
 </a>

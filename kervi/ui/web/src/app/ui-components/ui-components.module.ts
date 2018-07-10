@@ -11,6 +11,7 @@ import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component'
 import { ImageViewerComponent } from './image-viewer/image-viewer.component' 
 import { ActionComponent } from './action/action.component' 
 import { DateTimeComponent } from './datetimepicker/datetimepicker.component' 
+import { IconsComponent } from './icons/icons.component' 
 import { NgxGaugeModule } from 'ngx-gauge';
 
 @NgModule({
@@ -25,7 +26,8 @@ import { NgxGaugeModule } from 'ngx-gauge';
     MPEGViewerComponent,
     ImageViewerComponent,
     ActionComponent,
-    DateTimeComponent
+    DateTimeComponent,
+    IconsComponent
   ],
   exports:[
       SparklineComponent,

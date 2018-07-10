@@ -1,6 +1,6 @@
 <nav class="navbar row navbar-toggleable-md navbar-fixed-top navbar-light bg-faded page-header">
 	<div class="row" style="width:100%">
-		<div class=" col-sm-4">
+		<div class="col-xs-4 col-sm-4">
 			<ul class="navbar-nav flex-nowrap flex-row" >
 				<li class="nav-item dropdown">
 					<a *ngIf="showMenu" class="dropdown btn nav-link" title="Dashboards" style="padding-top:0;cursor: pointer" data-toggle="dropdown"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></a>
@@ -22,7 +22,7 @@
 				<li *ngIf="dashboard" style="display:inline-block;white-space:nowrap">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>
 			</ul>
 		</div>	
-		<div *ngIf="dashboard && dashboard.sysSection" class="col-sm-8 core-sensors text-xs-center text-sm-right" style="display:inline-block">
+		<div *ngIf="dashboard && dashboard.sysSection" class="col-xs-8 col-sm-8 core-sensors text-xs-center text-sm-right" style="display:inline-block">
 				&nbsp;<kervi-dashboard-section [defaultSizes]="defaultSizes" [inline]="true" [section]="dashboard.sysSection" ></kervi-dashboard-section>
 		</div>
 	</div>
