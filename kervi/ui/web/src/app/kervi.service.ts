@@ -2,7 +2,9 @@
 // Licensed under MIT
 
 import { Injectable , EventEmitter} from '@angular/core';
+import {KerviSpineBase} from "../ikervi-spine";
 import {KerviSpine} from "../kervi-spine";
+import {KerviIO} from "../kervi_io";
 import {BehaviorSubject, Subject} from 'rxjs/Rx';
 import {IComponent} from './models/IComponent.model';
 import { ComponentFactory } from './models/factory';
@@ -13,7 +15,7 @@ declare var socketProtocol : any;
 
 @Injectable()
 export class KerviService {
-  spine: KerviSpine = null;
+  spine: KerviSpineBase = null;
   private appInfo=null;
   public  application$: BehaviorSubject<any>;
   private components : IComponent[] = [];
@@ -189,7 +191,7 @@ export class KerviService {
       address = httpHost + ":9000";
     }
     console.log("ks", address);
-    this.spine = new KerviSpine({
+    this.spine = new KerviIO({
       address: address,
       protocol: protocol,
       onOpen: this.onOpen,
@@ -199,6 +201,7 @@ export class KerviService {
       onLogOff: this.onLogoff,
       onAuthenticateStart: this.onAuthenticateStart,
       targetScope:this,
+      appId: "app_1"
      });
   }
 

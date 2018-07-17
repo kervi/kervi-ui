@@ -19,6 +19,7 @@
             "assets": [
               "src/assets",
               "src/favicon.ico"
+              
             ],
             "styles": [
               "src/styles/themes/default/default.scss"
@@ -39,6 +40,8 @@
               "node_modules/photoswipe/dist/photoswipe.js",
               "node_modules/photoswipe/dist/photoswipe-ui-default.js",
               "node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js",
+              "node_modules/sockjs-client/dist/sockjs.js",
+              "node_modules/stompjs/lib/stomp.js"
               
             ]
           },

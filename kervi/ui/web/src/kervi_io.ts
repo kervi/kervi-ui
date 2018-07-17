@@ -1,165 +1,76 @@
 // Copyright (c) 2016, Tim Wentzlau
 // Licensed under MIT
-import {KerviSpineBase} from "./ikervi-spine"
-export class  KerviSpine extends KerviSpineBase{
-
-	/*public isConnected: Boolean = false;
-	public doAuthenticate:boolean = false;
-	sessionId = null;
-	queryHandlers=[];
-	commandHandlers=[];
-	eventHandlers=[];
-	rpcQueue={};
-	ready=false;
-	messageId=0;
-	sensors={};
-	controllers={};
-	sensorTypes=[];
-	controllerTypes=[];
-	pointOfInterests=[];
-	application=null;
-	allowAnonymous = true;
-	firstOnOpen = true;*/
-
-	
-	
-	/*public options=  {
-			userName: "anonymous",
-			password: null,
-			address:null,
-			onOpen:null,
-			onClose:null,
-			onAuthenticate:null,
-			onAuthenticateFailed:null,
-			onAuthenticateStart:null,
-			onLogOff: null,
-			autoConnect:true,
-			targetScope:null,
-			protocol:"ws"
-	}*/
+import {KerviSpineBase} from "./ikervi-spine";
+declare var Stomp:any;
+export class  KerviIO extends KerviSpineBase {
+	private socketSession:null;
+	private exchange = "/exchange/app_1";
 	
 	constructor(public constructorOptions){
-		super(constructorOptions);
-		console.log("kervi spine constructor");
+		super(constructorOptions)
+		console.log("Kervi io spine init",this.options,constructorOptions);
+		
+	}
+
+	private onMQConnect(frame){
+		console.log("MQ connect", frame, this.websocket, this);
+		this.subscribe(this.exchange, function(message) {
+			console.log("mq ", message);
+		}, { });
+
+		//this.onOpen(evt);
+	}
+
+	private onMQError(frame){
+		console.log("MQ error", frame);
 	}
 
 	
-
-	/*private extend(...p:any[])
-	{
-		for(var i=1; i<p.length; i++)
-			for(var key in p[i])
-				if(p[i].hasOwnProperty(key))
-					p[0][key] = p[i][key];
-		return p[0];
-	}
-
-	private addRPCCallback(id:string,callback)
-	{
-		if (callback)
-			this.rpcQueue[id]=callback;
-	}
-
-	private handleRPCResponse(message){
-		var callback=this.rpcQueue[message.id];
-		if (callback){
-			delete this.rpcQueue[message.id];
-			callback.call(this.options.targetScope,message.response,message.response);
-		}
-	}
-
-	private handleEvent(message){
-		var eventName=message.event;
-		var id=message.id;
-		
-		var eventPath=eventName;
-		if (id){
-			eventPath+="/"+id;
-		}
-		
-		var value=null;
-		if(message.args && message.args.length){
-			value=message.args[0];
-		}
-		for(var n=0;(n<this.eventHandlers.length);n++)
-		{
-			var h=this.eventHandlers[n];
-			if (h.eventName==eventPath)
-				h.callback.call(value,id,value);
-			else if (h.eventName==eventName)
-				h.callback.call(value,id,value);
-		}
-	}
-
-	private handleCommand(message){
-		console.log("cmd",this,message);
-		var command=message.command
-		
-		var args=null;
-		if(message.args && message.args.length){
-			args=message.args[0];
-		}
-		
-		for(var n=0;(n<this.commandHandlers.length);n++)
-		{
-			var c=this.commandHandlers[n];
-			if (c.command==command)
-				c.callback.call(this,args);
-		}
-	}*/
-
 	protected connect(){
 		if (this.isConnected){
 			console.log("Kervi is connected");
 			return
 		}
 		var self=this;
-		this.websocket= new WebSocket(this.options.protocol + "://" + this.options.address);
-		this.websocket.onopen = function(evt) { 
-			console.log("kervi spine on open");
-			self.onOpen(evt);
-		};
-		
-		this.websocket.onclose = function(evt) { 
-			self.onClose(evt) 
-		};
-		
-		this.websocket.onmessage = function(evt) { 
-			self.onMessage(evt) 
-		};
-		
-		this.websocket.onerror = function(evt) {
-			self.onError(evt) 
-		};
+		//var mqUrl= this.options.protocol + "://" + this.options.address
+		var mqUrl= ""
+		this.websocket = Stomp.client(mqUrl);
+		this.websocket.heartbeat.incoming = 0;
+		this.websocket.connect(
+			"", 
+			"", 
+			function (frame){
+				console.log("MQ connect", frame, this.websocket, this);
+				self.socketSession = frame.headers.session;
+				self.websocket.subscribe(self.exchange, function(message) {
+					console.log("mq ", message);
+					if (message.headers["topic"])
+						message.headers["topic"] = message.headers["topic"].replace(new RegExp("\\c","g"),":");
+					if (message.command=="CONNECTED"){
+
+					}
+					else if (message.headers["topic"] == "ping")
+						self.onPing(message);
+					else
+						self.onMessage(message);
+				}, { });
+			},
+			self.onMQError, "api_key_1");
 	}
 
 	
-
-	/*protected onOpen(evt){
-		console.log("Kervi spine on open",this,evt);
+	onPing(message){
+		console.log("onping", message);
+		var self = this;
+		if (!this.isConnected && message.headers["connection_id"]== this.options.appId){
+			this.onOpen(message);
+			this.websocket.send(self.exchange, { topic:"session:new", router_id:message.headers["router_id"], session_id:this.socketSession}, "{}")	
+			
+		}
 		
-		var self=this
-		this.isConnected=true;
-		
-		this.eventHandlers = [];
-		this.commandHandlers = [];
-		this.queryHandlers = [];	
-		console.log("Kervi spine ready")
 	}
 
-	protected onClose(evt){
-		console.log("Kervi spine on close",evt);
-		this.isConnected=false;
-		
-		if (this.options.onClose)
-			this.options.onClose.call(this.options.targetScope,evt);
-		this.firstOnOpen=true;
-		if (this.options.autoConnect){
-			setTimeout(1000,this.connect());
-		}
-	}*/
-
-	public authenticate(userName, password){
+	authenticate(userName, password){
 		this.options.userName = userName;
 		this.options.password = password;
 		if (this.options.onAuthenticateStart)
@@ -168,7 +79,7 @@ export class  KerviSpine extends KerviSpineBase{
 		this.websocket.send(JSON.stringify(cmd));
 	}
 
-	public logoff(){
+	logoff(){
 		//this.options.userName = this.allowAnonymous ? "anonymous" : null;
 		//this.options.password = null;
 
@@ -178,11 +89,12 @@ export class  KerviSpine extends KerviSpineBase{
 	}
 
 	onMessage(evt){
-		console.log("on m",evt.data);
-		var message=JSON.parse(evt.data);
+		console.log("on m",evt);
+		var message=JSON.parse(evt.body);
 		var self = this;
-		
-		if (message.messageType=="authenticate"){
+		var topic = evt.headers["topic"];
+
+		if (topic=="authenticate"){
 			console.log("authenticate");
 			this.doAuthenticate = true;
 			if (this.options.userName)
@@ -190,7 +102,7 @@ export class  KerviSpine extends KerviSpineBase{
 			else
 				this.options.onAuthenticate.call(this.options.targetScope,evt);
 		}
-		else if (message.messageType=="authentication_failed"){
+		else if (topic=="authentication_failed"){
 			console.log("authentication failed", this.options.userName);
 			if (this.options.userName == "anonymous") {
 				this.allowAnonymous = false;
@@ -205,7 +117,7 @@ export class  KerviSpine extends KerviSpineBase{
 			} else
 				this.options.onAuthenticateFailed.call(this.options.targetScope,evt);
 		}
-		else if (message.messageType=="session_authenticated"){
+		else if (topic=="session_authenticated"){
 			var date = new Date();
 			
         	date.setTime(date.getTime() + (2*60*60*1000));
@@ -215,14 +127,13 @@ export class  KerviSpine extends KerviSpineBase{
 			
 			
 			setTimeout(function(){
-				console.log("to", self.options);
 				if (self.options.onOpen)
 					self.options.onOpen.call(self.options.targetScope, self.firstOnOpen,evt);
 					self.firstOnOpen = false;
 			}, 100
 			);
 			
-		} else if (message.messageType == "session_logoff"){ 
+		} else if (topic == "session_logoff"){ 
 			if (self.options.onLogOff)
 				self.options.onLogOff.call(self.options.targetScope,evt);
 			if (this.allowAnonymous && this.options.userName != "anonymous"){
@@ -234,11 +145,14 @@ export class  KerviSpine extends KerviSpineBase{
 			
 				
 			}
-		} else if (message.messageType=="response")
-			this.handleRPCResponse(message);
-		else if (message.messageType=="event")
-			this.handleEvent(message);
-		else if (message.messageType=="command")
+		} else if (evt.headers["type"]=="query_response"){
+			this.handleRPCResponse({id:evt.headers["query_id"], response:message});
+		}else if (evt.headers["type"]=="event"){
+			console.log("e", evt);
+			var topic_tag= evt.headers["topic"].split(":");
+			
+			this.handleEvent({event:topic_tag[1], id:topic_tag[2], args:message.args});
+		}else if (message.messageType=="command")
 			this.handleCommand(message);
 		else
 			console.log("Kervi spine message unknown",this.rpcQueue,evt);
@@ -251,13 +165,22 @@ export class  KerviSpine extends KerviSpineBase{
 	public addCommandHandler (command:string,callback){
 		this.commandHandlers.push({command:command,callback:callback});
 		var cmd={id:this.messageId++,"messageType":"registerCommandHandler","command":command};
-		this.websocket.send(JSON.stringify(cmd));
+		//this.websocket.send(JSON.stringify(cmd));
+		this.websocket.send(
+			this.exchange,
+			{ topic:"registerCommandHandler", router_id:this.socketSession},
+			JSON.stringify(cmd)
+		)	
 	};
 
 	public addQueryHandler(query:string,callback){
 		this.queryHandlers.push({query:query,callback:callback});
 		var cmd={id:this.messageId++,"messageType":"registerQueryHandler","query":query};
-		this.websocket.send(JSON.stringify(cmd));
+		this.websocket.send(
+			this.exchange,
+			{ topic:"registerQueryHandler", router_id:this.socketSession},
+			JSON.stringify(cmd)
+		)
 	};
 
 	public addEventHandler=function(eventName:string,id:string,callback){
@@ -266,8 +189,11 @@ export class  KerviSpine extends KerviSpineBase{
 		else
 			this.eventHandlers.push({"eventName":eventName,callback:callback});
 		var cmd={id:this.messageId++,"messageType":"registerEventHandler","event":eventName,"eventId":id};
-		//console.log("add event handler",cmd);
-		this.websocket.send(JSON.stringify(cmd));
+		this.websocket.send(
+			this.exchange,
+			{ topic:"registerEventHandler", router_id:this.socketSession},
+			JSON.stringify(cmd)
+		)
 	};
 
 	public sendCommand(command:string,...p:any[]){
@@ -291,11 +217,16 @@ export class  KerviSpine extends KerviSpineBase{
 				args.push(arguments[i]);
 			}
 		}*/
-		var cmd={id:this.messageId++,"messageType":"command","command":command,"args":args};
+		var cmd={id:this.messageId++,"args":args, kwargs:{}};
+		
 		if (callback && callback instanceof Function)
 			this.addRPCCallback(cmd.id.toString(),callback);
 		console.log("sendCommand",this,cmd);
-		this.websocket.send(JSON.stringify(cmd));
+		this.websocket.send(
+			this.exchange,
+			{ topic:"command:"+ command, router_id:this.socketSession},
+			JSON.stringify(cmd)
+		)
 	};
 
 	public sendQuery(query,...p:any[]){
@@ -309,10 +240,15 @@ export class  KerviSpine extends KerviSpineBase{
 				args.push(p[i]);
 		}
 		 
-		var cmd={id:this.messageId++,"messageType":"query","query":query,"args":args};
+		var cmd={id:this.messageId++,"messageType":"query","query":query,"args":args, kwargs:[], qts:0};
 		this.addRPCCallback(cmd.id.toString(),callback);
 		console.log("sendQuery", callback,cmd);
-		this.websocket.send(JSON.stringify(cmd));
+		//this.websocket.send(JSON.stringify(cmd));
+		this.websocket.send(
+			this.exchange,
+			{ topic:"query:" + query, qts:0, query_id: cmd.id.toString(), router_id:this.socketSession, response_address:this.socketSession},
+			JSON.stringify(cmd)
+		)
 	};
 
 	public triggerEvent(eventName:string,id:string){
