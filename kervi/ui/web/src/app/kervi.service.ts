@@ -190,19 +190,32 @@ export class KerviService {
       var httpHost = window.location.hostname;
       address = httpHost + ":9000";
     }
-    console.log("ks", address);
-    this.spine = new KerviIO({
-      address: address,
-      protocol: protocol,
-      onOpen: this.onOpen,
-      onClose:this.onClose,
-      onAuthenticate:this.onAuthenticate,
-      onAuthenticateFailed:this.onAuthenticateFailed,
-      onLogOff: this.onLogoff,
-      onAuthenticateStart: this.onAuthenticateStart,
-      targetScope:this,
-      appId: "app_1"
-     });
+    console.log("ks", address, sessionStorage.getItem("mqc"));
+    
+    if (sessionStorage.getItem("mqc")){
+      
+      this.spine = new KerviIO({
+        onOpen: this.onOpen,
+        onClose:this.onClose,
+        onAuthenticate:this.onAuthenticate,
+        onAuthenticateFailed:this.onAuthenticateFailed,
+        onLogOff: this.onLogoff,
+        onAuthenticateStart: this.onAuthenticateStart,
+        targetScope:this,
+        apiToken: JSON.parse(sessionStorage.getItem("mqc"))
+      });
+    } else
+      this.spine = new KerviSpine({
+        address: address,
+        protocol: protocol,
+        onOpen: this.onOpen,
+        onClose:this.onClose,
+        onAuthenticate:this.onAuthenticate,
+        onAuthenticateFailed:this.onAuthenticateFailed,
+        onLogOff: this.onLogoff,
+        onAuthenticateStart: this.onAuthenticateStart,
+        targetScope:this
+      });
   }
 
   isAnonymous(){

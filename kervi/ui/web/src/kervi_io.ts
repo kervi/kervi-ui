@@ -7,8 +7,8 @@ export class  KerviIO extends KerviSpineBase {
 	private exchange = "/exchange/app_1";
 	
 	constructor(public constructorOptions){
-		super(constructorOptions)
-		console.log("Kervi io spine init",this.options,constructorOptions);
+		super(constructorOptions);
+		console.log("Kervi io spine init x", this.options,constructorOptions);
 		
 	}
 
@@ -33,12 +33,12 @@ export class  KerviIO extends KerviSpineBase {
 		}
 		var self=this;
 		//var mqUrl= this.options.protocol + "://" + this.options.address
-		var mqUrl= ""
+		var mqUrl= "wss://mq.kervi.io:15673/ws"
 		this.websocket = Stomp.client(mqUrl);
 		this.websocket.heartbeat.incoming = 0;
 		this.websocket.connect(
-			"", 
-			"", 
+			self.options.apiToken.api_token, 
+			"ui", 
 			function (frame){
 				console.log("MQ connect", frame, this.websocket, this);
 				self.socketSession = frame.headers.session;
@@ -55,14 +55,14 @@ export class  KerviIO extends KerviSpineBase {
 						self.onMessage(message);
 				}, { });
 			},
-			self.onMQError, "api_key_1");
+			self.onMQError, self.options.apiToken.api_channel);
 	}
 
 	
 	onPing(message){
-		console.log("onping", message);
+		console.log("onping", this.options.appId, message);
 		var self = this;
-		if (!this.isConnected && message.headers["connection_id"]== this.options.appId){
+		if (!this.isConnected && message.headers["connection_id"]== self.options.apiToken.app_id){
 			this.onOpen(message);
 			this.websocket.send(self.exchange, { topic:"session:new", router_id:message.headers["router_id"], session_id:this.socketSession}, "{}")	
 			

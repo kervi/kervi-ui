@@ -37,7 +37,7 @@ export class  KerviSpineBase{
 			autoConnect:true,
 			targetScope:null,
 			protocol:"ws",
-			appId:null
+			apiToken:null
 	}
 	
 	constructor(public constructorOptions){
