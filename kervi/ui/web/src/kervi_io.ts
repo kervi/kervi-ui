@@ -12,15 +12,6 @@ export class  KerviIO extends KerviSpineBase {
 		
 	}
 
-	private onMQConnect(frame){
-		console.log("MQ connect", frame, this.websocket, this);
-		this.subscribe(this.exchange, function(message) {
-			console.log("mq ", message);
-		}, { });
-
-		//this.onOpen(evt);
-	}
-
 	private onMQError(frame){
 		console.log("MQ error", frame);
 	}
