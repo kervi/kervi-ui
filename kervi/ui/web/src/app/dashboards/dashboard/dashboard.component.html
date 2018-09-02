@@ -17,7 +17,7 @@
 					</div>
 				</li>
 				<li class="nav-item" *ngIf="showSectionController">
-					<a  class="nav-link btn" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders fa-lg" aria-hidden="true"></i>{{dashboardSectionsVisible}}</a>
+					<a  class="nav-link btn" (click)="dashboardSectionsHidden = !dashboardSectionsHidden;"><i class="fa fa-sliders-h fa-lg" aria-hidden="true" style="transform:rotate(90deg);"></i>{{dashboardSectionsVisible}}</a>
 				</li>
 				<li *ngIf="dashboard" style="display:inline-block;white-space:nowrap">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>
 			</ul>

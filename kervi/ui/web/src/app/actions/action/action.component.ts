@@ -63,7 +63,7 @@ export class ActionComponent implements OnInit {
 
   public release() {
     if (this.action.running$.value)
-        this.kerviService.spine.sendCommand(this.action.interuptCommand, ...this.parameters.interuptParameters);    
+        this.kerviService.spine.sendCommand(this.action.interruptCommand, ...this.parameters.interruptParameters);    
   }
   
 }
