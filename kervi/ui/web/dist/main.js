@@ -1485,21 +1485,14 @@ var KerviService = /** @class */ (function () {
                     for (var _i = 0, _a = self.components; _i < _a.length; _i++) {
                         var component = _a[_i];
                         if (component.id == value.id) {
-                            if (component.componentType == "sensor") {
-                                var dynamicValue = component;
-                                dynamicValue.value.valueTS = new Date(this.timestamp + " utc");
-                                dynamicValue.value.value$.next(value.value);
-                                var spl = dynamicValue.value.sparkline$.value;
-                                spl.push(value.value);
-                                if (spl.length > 10)
-                                    spl.shift();
-                                dynamicValue.value.sparkline$.next(spl);
-                            }
-                            else {
-                                var dynamicValue = component;
-                                dynamicValue.valueTS = new Date(this.timestamp + " utc");
-                                dynamicValue.value$.next(value.value);
-                            }
+                            var dynamicValue = component;
+                            dynamicValue.valueTS = new Date(this.timestamp + " utc");
+                            dynamicValue.value$.next(value.value);
+                            var spl = dynamicValue.sparkline$.value;
+                            spl.push(value.value);
+                            if (spl.length > 10)
+                                spl.shift();
+                            dynamicValue.sparkline$.next(spl);
                         }
                     }
                 });
@@ -2264,7 +2257,7 @@ var DashboardModel = /** @class */ (function () {
 /*!***********************************************!*\
   !*** ./src/app/models/dynamicValues.model.ts ***!
   \***********************************************/
-/*! exports provided: DynamicRangeType, DynamicRange, DynamicEnumOptionModel, DynamicEnumModel, DynamicNumberModel, DynamicStringModel, DynamicBooleanModel, DynamicDateTimeModel */
+/*! exports provided: DynamicRangeType, DynamicRange, DynamicEnumOptionModel, DynamicEnumModel, DynamicNumberModel, DynamicStringModel, DynamicBooleanModel, DynamicDateTimeModel, DynamicColorModel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2277,6 +2270,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicStringModel", function() { return DynamicStringModel; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicBooleanModel", function() { return DynamicBooleanModel; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicDateTimeModel", function() { return DynamicDateTimeModel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicColorModel", function() { return DynamicColorModel; });
 /* harmony import */ var _IComponent_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IComponent.model */ "./src/app/models/IComponent.model.ts");
 /* harmony import */ var rxjs_Rx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/Rx */ "./node_modules/rxjs-compat/_esm5/Rx.js");
 // Copyright (c) 2016, Tim Wentzlau
@@ -2545,6 +2539,33 @@ var DynamicDateTimeModel = /** @class */ (function () {
     return DynamicDateTimeModel;
 }());
 
+var DynamicColorModel = /** @class */ (function () {
+    function DynamicColorModel(message) {
+        this.componentType = "DynamicValue";
+        this.ui = {};
+        this.dashboards = [];
+        this.value$ = new rxjs_Rx__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"](null);
+        this.id = message.id;
+        this.name = message.name;
+        this.type = message.componentType;
+        this.ui = message.ui;
+        this.isInput = message.isInput;
+        this.visible = message.visible;
+        this.subType = message.inputType;
+        this.value$.next(message.value);
+        this.command = message.command;
+        for (var _i = 0, _a = message.dashboardLinks; _i < _a.length; _i++) {
+            var dashboardLink = _a[_i];
+            this.dashboards.push(new _IComponent_model__WEBPACK_IMPORTED_MODULE_0__["DashboardLink"](this, dashboardLink));
+        }
+    }
+    DynamicColorModel.prototype.updateReferences = function () { };
+    ;
+    DynamicColorModel.prototype.reload = function (component) { };
+    ;
+    return DynamicColorModel;
+}());
+
 
 
 /***/ }),
@@ -2612,6 +2633,8 @@ var ComponentFactory = /** @class */ (function () {
                 component = new _dynamicValues_model__WEBPACK_IMPORTED_MODULE_0__["DynamicEnumModel"](message);
             else if (message.componentType == "datetime-value")
                 component = new _dynamicValues_model__WEBPACK_IMPORTED_MODULE_0__["DynamicDateTimeModel"](message);
+            else if (message.componentType == "color-value")
+                component = new _dynamicValues_model__WEBPACK_IMPORTED_MODULE_0__["DynamicColorModel"](message);
             if (component)
                 result.push(component);
             if (subComponents) {
@@ -2671,12 +2694,14 @@ var SensorModel = /** @class */ (function () {
         this.type = null;
         this.visible = true;
         this.value = null;
+        this.valueType = null;
         this.dashboards = [];
         this.id = message.id;
         this.name = message.name;
         this.ui = message.ui;
         this.visible = message.visible;
         this.value = new _dynamicValues_model__WEBPACK_IMPORTED_MODULE_1__["DynamicNumberModel"](message);
+        this.valueType = message.value_type;
         this.type = message.type;
         for (var _i = 0, _a = message.subSensors; _i < _a.length; _i++) {
             var subSensor = _a[_i];
@@ -2705,7 +2730,7 @@ var SensorModel = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<ng-container *ngIf=\"sensor.subSensors.length == 0\">\r\n    <dynamic-value-number [inline]=\"inline\" [input]=\"sensor.value\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\"></dynamic-value-number>\t\r\n</ng-container>\r\n<ng-container *ngIf=\"sensor.subSensors.length > 0\">\r\n\t<div >\r\n\t\t<div>\r\n\t\t\t<i *ngIf=\"parameters.labelIcon\" class=\"fa fa-{{currentIcon}}\"></i>\r\n\t\t\t<span *ngIf=\"parameters.label\">{{parameters.label}}:</span>\r\n\t\t</div>\r\n\t\t<ng-container *ngFor=\"let subSensor of sensor.subSensors\">\r\n\t\t\t<div style=\"padding-left:15px;clear:both\">\r\n\t\t\t\t<kervi-sensor [inline]=\"lnline\" [sensor]=\"subSensor\" ></kervi-sensor>\r\n\t\t\t</div>\r\n\t\t</ng-container>\r\n\t</div>\r\n</ng-container>"
+module.exports = "<ng-container *ngIf=\"sensor.subSensors.length == 0\">\r\n\t<dynamic-value-number *ngIf=\"sensor.valueType == 'number'\" [inline]=\"inline\" [input]=\"sensor.value\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\"></dynamic-value-number>\r\n\t<dynamic-value-color *ngIf=\"sensor.valueType == 'color'\" [inline]=\"inline\" [value]=\"sensor.value\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\"></dynamic-value-color>\t\r\n</ng-container>\r\n<ng-container *ngIf=\"sensor.subSensors.length > 0\">\r\n\t<div >\r\n\t\t<div>\r\n\t\t\t<i *ngIf=\"parameters.labelIcon\" class=\"fa fa-{{currentIcon}}\"></i>\r\n\t\t\t<span *ngIf=\"parameters.label\">{{parameters.label}}:</span>\r\n\t\t</div>\r\n\t\t<ng-container *ngFor=\"let subSensor of sensor.subSensors\">\r\n\t\t\t<div style=\"padding-left:15px;clear:both\">\r\n\t\t\t\t<kervi-sensor [inline]=\"lnline\" [sensor]=\"subSensor\" ></kervi-sensor>\r\n\t\t\t</div>\r\n\t\t</ng-container>\r\n\t</div>\r\n</ng-container>"
 
 /***/ }),
 
@@ -3904,6 +3929,156 @@ var ChartComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/ui-components/color/color.component.html":
+/*!**********************************************************!*\
+  !*** ./src/app/ui-components/color/color.component.html ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"max-width:90px\" class=\"input-group\">\r\n<div  attr.value=\"{{value | async}}\" class=\"form-control color\"></div>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/ui-components/color/color.component.scss":
+/*!**********************************************************!*\
+  !*** ./src/app/ui-components/color/color.component.scss ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/ui-components/color/color.component.ts":
+/*!********************************************************!*\
+  !*** ./src/app/ui-components/color/color.component.ts ***!
+  \********************************************************/
+/*! exports provided: ColorComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ColorComponent", function() { return ColorComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _kervi_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../kervi.service */ "./src/app/kervi.service.ts");
+/* harmony import */ var _models_dashboard_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../models/dashboard.model */ "./src/app/models/dashboard.model.ts");
+/* harmony import */ var rxjs_Rx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/Rx */ "./node_modules/rxjs-compat/_esm5/Rx.js");
+// Copyright (c) 2016, Tim Wentzlau
+// Licensed under MIT
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var ColorComponent = /** @class */ (function () {
+    function ColorComponent(kerviService, elementRef) {
+        this.kerviService = kerviService;
+        this.elementRef = elementRef;
+        this.value = new rxjs_Rx__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]("#FFFFFF");
+        this.inline = false;
+        this.defaultSizes = new _models_dashboard_model__WEBPACK_IMPORTED_MODULE_2__["DashboardSizes"]();
+        this.picker = null;
+    }
+    ColorComponent.prototype.ngOnInit = function () {
+        var self = this;
+        if (!this.parameters) {
+            if (!self.parameters.buttonWidth)
+                this.width = this.defaultSizes.switchWidth;
+            else
+                this.width = self.parameters.buttonWidth;
+            if (!self.parameters.buttonHeight)
+                this.height = this.defaultSizes.switchHeight;
+            else
+                this.height = self.parameters.buttonHeight;
+        }
+        else {
+            this.width = this.defaultSizes.switchWidth;
+            this.height = this.defaultSizes.switchHeight;
+        }
+        self.valueSubscription = self.value.subscribe(function (v) {
+            if (self.picker && this.parent && this.parent.value.ui.isInput)
+                jQuery('.color', self.elementRef.nativeElement).css("background-color", v);
+            else
+                jQuery('.color', self.elementRef.nativeElement).attr("style", "background-color:" + v);
+        });
+        if (this.parent.value.ui.isInput) {
+            setTimeout(function () {
+                self.picker = jQuery('.color', self.elementRef.nativeElement).colorPicker({
+                    //color: 'rgba(255,12,14,1)',
+                    cssAddon: '.cp-color-picker {z-index:2000}',
+                    buildCallback: function (b) {
+                    },
+                    positionCallback: function (p) {
+                    },
+                    renderCallback: function (v) {
+                        var value = v.text;
+                        if (value.indexOf("rgb") == 0) {
+                            var rgb = v.text.split(',');
+                            var r = parseInt(rgb[0].substring(4));
+                            var g = parseInt(rgb[1]);
+                            var b = parseInt(rgb[2]);
+                            value = "#" + r.toString(16) + g.toString(16) + b.toString(16);
+                        }
+                        if (value)
+                            self.parent.color_change(value);
+                    },
+                    actionCallback: function (v, x) {
+                        console.log("c", v, x);
+                    }
+                });
+            }, 0);
+        }
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", rxjs_Rx__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"])
+    ], ColorComponent.prototype, "value", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _models_dashboard_model__WEBPACK_IMPORTED_MODULE_2__["DashboardSectionModel"])
+    ], ColorComponent.prototype, "dashboardSection", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ColorComponent.prototype, "parameters", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Boolean)
+    ], ColorComponent.prototype, "inline", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _models_dashboard_model__WEBPACK_IMPORTED_MODULE_2__["DashboardSizes"])
+    ], ColorComponent.prototype, "defaultSizes", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ColorComponent.prototype, "parent", void 0);
+    ColorComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'kervi-color',
+            template: __webpack_require__(/*! ./color.component.html */ "./src/app/ui-components/color/color.component.html"),
+            styles: [__webpack_require__(/*! ./color.component.scss */ "./src/app/ui-components/color/color.component.scss")],
+            encapsulation: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewEncapsulation"].None
+        }),
+        __metadata("design:paramtypes", [_kervi_service__WEBPACK_IMPORTED_MODULE_1__["KerviService"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
+    ], ColorComponent);
+    return ColorComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/ui-components/datetimepicker/datetimepicker.component.html":
 /*!****************************************************************************!*\
   !*** ./src/app/ui-components/datetimepicker/datetimepicker.component.html ***!
@@ -4140,7 +4315,9 @@ var GaugeComponent = /** @class */ (function () {
         this.canvasId = this.templateService.makeId();
         var warningColor = this.color("color", ".sensor-template .sensor-warning");
         var fatalColor = this.color("color", ".sensor-template .sensor-fatal");
+        var normalColor = this.color("color", ".sensor-template .sensor-major-ticks");
         var fromLimit = self.value.minValue;
+        this.dataHighlights[self.value.minValue] = { color: normalColor };
         for (var _i = 0, _a = self.value.ranges; _i < _a.length; _i++) {
             var range = _a[_i];
             if (range.type == _models_dynamicValues_model__WEBPACK_IMPORTED_MODULE_1__["DynamicRangeType"].error)
@@ -4148,7 +4325,8 @@ var GaugeComponent = /** @class */ (function () {
             else if (range.type == _models_dynamicValues_model__WEBPACK_IMPORTED_MODULE_1__["DynamicRangeType"].warning)
                 this.dataHighlights[range.start] = { color: warningColor };
             else
-                this.dataHighlights[range.start] = { color: this.color("color", ".sensor-template .sensor-major-ticks") };
+                this.dataHighlights[range.start] = { color: normalColor };
+            this.dataHighlights[range.end] = { color: normalColor };
         }
         console.log("dr", self.value.ranges, this.dataHighlights);
         var nspan = (self.value.maxValue - self.value.minValue);
@@ -4956,6 +5134,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _datetimepicker_datetimepicker_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./datetimepicker/datetimepicker.component */ "./src/app/ui-components/datetimepicker/datetimepicker.component.ts");
 /* harmony import */ var _icons_icons_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./icons/icons.component */ "./src/app/ui-components/icons/icons.component.ts");
 /* harmony import */ var ngx_gauge__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ngx-gauge */ "./node_modules/ngx-gauge/ngx-gauge.es5.js");
+/* harmony import */ var _color_color_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./color/color.component */ "./src/app/ui-components/color/color.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4965,6 +5144,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -4997,7 +5177,8 @@ var UIComponentsModule = /** @class */ (function () {
                 _image_viewer_image_viewer_component__WEBPACK_IMPORTED_MODULE_10__["ImageViewerComponent"],
                 _action_action_component__WEBPACK_IMPORTED_MODULE_11__["ActionComponent"],
                 _datetimepicker_datetimepicker_component__WEBPACK_IMPORTED_MODULE_12__["DateTimeComponent"],
-                _icons_icons_component__WEBPACK_IMPORTED_MODULE_13__["IconsComponent"]
+                _icons_icons_component__WEBPACK_IMPORTED_MODULE_13__["IconsComponent"],
+                _color_color_component__WEBPACK_IMPORTED_MODULE_15__["ColorComponent"]
             ],
             exports: [
                 _sparkline_sparkline_component__WEBPACK_IMPORTED_MODULE_1__["SparklineComponent"],
@@ -5008,7 +5189,8 @@ var UIComponentsModule = /** @class */ (function () {
                 _button_button_component__WEBPACK_IMPORTED_MODULE_7__["ButtonComponent"],
                 _cam_viewer_cam_viewer_component__WEBPACK_IMPORTED_MODULE_8__["CamViewerComponent"],
                 _action_action_component__WEBPACK_IMPORTED_MODULE_11__["ActionComponent"],
-                _datetimepicker_datetimepicker_component__WEBPACK_IMPORTED_MODULE_12__["DateTimeComponent"]
+                _datetimepicker_datetimepicker_component__WEBPACK_IMPORTED_MODULE_12__["DateTimeComponent"],
+                _color_color_component__WEBPACK_IMPORTED_MODULE_15__["ColorComponent"]
             ],
             imports: [
                 _angular_common__WEBPACK_IMPORTED_MODULE_5__["CommonModule"],
@@ -5158,6 +5340,135 @@ var DynamicBooleanComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/values/color-value/color-value.component.html":
+/*!***************************************************************!*\
+  !*** ./src/app/values/color-value/color-value.component.html ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div *ngIf=\"!inline\" class=\"block-component\"> \r\n    <div class=\"label-section\">\r\n        <div style=\"display:inline-block;float:left;\">\r\n            <div class=\"value-label\">\r\n                <span  *ngIf=\"parameters.labelIcon\" class=\"fa fa-{{parameters.labelIcon}}\"></span>\r\n                <span  *ngIf=\"parameters.label\"  >{{parameters.label}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <kervi-color [parent]=\"this\" [defaultSizes]=\"defaultSizes\" [value]=\"value.value$\" [inline]=\"inline\" [parameters]=\"parameters\" ></kervi-color>\r\n    \r\n</div>\r\n<div style=\"display:inline-block\" *ngIf=\"inline\" >\r\n    <span  *ngIf=\"parameters.labelIcon\" class=\"fa fa-{{parameters.labelIcon}}\"></span>\r\n    <span *ngIf=\"parameters.label\" >{{parameters.label}}</span>\r\n    <span *ngIf=\"parameters.labelIcon || parameters.label\" >&nbsp;</span>\r\n    <kervi-color [parent]=\"this\" [defaultSizes]=\"defaultSizes\" [value]=\"value.value$\" [inline]=\"inline\" [parameters]=\"parameters\" ></kervi-color>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/values/color-value/color-value.component.scss":
+/*!***************************************************************!*\
+  !*** ./src/app/values/color-value/color-value.component.scss ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/values/color-value/color-value.component.ts":
+/*!*************************************************************!*\
+  !*** ./src/app/values/color-value/color-value.component.ts ***!
+  \*************************************************************/
+/*! exports provided: DynamicColorComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicColorComponent", function() { return DynamicColorComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _models_dynamicValues_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../models/dynamicValues.model */ "./src/app/models/dynamicValues.model.ts");
+/* harmony import */ var _kervi_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../kervi.service */ "./src/app/kervi.service.ts");
+/* harmony import */ var _template_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../template.service */ "./src/app/template.service.ts");
+/* harmony import */ var _models_dashboard_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../models/dashboard.model */ "./src/app/models/dashboard.model.ts");
+// Copyright (c) 2016, Tim Wentzlau
+// Licensed under MIT
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var DynamicColorComponent = /** @class */ (function () {
+    function DynamicColorComponent(kerviService, elementRef, templateService) {
+        this.kerviService = kerviService;
+        this.elementRef = elementRef;
+        this.templateService = templateService;
+        this.inline = false;
+        this.defaultSizes = new _models_dashboard_model__WEBPACK_IMPORTED_MODULE_4__["DashboardSizes"]();
+        this.size = 0;
+        this.unitSize = 150;
+        this.displayType = "button";
+        //console.log("cnio",this);
+    }
+    DynamicColorComponent.prototype.ngOnInit = function () {
+        var self = this;
+        if (!this.parameters)
+            this.parameters = this.value.ui;
+        if (this.parameters) {
+            if (this.parameters.type) {
+                this.displayType = this.parameters.type;
+            }
+            if (this.parameters.size)
+                this.size = this.parameters.size;
+            if (!this.inline && this.parameters.inline) {
+                this.inline = true;
+            }
+            else if (!this.inline && this.parameters.size > 0) {
+                this.inline = true;
+            }
+        }
+        if (this.dashboardSection) {
+            this.unitSize = this.dashboardSection.dashboard.unitSize;
+        }
+        if (self.value.isInput) {
+            var sliderSize = self.unitSize * self.size;
+            if (self.size == 0)
+                sliderSize = self.unitSize;
+        }
+    };
+    DynamicColorComponent.prototype.color_change = function (v) {
+        this.kerviService.spine.sendCommand(this.value.command, v);
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _models_dynamicValues_model__WEBPACK_IMPORTED_MODULE_1__["DynamicColorModel"])
+    ], DynamicColorComponent.prototype, "value", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _models_dashboard_model__WEBPACK_IMPORTED_MODULE_4__["DashboardSectionModel"])
+    ], DynamicColorComponent.prototype, "dashboardSection", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], DynamicColorComponent.prototype, "parameters", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Boolean)
+    ], DynamicColorComponent.prototype, "inline", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _models_dashboard_model__WEBPACK_IMPORTED_MODULE_4__["DashboardSizes"])
+    ], DynamicColorComponent.prototype, "defaultSizes", void 0);
+    DynamicColorComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'dynamic-value-color',
+            template: __webpack_require__(/*! ./color-value.component.html */ "./src/app/values/color-value/color-value.component.html"),
+            styles: [__webpack_require__(/*! ./color-value.component.scss */ "./src/app/values/color-value/color-value.component.scss")]
+        }),
+        __metadata("design:paramtypes", [_kervi_service__WEBPACK_IMPORTED_MODULE_2__["KerviService"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"], _template_service__WEBPACK_IMPORTED_MODULE_3__["TemplateService"]])
+    ], DynamicColorComponent);
+    return DynamicColorComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/values/datetime-value/datetime-value.component.html":
 /*!*********************************************************************!*\
   !*** ./src/app/values/datetime-value/datetime-value.component.html ***!
@@ -5296,7 +5607,7 @@ var DynamicDateTimeComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-container [ngSwitch]=\"value.type\">\r\n    <ng-template ngSwitchCase=\"number-value\">\r\n        <dynamic-value-number [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [input]=\"value\"></dynamic-value-number>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"boolean-value\">\r\n        <dynamic-value-boolean [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [value]=\"value\"></dynamic-value-boolean>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"string-value\">\r\n        <dynamic-value-string [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [input]=\"value\"></dynamic-value-string>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"enum-value\">\r\n        <dynamic-value-enum [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [input]=\"value\"></dynamic-value-enum>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"datetime-value\">\r\n        <dynamic-value-datetime [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [value]=\"value\"></dynamic-value-datetime>\r\n    </ng-template>\r\n</ng-container>\r\n"
+module.exports = "<ng-container [ngSwitch]=\"value.type\">\r\n    <ng-template ngSwitchCase=\"number-value\">\r\n        <dynamic-value-number [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [input]=\"value\"></dynamic-value-number>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"boolean-value\">\r\n        <dynamic-value-boolean [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [value]=\"value\"></dynamic-value-boolean>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"string-value\">\r\n        <dynamic-value-string [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [input]=\"value\"></dynamic-value-string>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"enum-value\">\r\n        <dynamic-value-enum [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [input]=\"value\"></dynamic-value-enum>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"datetime-value\">\r\n        <dynamic-value-datetime [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [value]=\"value\"></dynamic-value-datetime>\r\n    </ng-template>\r\n    <ng-template ngSwitchCase=\"color-value\">\r\n        <dynamic-value-color [defaultSizes]=\"defaultSizes\" [parameters]=\"parameters\" [dashboardSection]=\"dashboardSection\" [inline]=\"inline\" [value]=\"value\"></dynamic-value-color>\r\n    </ng-template>\r\n</ng-container>\r\n"
 
 /***/ }),
 
@@ -5786,9 +6097,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _boolean_value_boolean_value_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./boolean-value/boolean-value.component */ "./src/app/values/boolean-value/boolean-value.component.ts");
 /* harmony import */ var _string_value_string_value_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./string-value/string-value.component */ "./src/app/values/string-value/string-value.component.ts");
 /* harmony import */ var _datetime_value_datetime_value_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./datetime-value/datetime-value.component */ "./src/app/values/datetime-value/datetime-value.component.ts");
-/* harmony import */ var _enum_value_enum_value_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./enum-value/enum-value.component */ "./src/app/values/enum-value/enum-value.component.ts");
-/* harmony import */ var _dynamic_value_dynamic_value_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./dynamic-value/dynamic-value.component */ "./src/app/values/dynamic-value/dynamic-value.component.ts");
-/* harmony import */ var _ui_components_ui_components_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ui-components/ui-components.module */ "./src/app/ui-components/ui-components.module.ts");
+/* harmony import */ var _color_value_color_value_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./color-value/color-value.component */ "./src/app/values/color-value/color-value.component.ts");
+/* harmony import */ var _enum_value_enum_value_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./enum-value/enum-value.component */ "./src/app/values/enum-value/enum-value.component.ts");
+/* harmony import */ var _dynamic_value_dynamic_value_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./dynamic-value/dynamic-value.component */ "./src/app/values/dynamic-value/dynamic-value.component.ts");
+/* harmony import */ var _ui_components_ui_components_module__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../ui-components/ui-components.module */ "./src/app/ui-components/ui-components.module.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5807,6 +6119,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var ValuesModule = /** @class */ (function () {
     function ValuesModule() {
     }
@@ -5814,22 +6127,24 @@ var ValuesModule = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
             declarations: [
                 _number_value_number_value_component__WEBPACK_IMPORTED_MODULE_2__["DynamicNumberComponent"],
-                _dynamic_value_dynamic_value_component__WEBPACK_IMPORTED_MODULE_7__["DynamicValueComponent"],
+                _dynamic_value_dynamic_value_component__WEBPACK_IMPORTED_MODULE_8__["DynamicValueComponent"],
                 _boolean_value_boolean_value_component__WEBPACK_IMPORTED_MODULE_3__["DynamicBooleanComponent"],
                 _string_value_string_value_component__WEBPACK_IMPORTED_MODULE_4__["DynamicStringComponent"],
-                _enum_value_enum_value_component__WEBPACK_IMPORTED_MODULE_6__["DynamicEnumComponent"],
-                _datetime_value_datetime_value_component__WEBPACK_IMPORTED_MODULE_5__["DynamicDateTimeComponent"]
+                _enum_value_enum_value_component__WEBPACK_IMPORTED_MODULE_7__["DynamicEnumComponent"],
+                _datetime_value_datetime_value_component__WEBPACK_IMPORTED_MODULE_5__["DynamicDateTimeComponent"],
+                _color_value_color_value_component__WEBPACK_IMPORTED_MODULE_6__["DynamicColorComponent"]
             ],
             exports: [
                 _number_value_number_value_component__WEBPACK_IMPORTED_MODULE_2__["DynamicNumberComponent"],
-                _dynamic_value_dynamic_value_component__WEBPACK_IMPORTED_MODULE_7__["DynamicValueComponent"],
+                _dynamic_value_dynamic_value_component__WEBPACK_IMPORTED_MODULE_8__["DynamicValueComponent"],
                 _boolean_value_boolean_value_component__WEBPACK_IMPORTED_MODULE_3__["DynamicBooleanComponent"],
                 _string_value_string_value_component__WEBPACK_IMPORTED_MODULE_4__["DynamicStringComponent"],
-                _enum_value_enum_value_component__WEBPACK_IMPORTED_MODULE_6__["DynamicEnumComponent"],
-                _datetime_value_datetime_value_component__WEBPACK_IMPORTED_MODULE_5__["DynamicDateTimeComponent"]
+                _enum_value_enum_value_component__WEBPACK_IMPORTED_MODULE_7__["DynamicEnumComponent"],
+                _datetime_value_datetime_value_component__WEBPACK_IMPORTED_MODULE_5__["DynamicDateTimeComponent"],
+                _color_value_color_value_component__WEBPACK_IMPORTED_MODULE_6__["DynamicColorComponent"]
             ],
             imports: [
-                _ui_components_ui_components_module__WEBPACK_IMPORTED_MODULE_8__["UIComponentsModule"],
+                _ui_components_ui_components_module__WEBPACK_IMPORTED_MODULE_9__["UIComponentsModule"],
                 _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"]
             ],
             providers: [],
