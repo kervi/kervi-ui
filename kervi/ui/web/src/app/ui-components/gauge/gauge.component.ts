@@ -43,19 +43,21 @@ export class GaugeComponent implements OnInit {
     
     this.canvasId=this.templateService.makeId();
     
-    var warningColor=this.color("color",".sensor-template .sensor-warning");
-    var fatalColor=this.color("color",".sensor-template .sensor-fatal");
-
+    var warningColor = this.color("color",".sensor-template .sensor-warning");
+    var fatalColor = this.color("color",".sensor-template .sensor-fatal");
+    var normalColor = this.color("color",".sensor-template .sensor-major-ticks");
     
     var fromLimit=self.value.minValue;
-      
+    
+    this.dataHighlights[self.value.minValue]={color:normalColor}
     for(var range of self.value.ranges){
       if (range.type == DynamicRangeType.error)
         this.dataHighlights[range.start]={color: fatalColor};
       else if (range.type == DynamicRangeType.warning)
         this.dataHighlights[range.start]={color:warningColor};
       else
-        this.dataHighlights[range.start]={color:this.color("color",".sensor-template .sensor-major-ticks")};
+        this.dataHighlights[range.start]={color:normalColor};
+      this.dataHighlights[range.end]={color:normalColor}
     }
       console.log("dr", self.value.ranges, this.dataHighlights);
       var nspan=(self.value.maxValue-self.value.minValue);

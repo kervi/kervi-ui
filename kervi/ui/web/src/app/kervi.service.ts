@@ -50,22 +50,16 @@ export class KerviService {
           self.spine.addEventHandler("valueChanged","",function(id, value){
             for (let component of self.components){
               if (component.id==value.id){
-                if (component.componentType == "sensor"){
-                  var dynamicValue = component as any;
+                var dynamicValue = component as any;
+              
+                dynamicValue.valueTS=new Date(this.timestamp + " utc");
+                dynamicValue.value$.next(value.value);
+                var spl=dynamicValue.sparkline$.value;
+                spl.push(value.value);
+                if (spl.length>10)
+                    spl.shift();
+                dynamicValue.sparkline$.next(spl);  
                 
-                  dynamicValue.value.valueTS=new Date(this.timestamp + " utc");
-                  dynamicValue.value.value$.next(value.value);
-                  var spl=dynamicValue.value.sparkline$.value;
-                  spl.push(value.value);
-                  if (spl.length>10)
-                      spl.shift();
-                  dynamicValue.value.sparkline$.next(spl);  
-                } else {
-                  var dynamicValue = component as any;
-                  
-                  dynamicValue.valueTS=new Date(this.timestamp + " utc");
-                  dynamicValue.value$.next(value.value);
-                }
               }
             }
           });

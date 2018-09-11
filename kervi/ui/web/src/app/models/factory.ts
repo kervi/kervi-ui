@@ -45,6 +45,8 @@ export class ComponentFactory{
                 component = new DynamicValues.DynamicEnumModel(message);
             else if (message.componentType == "datetime-value")
                 component = new DynamicValues.DynamicDateTimeModel(message);
+            else if (message.componentType == "color-value")
+                component = new DynamicValues.DynamicColorModel(message);
             
             if (component)
                 result.push(component);

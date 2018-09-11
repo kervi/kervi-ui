@@ -14,6 +14,7 @@ export class SensorModel implements IComponent {
     public type: string = null;
     public visible: boolean = true;
     public value:DynamicNumberModel = null;
+    public valueType:string = null;
     public dashboards: DashboardLink[] = [];
     
     updateReferences(){};
@@ -25,6 +26,7 @@ export class SensorModel implements IComponent {
         this.ui=message.ui;
         this.visible=message.visible;
         this.value = new DynamicNumberModel(message);
+        this.valueType = message.value_type;
         this.type=message.type;
         for(var subSensor of message.subSensors){
             this.subSensors.push(new SensorModel(subSensor));

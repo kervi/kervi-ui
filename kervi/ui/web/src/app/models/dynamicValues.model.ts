@@ -300,3 +300,36 @@ export class DynamicDateTimeModel implements IComponent {
     updateReferences(){};
     reload(component:IComponent){};
 }
+
+export class DynamicColorModel implements IComponent {
+    public id: string;
+    public name: string;
+    public componentType = "DynamicValue";
+    public isInput:boolean;
+    public ui:any = {}
+    public dashboards: DashboardLink[] = [];
+    public type: string;
+    public visible: boolean;
+    public subType: string;
+    public command: string;
+    public value$: BehaviorSubject<Date> = new BehaviorSubject<Date>(null);
+
+    constructor(message) {
+        this.id = message.id;
+        this.name = message.name;
+        this.type = message.componentType;
+        this.ui = message.ui;
+        this.isInput = message.isInput;
+        this.visible = message.visible;
+        this.subType = message.inputType;
+        this.value$.next(message.value);
+        this.command = message.command;
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
+        }
+    }
+
+    updateReferences(){};
+    reload(component:IComponent){};
+}
