@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private rightXValue: DynamicNumberModel = null;
   private rightYValue: DynamicNumberModel = null;
-
+  private inFullScreen:boolean = false;
   constructor(private elementRef:ElementRef, private zone:NgZone, private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
       
    }
@@ -87,6 +87,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.kerviService.spine.sendCommand(this.rightYValue.command, 0);
         }
    }
+
+   toggleFullScreen() {
+    var doc:any;
+    doc = document;
+    if ((doc.fullScreenElement && doc.fullScreenElement !== null) ||    
+     (!doc.mozFullScreen && !document.webkitIsFullScreen)) {
+       this.inFullScreen = true;
+      if (doc.documentElement.requestFullScreen) {  
+        doc.documentElement.requestFullScreen();  
+      } else if (doc.documentElement.mozRequestFullScreen) {  
+        doc.documentElement.mozRequestFullScreen();  
+      } else if (document.documentElement.webkitRequestFullScreen) {  
+        doc.documentElement.webkitRequestFullScreen();  
+      }  
+    } else {  
+      this.inFullScreen=false;
+      if (doc.cancelFullScreen) {  
+        doc.cancelFullScreen();  
+      } else if (doc.mozCancelFullScreen) {  
+        doc.mozCancelFullScreen();  
+      } else if (document.webkitCancelFullScreen) {  
+        doc.webkitCancelFullScreen();  
+      }  
+    }  
+  }
 
 
   ngOnInit() {

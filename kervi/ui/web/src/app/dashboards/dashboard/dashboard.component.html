@@ -63,6 +63,7 @@
 			</div>
 			<div class="col-sm-4 text-right" style="text-align: right">
 				<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerRightSection" [defaultSizes]="defaultSizes" [section]="dashboard.footerRightSection"></kervi-dashboard-section>
+				<i class="fa fa-expand" title="Toggle full screen" (mousedown)="toggleFullScreen()"></i>&nbsp;
 			</div>
 		</div>
 	</footer>
