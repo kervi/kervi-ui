@@ -41,6 +41,7 @@
     "stompjs": "^2.3.3",
     "tempusdominus-bootstrap-4": "^5.0.0",
     "tether": "^1.4.0",
+    "tinyColorPicker": "https://github.com/PitPik/tinyColorPicker/tarball/master",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
