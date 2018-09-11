@@ -54,12 +54,13 @@ export class KerviService {
               
                 dynamicValue.valueTS=new Date(this.timestamp + " utc");
                 dynamicValue.value$.next(value.value);
-                var spl=dynamicValue.sparkline$.value;
-                spl.push(value.value);
-                if (spl.length>10)
-                    spl.shift();
-                dynamicValue.sparkline$.next(spl);  
-                
+                if (dynamicValue.sparkline$){
+                  var spl=dynamicValue.sparkline$.value;
+                  spl.push(value.value);
+                  if (spl.length>10)
+                      spl.shift();
+                  dynamicValue.sparkline$.next(spl);  
+                }
               }
             }
           });

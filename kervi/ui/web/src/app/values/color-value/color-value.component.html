@@ -7,7 +7,11 @@
             </div>
         </div>
     </div>
-    <kervi-color [parent]="this" [defaultSizes]="defaultSizes" [value]="value.value$" [inline]="inline" [parameters]="parameters" ></kervi-color>
+    <div class="value-section">
+        <div class="value-value" [style.min-width.rem]="parameters.valueSize">
+            <kervi-color [parent]="this" [defaultSizes]="defaultSizes" [value]="value.value$" [inline]="inline" [parameters]="parameters" ></kervi-color>
+        </div>
+    </div>
     
 </div>
 <div style="display:inline-block" *ngIf="inline" >
