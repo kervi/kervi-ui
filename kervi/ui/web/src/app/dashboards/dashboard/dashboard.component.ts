@@ -18,6 +18,7 @@ declare var jQuery: any;
 export class DashboardComponent implements OnInit, OnDestroy {
   public dashboards$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   public dashboardCount:Number = 0;
+  public componentsCount:Number = 0;
   public dashboardId:string;
   public dashboard:DashboardModel;
   public sections: DashboardSectionModel[] = [];
@@ -118,7 +119,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     console.log("db init", this);
     var self = this;
     this.dashboardsService.getDashboards$().subscribe(function (v) {
-        self.dashboardCount = v.length 
+        self.dashboardCount = v.length;
+        self.componentsCount = self.dashboardsService.componentsCount;
         self.showMenu = (self.dashboardCount > 1 || self.kerviService.doAuthenticate);
         self.anonymous = self.kerviService.isAnonymous();
         self.dashboards$.next(v);

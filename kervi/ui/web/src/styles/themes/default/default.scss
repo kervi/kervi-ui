@@ -96,6 +96,9 @@ $body-bg:    #011001 !default;
 $body-color: #67b16b !default;
 $border-radius-base: .15rem;
 
+html:fullscreen{
+  background-color:#011001 !important;
+}
 .form-group{
   margin-bottom:0 !important;
 }
