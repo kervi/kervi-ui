@@ -197,7 +197,7 @@ def start(ip_address, http_port, ws_port):
             import ssl
             SERVER.socket = ssl.wrap_socket (SERVER.socket, keyfile=key_file, certfile=cert_file, server_side=True)
 
-    SERVER_THREAD = threading.Thread(target=SERVER.serve_forever)
+    SERVER_THREAD = threading.Thread(target=SERVER.serve_forever, name="webserver")
     SERVER_THREAD.daemon = True
     SERVER_THREAD.start()
 
