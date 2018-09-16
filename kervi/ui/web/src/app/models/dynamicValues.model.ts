@@ -39,6 +39,7 @@ export class DynamicEnumOptionModel{
     }
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
 }
 
 export class DynamicEnumModel implements IComponent{
@@ -80,6 +81,7 @@ export class DynamicEnumModel implements IComponent{
 
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
 
     public selectOptions(selectedOptions:any){
         console.log("soc");
@@ -156,6 +158,7 @@ export class DynamicNumberModel implements IComponent {
 
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
 }
 
 export class DynamicStringModel implements IComponent {
@@ -203,6 +206,7 @@ export class DynamicStringModel implements IComponent {
 
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
 }
 
 export class DynamicBooleanModel implements IComponent {
@@ -236,6 +240,7 @@ export class DynamicBooleanModel implements IComponent {
 
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
 }
 
 /*export class ControllerButtonModel implements IComponent {
@@ -299,6 +304,7 @@ export class DynamicDateTimeModel implements IComponent {
 
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
 }
 
 export class DynamicColorModel implements IComponent {
@@ -332,4 +338,5 @@ export class DynamicColorModel implements IComponent {
 
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
 }

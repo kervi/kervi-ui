@@ -121,6 +121,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboardsService.getDashboards$().subscribe(function (v) {
         self.dashboardCount = v.length;
         self.componentsCount = self.dashboardsService.componentsCount;
+        console.log("dc", self.dashboardCount, self.componentsCount);
         self.showMenu = (self.dashboardCount > 1 || self.kerviService.doAuthenticate);
         self.anonymous = self.kerviService.isAnonymous();
         self.dashboards$.next(v);

@@ -19,6 +19,7 @@ export class ActionModel implements IComponent {
     
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
     
     constructor(message: any){
         this.id=message.id;

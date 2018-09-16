@@ -770,7 +770,7 @@ module.exports = ".page-header{\r\n    position:relative;\r\n    z-index:2000;\r
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar row navbar-toggleable-md navbar-fixed-top navbar-light bg-faded page-header\">\r\n\t<div class=\"row\" style=\"width:100%\">\r\n\t\t<div class=\"col-xs-4 col-sm-4\">\r\n\t\t\t<ul class=\"navbar-nav flex-nowrap flex-row\" >\r\n\t\t\t\t<li class=\"nav-item dropdown\">\r\n\t\t\t\t\t<a *ngIf=\"showMenu\" class=\"dropdown btn nav-link\" title=\"Dashboards\" style=\"padding-top:0;cursor: pointer\" data-toggle=\"dropdown\"><i class=\"fa fa-bars fa-lg\" aria-hidden=\"true\"></i></a>\r\n\t\t\t\t\t<div  class=\"dropdown-menu  multi-leve ul.nav.navbar-nav.no-collapse\">\r\n\t\t\t\t\t\t<!--<span class=\"dropdown-divider\">&nbsp; Dashboards</span>-->\r\n\t\t\t\t\t\t<div class=\"dropdown-submenu\">\r\n\t\t\t\t\t\t\t<ng-container *ngIf=\"dashboardCount > 1\">\r\n\t\t\t\t\t\t\t<a  *ngFor=\"let dashboard of (dashboards$ | async)\" class=\"dropdown-item\" [routerLink]=\"['/dashboard', dashboard.id]\">{{dashboard.name}}</a>\r\n\t\t\t\t\t\t\t</ng-container>\r\n\t\t\t\t\t\t\t<div *ngIf=\"authenticated && dashboardCount > 1\" class=\"dropdown-divider\"></div>\r\n\t\t\t\t\t\t\t<a *ngIf=\"authenticated && anonymous\" href=\"javascript: return false;\" (click)=\"logoff($event)\" class=\"dropdown-item\" >Log in</a>\r\n\t\t\t\t\t\t\t<a *ngIf=\"authenticated && !anonymous\" href=\"javascript: return false;\" (click)=\"logoff($event)\" class=\"dropdown-item\" >Log out</a>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li class=\"nav-item\" *ngIf=\"showSectionController\">\r\n\t\t\t\t\t<a  class=\"nav-link btn\" (click)=\"dashboardSectionsHidden = !dashboardSectionsHidden;\"><i class=\"fa fa-sliders-h fa-lg\" aria-hidden=\"true\" style=\"transform:rotate(90deg);\"></i>{{dashboardSectionsVisible}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li *ngIf=\"dashboard\" style=\"display:inline-block;white-space:nowrap\">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>\r\n\t\t\t</ul>\r\n\t\t</div>\t\r\n\t\t<div *ngIf=\"dashboard && dashboard.sysSection\" class=\"col-xs-8 col-sm-8 core-sensors text-xs-center text-sm-right\" style=\"display:inline-block\">\r\n\t\t\t\t&nbsp;<kervi-dashboard-section [defaultSizes]=\"defaultSizes\" [inline]=\"true\" [section]=\"dashboard.sysSection\" ></kervi-dashboard-section>\r\n\t\t</div>\r\n\t</div>\r\n</nav>\r\n\r\n<ng-container *ngIf=\"dashboard && dashboard.template\">\r\n\t<!--<dashboard-layout [dashboard]=\"dashboard\"></dashboard-layout>-->\r\n</ng-container>\r\n<div *ngIf=\"dashboard && !dashboard.template\" style=\"position:relative;margin-top:35px;\">\r\n\t<kervi-cam-viewer *ngIf=\"cameraId\" [isBackground]=\"true\" [cameraId]=\"cameraId\" [parameters]=\"cameraParameters\"></kervi-cam-viewer>\r\n\t<div id=\"controller-pads\">\r\n\t\t<div *ngIf=\"showLeftPad\" class=\"left-pad-area\" style=\"position:fixed;\" (mousedown)=\"padPress('left')\" (mouseup)=\"padRelease('left')\">\r\n\t\t\t<fieldset id=\"leftPad\" style=\"position:absolute\" class=\"pad\" [attr.data-width]=\"padSize\" [attr.data-height]=\"padSize\">\r\n\t\t\t\t<legend></legend>\r\n\t\t\t\t<input type=\"hidden\" id=\"left-pad-x\" name=\"left-x\" value=\"0\"><input type=\"hidden\" id=\"left-pad-y\" name=\"left-y\" value=\"0\">\r\n\t\t\t</fieldset>\r\n\t\t</div>\r\n\t\t<div *ngIf=\"showRightPad\" class=\"right-pad-area\" style=\"position:fixed\" (mousedown)=\"padPress('right')\" (mouseup)=\"padRelease('right')\">\r\n\t\t\t<fieldset id=\"rightPad\" style=\"position:absolute\" class=\"pad\" [attr.data-width]=\"padSize\" [attr.data-height]=\"padSize\">\r\n\t\t\t\t<legend></legend>\r\n\t\t\t\t<input id=\"right-pad-x\" type=\"hidden\" name=\"right-x\" value=\"0\"> <input type=\"hidden\" id=\"right-pad-y\" name=\"right-y\" value=\"0\">\r\n\t\t\t</fieldset>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"container-fluid\" style=\"top:0;padding-top:10px;z-index:1999;position:absolute;padding-bottom:30px;\" >\r\n\t\t<div  [ngClass]=\"{'dashboard-sections-hidden' : dashboardSectionsHidden }\">\r\n\t\t\t<kervi-dashboard-section  *ngFor=\"let section of dashboard.sections\" [defaultSizes]=\"defaultSizes\" [section]=\"section\" class=\"w-{{section.width}}\"></kervi-dashboard-section>\r\n\t\t</div>  \r\n\t</div>\r\n</div>\r\n<footer class=\"footer\" *ngIf=\"dashboard\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-sm-4 text-left\" style=\"text-align: left\">\r\n\t\t\t\t<kervi-dashboard-section [inline]=\"true\" *ngIf=\"dashboard.footerLefSection\" [defaultSizes]=\"defaultSizes\" [section]=\"dashboard.footerLeftSection\"></kervi-dashboard-section>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"col-sm-4 text-center\" style=\"text-align:center\">\r\n\t\t\t\t<kervi-dashboard-section [inline]=\"true\" *ngIf=\"dashboard.footerCenterSection\" [defaultSizes]=\"defaultSizes\" [section]=\"dashboard.footerCenterSection\"></kervi-dashboard-section>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"col-sm-4 text-right\" style=\"text-align: right\">\r\n\t\t\t\t<kervi-dashboard-section [inline]=\"true\" *ngIf=\"dashboard.footerRightSection\" [defaultSizes]=\"defaultSizes\" [section]=\"dashboard.footerRightSection\"></kervi-dashboard-section>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</footer>"
+module.exports = "<nav class=\"navbar row navbar-toggleable-md navbar-fixed-top navbar-light bg-faded page-header\">\r\n\t<div class=\"row\" style=\"width:100%\">\r\n\t\t<div class=\"col-xs-4 col-sm-4\">\r\n\t\t\t<ul class=\"navbar-nav flex-nowrap flex-row\" >\r\n\t\t\t\t<li class=\"nav-item dropdown\">\r\n\t\t\t\t\t<a *ngIf=\"showMenu\" class=\"dropdown btn nav-link\" title=\"Dashboards\" style=\"padding-top:0;cursor: pointer\" data-toggle=\"dropdown\"><i class=\"fa fa-bars fa-lg\" aria-hidden=\"true\"></i></a>\r\n\t\t\t\t\t<div  class=\"dropdown-menu  multi-leve ul.nav.navbar-nav.no-collapse\">\r\n\t\t\t\t\t\t<!--<span class=\"dropdown-divider\">&nbsp; Dashboards</span>-->\r\n\t\t\t\t\t\t<div class=\"dropdown-submenu\">\r\n\t\t\t\t\t\t\t<ng-container *ngIf=\"dashboardCount > 1\">\r\n\t\t\t\t\t\t\t<a  *ngFor=\"let dashboard of (dashboards$ | async)\" class=\"dropdown-item\" [routerLink]=\"['/dashboard', dashboard.id]\">{{dashboard.name}}</a>\r\n\t\t\t\t\t\t\t</ng-container>\r\n\t\t\t\t\t\t\t<div *ngIf=\"authenticated && dashboardCount > 1\" class=\"dropdown-divider\"></div>\r\n\t\t\t\t\t\t\t<a *ngIf=\"authenticated && anonymous\" href=\"javascript: return false;\" (click)=\"logoff($event)\" class=\"dropdown-item\" >Log in</a>\r\n\t\t\t\t\t\t\t<a *ngIf=\"authenticated && !anonymous\" href=\"javascript: return false;\" (click)=\"logoff($event)\" class=\"dropdown-item\" >Log out</a>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li class=\"nav-item\" *ngIf=\"showSectionController\">\r\n\t\t\t\t\t<a  class=\"nav-link btn\" (click)=\"dashboardSectionsHidden = !dashboardSectionsHidden;\"><i class=\"fa fa-sliders-h fa-lg\" aria-hidden=\"true\" style=\"transform:rotate(90deg);\"></i>{{dashboardSectionsVisible}}</a>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li *ngIf=\"dashboard\" style=\"display:inline-block;white-space:nowrap\">&nbsp;&nbsp;&nbsp;{{dashboard.name}}</li>\r\n\t\t\t</ul>\r\n\t\t</div>\t\r\n\t\t<div *ngIf=\"dashboard && dashboard.sysSection\" class=\"col-xs-8 col-sm-8 core-sensors text-xs-center text-sm-right\" style=\"display:inline-block\">\r\n\t\t\t\t&nbsp;<kervi-dashboard-section [defaultSizes]=\"defaultSizes\" [inline]=\"true\" [section]=\"dashboard.sysSection\" ></kervi-dashboard-section>\r\n\t\t</div>\r\n\t</div>\r\n</nav>\r\n\r\n<ng-container *ngIf=\"dashboard && dashboard.template\">\r\n\t<!--<dashboard-layout [dashboard]=\"dashboard\"></dashboard-layout>-->\r\n</ng-container>\r\n\r\n<div *ngIf=\"dashboard && !dashboard.template\" style=\"position:relative;margin-top:35px;\">\r\n\t\r\n\t<kervi-cam-viewer *ngIf=\"cameraId\" [isBackground]=\"true\" [cameraId]=\"cameraId\" [parameters]=\"cameraParameters\"></kervi-cam-viewer>\r\n\t<div id=\"controller-pads\">\r\n\t\t<div *ngIf=\"showLeftPad\" class=\"left-pad-area\" style=\"position:fixed;\" (mousedown)=\"padPress('left')\" (mouseup)=\"padRelease('left')\">\r\n\t\t\t<fieldset id=\"leftPad\" style=\"position:absolute\" class=\"pad\" [attr.data-width]=\"padSize\" [attr.data-height]=\"padSize\">\r\n\t\t\t\t<legend></legend>\r\n\t\t\t\t<input type=\"hidden\" id=\"left-pad-x\" name=\"left-x\" value=\"0\"><input type=\"hidden\" id=\"left-pad-y\" name=\"left-y\" value=\"0\">\r\n\t\t\t</fieldset>\r\n\t\t</div>\r\n\t\t<div *ngIf=\"showRightPad\" class=\"right-pad-area\" style=\"position:fixed\" (mousedown)=\"padPress('right')\" (mouseup)=\"padRelease('right')\">\r\n\t\t\t<fieldset id=\"rightPad\" style=\"position:absolute\" class=\"pad\" [attr.data-width]=\"padSize\" [attr.data-height]=\"padSize\">\r\n\t\t\t\t<legend></legend>\r\n\t\t\t\t<input id=\"right-pad-x\" type=\"hidden\" name=\"right-x\" value=\"0\"> <input type=\"hidden\" id=\"right-pad-y\" name=\"right-y\" value=\"0\">\r\n\t\t\t</fieldset>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"container-fluid\" style=\"top:0;padding-top:10px;z-index:1999;position:absolute;padding-bottom:30px;\" >\r\n\t\t<ng-container *ngIf=\"componentsCount==0\">\r\n\t\t\t<div class=\"card-deck\">\r\n\t\t\t\t<div class=\"card-body\"   style=\"position:relative;margin-top:35px;\">\r\n\t\t\t\t\t<h1>Hello world</h1>\r\n\t\t\t\t\t<p>No dashboards, sensors, controllers or other components are found in this application!</p>\r\n\t\t\t\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</ng-container>\r\n\t\t\r\n\t\t<div  [ngClass]=\"{'dashboard-sections-hidden' : dashboardSectionsHidden }\">\r\n\t\t\t<kervi-dashboard-section  *ngFor=\"let section of dashboard.sections\" [defaultSizes]=\"defaultSizes\" [section]=\"section\" class=\"w-{{section.width}}\"></kervi-dashboard-section>\r\n\t\t</div>  \r\n\t</div>\r\n</div>\r\n<footer class=\"footer\" *ngIf=\"dashboard\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-sm-4 text-left\" style=\"text-align: left\">\r\n\t\t\t\t<kervi-dashboard-section [inline]=\"true\" *ngIf=\"dashboard.footerLefSection\" [defaultSizes]=\"defaultSizes\" [section]=\"dashboard.footerLeftSection\"></kervi-dashboard-section>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"col-sm-4 text-center\" style=\"text-align:center\">\r\n\t\t\t\t<kervi-dashboard-section [inline]=\"true\" *ngIf=\"dashboard.footerCenterSection\" [defaultSizes]=\"defaultSizes\" [section]=\"dashboard.footerCenterSection\"></kervi-dashboard-section>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"col-sm-4 text-right\" style=\"text-align: right\">\r\n\t\t\t\t<kervi-dashboard-section [inline]=\"true\" *ngIf=\"dashboard.footerRightSection\" [defaultSizes]=\"defaultSizes\" [section]=\"dashboard.footerRightSection\"></kervi-dashboard-section>\r\n\t\t\t\t<i class=\"fa fa-expand\" title=\"Toggle full screen\" (mousedown)=\"toggleFullScreen()\"></i>&nbsp;\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</footer>"
 
 /***/ }),
 
@@ -815,6 +815,7 @@ var DashboardComponent = /** @class */ (function () {
         this.activatedRoute = activatedRoute;
         this.dashboards$ = new rxjs_Rx__WEBPACK_IMPORTED_MODULE_5__["BehaviorSubject"]([]);
         this.dashboardCount = 0;
+        this.componentsCount = 0;
         this.sections = [];
         this.authenticated = false;
         this.sectionRows = [];
@@ -837,6 +838,7 @@ var DashboardComponent = /** @class */ (function () {
         this.leftYValue = null;
         this.rightXValue = null;
         this.rightYValue = null;
+        this.inFullScreen = false;
     }
     DashboardComponent.prototype.logoff = function (event) {
         this.kerviService.logoff();
@@ -870,12 +872,43 @@ var DashboardComponent = /** @class */ (function () {
             this.kerviService.spine.sendCommand(this.rightYValue.command, 0);
         }
     };
+    DashboardComponent.prototype.toggleFullScreen = function () {
+        var doc;
+        doc = document;
+        if ((doc.fullScreenElement && doc.fullScreenElement !== null) ||
+            (!doc.mozFullScreen && !document.webkitIsFullScreen)) {
+            this.inFullScreen = true;
+            if (doc.documentElement.requestFullScreen) {
+                doc.documentElement.requestFullScreen();
+            }
+            else if (doc.documentElement.mozRequestFullScreen) {
+                doc.documentElement.mozRequestFullScreen();
+            }
+            else if (document.documentElement.webkitRequestFullScreen) {
+                doc.documentElement.webkitRequestFullScreen();
+            }
+        }
+        else {
+            this.inFullScreen = false;
+            if (doc.cancelFullScreen) {
+                doc.cancelFullScreen();
+            }
+            else if (doc.mozCancelFullScreen) {
+                doc.mozCancelFullScreen();
+            }
+            else if (document.webkitCancelFullScreen) {
+                doc.webkitCancelFullScreen();
+            }
+        }
+    };
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
         console.log("db init", this);
         var self = this;
         this.dashboardsService.getDashboards$().subscribe(function (v) {
             self.dashboardCount = v.length;
+            self.componentsCount = self.dashboardsService.componentsCount;
+            console.log("dc", self.dashboardCount, self.componentsCount);
             self.showMenu = (self.dashboardCount > 1 || self.kerviService.doAuthenticate);
             self.anonymous = self.kerviService.isAnonymous();
             self.dashboards$.next(v);
@@ -1173,68 +1206,85 @@ var DashboardsService = /** @class */ (function () {
         this.kerviService = kerviService;
         this.dashboards = [];
         this._dashboards$ = new rxjs_Rx__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
+        this.componentsCount = 0;
+        this.dashboardCount = 0;
         var self = this;
+        var dashboardCount = 0;
+        var componentsCount = 0;
+        self.componentsCount = 0;
         var s = this.kerviService.getComponents$().subscribe(function (v) {
             self.dashboards = self.kerviService.getComponentsByType("dashboard");
             console.log("load dashboards", self.dashboards);
             for (var _i = 0, _a = self.dashboards; _i < _a.length; _i++) {
                 var dashboard = _a[_i];
+                dashboardCount++;
                 //var dashboard = dashboardComponent as DashboardModel;
                 for (var _b = 0, _c = dashboard.sections; _b < _c.length; _b++) {
                     var section = _c[_b];
                     for (var _d = 0, _e = section.components; _d < _e.length; _d++) {
                         var sectionComponent = _e[_d];
+                        componentsCount += 1;
                         if (!sectionComponent.component)
                             sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                     }
                 }
                 for (var _f = 0, _g = dashboard.sysSection.components; _f < _g.length; _f++) {
                     var sectionComponent = _g[_f];
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
                 for (var _h = 0, _j = dashboard.headerSection.components; _h < _j.length; _h++) {
                     var sectionComponent = _j[_h];
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
                 for (var _k = 0, _l = dashboard.footerLeftSection.components; _k < _l.length; _k++) {
                     var sectionComponent = _l[_k];
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
                 for (var _m = 0, _o = dashboard.footerCenterSection.components; _m < _o.length; _m++) {
                     var sectionComponent = _o[_m];
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
                 for (var _p = 0, _q = dashboard.footerRightSection.components; _p < _q.length; _p++) {
                     var sectionComponent = _q[_p];
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
                 for (var _r = 0, _s = dashboard.LeftPadXSection.components; _r < _s.length; _r++) {
                     var sectionComponent = _s[_r];
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
                 for (var _t = 0, _u = dashboard.LeftPadYSection.components; _t < _u.length; _t++) {
                     var sectionComponent = _u[_t];
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
                 for (var _v = 0, _w = dashboard.RightPadXSection.components; _v < _w.length; _v++) {
                     var sectionComponent = _w[_v];
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
                 for (var _x = 0, _y = dashboard.RightPadYSection.components; _x < _y.length; _x++) {
                     var sectionComponent = _y[_x];
+                    this.componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component = self.kerviService.getComponent(sectionComponent.componentId);
                 }
             }
-            console.log("load dashboards updated", self.dashboards);
+            console.log("load dashboards updated", self.dashboards, dashboardCount, componentsCount);
+            self.componentsCount = componentsCount;
             self._dashboards$.next(self.dashboards);
         });
         this.kerviService.connected$.subscribe(function (v) {
@@ -1488,11 +1538,13 @@ var KerviService = /** @class */ (function () {
                             var dynamicValue = component;
                             dynamicValue.valueTS = new Date(this.timestamp + " utc");
                             dynamicValue.value$.next(value.value);
-                            var spl = dynamicValue.sparkline$.value;
-                            spl.push(value.value);
-                            if (spl.length > 10)
-                                spl.shift();
-                            dynamicValue.sparkline$.next(spl);
+                            if (dynamicValue.sparkline$) {
+                                var spl = dynamicValue.sparkline$.value;
+                                spl.push(value.value);
+                                if (spl.length > 10)
+                                    spl.shift();
+                                dynamicValue.sparkline$.next(spl);
+                            }
                         }
                     }
                 });
@@ -1562,9 +1614,15 @@ var KerviService = /** @class */ (function () {
                 if (!found)
                     deleteComponents.push(component);
             }
+            for (var _f = 0, _g = self.components; _f < _g.length; _f++) {
+                var component = _g[_f];
+                if (deleteComponents.indexOf(component) == -1) {
+                    component.removeReferences(deleteComponents);
+                }
+            }
             console.log("dc", deleteComponents);
-            for (var _f = 0, deleteComponents_1 = deleteComponents; _f < deleteComponents_1.length; _f++) {
-                var component = deleteComponents_1[_f];
+            for (var _h = 0, deleteComponents_1 = deleteComponents; _h < deleteComponents_1.length; _h++) {
+                var component = deleteComponents_1[_h];
                 self.components.splice(self.components.indexOf(component), 1);
             }
             console.log("refresh done");
@@ -1824,6 +1882,8 @@ var ActionModel = /** @class */ (function () {
     ;
     ActionModel.prototype.reload = function (component) { };
     ;
+    ActionModel.prototype.removeReferences = function (components) { };
+    ;
     return ActionModel;
 }());
 
@@ -1884,6 +1944,8 @@ var ControllerModel = /** @class */ (function () {
         }
     }
     ControllerModel.prototype.updateReferences = function () { };
+    ;
+    ControllerModel.prototype.removeReferences = function (components) { };
     ;
     ControllerModel.prototype.reload = function (component) { };
     ;
@@ -2132,6 +2194,33 @@ var DashboardModel = /** @class */ (function () {
             }
         }
     }
+    DashboardModel.prototype.removeSectionRef = function (deleteComponents, section, removeEmpty) {
+        for (var _i = 0, _a = section.components; _i < _a.length; _i++) {
+            var sectionComponent = _a[_i];
+            if (deleteComponents.indexOf(sectionComponent.component) > -1)
+                section.components.splice(section.components.indexOf(sectionComponent), 1);
+        }
+        var removeSections = [];
+        for (var _b = 0, _c = section.subSections; _b < _c.length; _b++) {
+            var subSection = _c[_b];
+            this.removeSectionRef(deleteComponents, subSection, removeEmpty);
+            if (subSection.components.length == 0) {
+                removeSections.push(subSection);
+            }
+        }
+        for (var _d = 0, removeSections_1 = removeSections; _d < removeSections_1.length; _d++) {
+            var subSection = removeSections_1[_d];
+            section.subSections.splice(section.subSections.indexOf(subSection));
+        }
+    };
+    DashboardModel.prototype.removeReferences = function (deleteComponents) {
+        for (var _i = 0, _a = this.sysSections; _i < _a.length; _i++) {
+            var section = _a[_i];
+            this.removeSectionRef(deleteComponents, section, false);
+        }
+        this.removeSectionRef(deleteComponents, section, true);
+    };
+    ;
     DashboardModel.prototype.updateReferences = function () { };
     ;
     DashboardModel.prototype.reload = function (component) {
@@ -2313,6 +2402,8 @@ var DynamicEnumOptionModel = /** @class */ (function () {
     ;
     DynamicEnumOptionModel.prototype.reload = function (component) { };
     ;
+    DynamicEnumOptionModel.prototype.removeReferences = function (components) { };
+    ;
     return DynamicEnumOptionModel;
 }());
 
@@ -2349,6 +2440,8 @@ var DynamicEnumModel = /** @class */ (function () {
     DynamicEnumModel.prototype.updateReferences = function () { };
     ;
     DynamicEnumModel.prototype.reload = function (component) { };
+    ;
+    DynamicEnumModel.prototype.removeReferences = function (components) { };
     ;
     DynamicEnumModel.prototype.selectOptions = function (selectedOptions) {
         console.log("soc");
@@ -2417,6 +2510,8 @@ var DynamicNumberModel = /** @class */ (function () {
     ;
     DynamicNumberModel.prototype.reload = function (component) { };
     ;
+    DynamicNumberModel.prototype.removeReferences = function (components) { };
+    ;
     return DynamicNumberModel;
 }());
 
@@ -2454,6 +2549,8 @@ var DynamicStringModel = /** @class */ (function () {
     ;
     DynamicStringModel.prototype.reload = function (component) { };
     ;
+    DynamicStringModel.prototype.removeReferences = function (components) { };
+    ;
     return DynamicStringModel;
 }());
 
@@ -2479,6 +2576,8 @@ var DynamicBooleanModel = /** @class */ (function () {
     DynamicBooleanModel.prototype.updateReferences = function () { };
     ;
     DynamicBooleanModel.prototype.reload = function (component) { };
+    ;
+    DynamicBooleanModel.prototype.removeReferences = function (components) { };
     ;
     return DynamicBooleanModel;
 }());
@@ -2536,6 +2635,8 @@ var DynamicDateTimeModel = /** @class */ (function () {
     ;
     DynamicDateTimeModel.prototype.reload = function (component) { };
     ;
+    DynamicDateTimeModel.prototype.removeReferences = function (components) { };
+    ;
     return DynamicDateTimeModel;
 }());
 
@@ -2562,6 +2663,8 @@ var DynamicColorModel = /** @class */ (function () {
     DynamicColorModel.prototype.updateReferences = function () { };
     ;
     DynamicColorModel.prototype.reload = function (component) { };
+    ;
+    DynamicColorModel.prototype.removeReferences = function (components) { };
     ;
     return DynamicColorModel;
 }());
@@ -2647,7 +2750,7 @@ var ComponentFactory = /** @class */ (function () {
         return [result, dashboards];
     };
     ComponentFactory.linkToDashboards = function (components, dashboards) {
-        //console.log("ltd", components, dashboards);
+        console.log("ltd", components, dashboards);
         for (var _i = 0, components_1 = components; _i < components_1.length; _i++) {
             var component = components_1[_i];
             if (!(component instanceof _dashboard_model__WEBPACK_IMPORTED_MODULE_3__["DashboardModel"])) {
@@ -2715,6 +2818,8 @@ var SensorModel = /** @class */ (function () {
     SensorModel.prototype.updateReferences = function () { };
     ;
     SensorModel.prototype.reload = function (component) { };
+    ;
+    SensorModel.prototype.removeReferences = function (components) { };
     ;
     return SensorModel;
 }());
@@ -5347,7 +5452,7 @@ var DynamicBooleanComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!inline\" class=\"block-component\"> \r\n    <div class=\"label-section\">\r\n        <div style=\"display:inline-block;float:left;\">\r\n            <div class=\"value-label\">\r\n                <span  *ngIf=\"parameters.labelIcon\" class=\"fa fa-{{parameters.labelIcon}}\"></span>\r\n                <span  *ngIf=\"parameters.label\"  >{{parameters.label}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <kervi-color [parent]=\"this\" [defaultSizes]=\"defaultSizes\" [value]=\"value.value$\" [inline]=\"inline\" [parameters]=\"parameters\" ></kervi-color>\r\n    \r\n</div>\r\n<div style=\"display:inline-block\" *ngIf=\"inline\" >\r\n    <span  *ngIf=\"parameters.labelIcon\" class=\"fa fa-{{parameters.labelIcon}}\"></span>\r\n    <span *ngIf=\"parameters.label\" >{{parameters.label}}</span>\r\n    <span *ngIf=\"parameters.labelIcon || parameters.label\" >&nbsp;</span>\r\n    <kervi-color [parent]=\"this\" [defaultSizes]=\"defaultSizes\" [value]=\"value.value$\" [inline]=\"inline\" [parameters]=\"parameters\" ></kervi-color>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"!inline\" class=\"block-component\"> \r\n    <div class=\"label-section\">\r\n        <div style=\"display:inline-block;float:left;\">\r\n            <div class=\"value-label\">\r\n                <span  *ngIf=\"parameters.labelIcon\" class=\"fa fa-{{parameters.labelIcon}}\"></span>\r\n                <span  *ngIf=\"parameters.label\"  >{{parameters.label}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"value-section\">\r\n        <div class=\"value-value\" [style.min-width.rem]=\"parameters.valueSize\">\r\n            <kervi-color [parent]=\"this\" [defaultSizes]=\"defaultSizes\" [value]=\"value.value$\" [inline]=\"inline\" [parameters]=\"parameters\" ></kervi-color>\r\n        </div>\r\n    </div>\r\n    \r\n</div>\r\n<div style=\"display:inline-block\" *ngIf=\"inline\" >\r\n    <span  *ngIf=\"parameters.labelIcon\" class=\"fa fa-{{parameters.labelIcon}}\"></span>\r\n    <span *ngIf=\"parameters.label\" >{{parameters.label}}</span>\r\n    <span *ngIf=\"parameters.labelIcon || parameters.label\" >&nbsp;</span>\r\n    <kervi-color [parent]=\"this\" [defaultSizes]=\"defaultSizes\" [value]=\"value.value$\" [inline]=\"inline\" [parameters]=\"parameters\" ></kervi-color>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -6257,7 +6362,7 @@ var KerviSpineBase = /** @class */ (function () {
         }
     };
     KerviSpineBase.prototype.handleEvent = function (message) {
-        console.log("ev", message);
+        //console.log("ev", message)
         var eventName = message.event;
         var id = message.id;
         var eventPath = eventName;
@@ -6543,7 +6648,7 @@ var KerviSpine = /** @class */ (function (_super) {
         this.websocket.send(JSON.stringify(cmd));
     };
     KerviSpine.prototype.onMessage = function (evt) {
-        console.log("on m", evt.data);
+        //console.log("on m",evt.data);
         var message = JSON.parse(evt.data);
         var self = this;
         if (message.messageType == "authenticate") {

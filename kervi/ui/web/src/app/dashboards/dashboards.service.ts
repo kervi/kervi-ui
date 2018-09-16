@@ -11,69 +11,72 @@ import { DashboardModel, DashboardSectionModel } from '../models/dashboard.model
 export class DashboardsService {
     dashboards:DashboardModel[] = [];
     private _dashboards$: BehaviorSubject<DashboardModel[]> = new BehaviorSubject<DashboardModel[]>([]);
-    public componentsCount:number = 0;
-    public dashboardCount:number = 0;
+    public componentsCount:Number = 0;
+    public dashboardCount:Number = 0;
 
     constructor(private kerviService:KerviService){
         var self=this;
-        
+        var dashboardCount = 0;
+        var componentsCount = 0;
+        self.componentsCount = 0;
         var s=this.kerviService.getComponents$().subscribe(function(v){
             self.dashboards=self.kerviService.getComponentsByType("dashboard") ;
             console.log("load dashboards",self.dashboards);
             for(var dashboard of self.dashboards){
-                this.dashboardCount++;
+                dashboardCount++;
                 //var dashboard = dashboardComponent as DashboardModel;
                 for(var section of dashboard.sections){
                     for (var sectionComponent of section.components ){
-                        this.componentsCount++;
+                        componentsCount+=1;
+                        
                         if (!sectionComponent.component)
                             sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                     }
                 }
 
                 for (var sectionComponent of dashboard.sysSection.components){
-                    this.componentsCount++;
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
 
                 for (var sectionComponent of dashboard.headerSection.components){
-                    this.componentsCount++;
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
 
                 for (var sectionComponent of dashboard.footerLeftSection.components){
-                    this.componentsCount++;
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
 
                 for (var sectionComponent of dashboard.footerCenterSection.components){
-                    this.componentsCount++;
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
 
                 for (var sectionComponent of dashboard.footerRightSection.components){
-                    this.componentsCount++;
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
 
                 for (var sectionComponent of dashboard.LeftPadXSection.components){
-                    this.componentsCount++;
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
                 for (var sectionComponent of dashboard.LeftPadYSection.components){
-                    this.componentsCount++;
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
 
                 for (var sectionComponent of dashboard.RightPadXSection.components){
-                    this.componentsCount++;
+                    componentsCount++;
                     if (!sectionComponent.component)
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
@@ -83,7 +86,8 @@ export class DashboardsService {
                         sectionComponent.component=self.kerviService.getComponent(sectionComponent.componentId)
                 }
             }
-            console.log("load dashboards updated",self.dashboards);
+            console.log("load dashboards updated",self.dashboards, dashboardCount, componentsCount);
+            self.componentsCount = componentsCount;
             self._dashboards$.next(self.dashboards);
         });
 

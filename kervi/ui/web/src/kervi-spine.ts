@@ -178,7 +178,7 @@ export class  KerviSpine extends KerviSpineBase{
 	}
 
 	onMessage(evt){
-		console.log("on m",evt.data);
+		//console.log("on m",evt.data);
 		var message=JSON.parse(evt.data);
 		var self = this;
 		

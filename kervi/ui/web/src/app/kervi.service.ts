@@ -131,6 +131,11 @@ export class KerviService {
             if (!found)
               deleteComponents.push(component);
           }
+          for(var component of self.components){
+            if(deleteComponents.indexOf(component)==-1){
+              component.removeReferences(deleteComponents);
+            }
+          }
           console.log("dc", deleteComponents);
           for(var component of deleteComponents){
             self.components.splice( self.components.indexOf(component), 1 );

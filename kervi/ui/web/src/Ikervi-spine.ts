@@ -72,7 +72,7 @@ export class  KerviSpineBase{
 	}
 
 	protected handleEvent(message){
-		console.log("ev", message)
+		//console.log("ev", message)
 		var eventName=message.event;
 		var id=message.id;
 		

@@ -254,6 +254,30 @@ export class DashboardModel implements IComponent{
         }
     }
 
+    removeSectionRef(deleteComponents:IComponent[], section:DashboardSectionModel, removeEmpty:boolean){
+        for(var sectionComponent of section.components){
+            if (deleteComponents.indexOf(sectionComponent.component)>-1)
+                section.components.splice(section.components.indexOf(sectionComponent) , 1 );
+        }
+        var removeSections:DashboardSectionModel[] = [];
+        for(var subSection of section.subSections){
+            this.removeSectionRef(deleteComponents, subSection, removeEmpty)
+            if (subSection.components.length == 0){
+                removeSections.push(subSection)
+            }
+        }
+        for(var subSection of removeSections){
+            section.subSections.splice(section.subSections.indexOf(subSection))
+        }
+    }
+
+    removeReferences(deleteComponents:IComponent[]){
+        for(var section of this.sysSections){
+            this.removeSectionRef(deleteComponents, section, false)
+        }
+        this.removeSectionRef(deleteComponents, section, true)
+        
+    };
     updateReferences(){};
     reload(component:IComponent){
         var source = component as DashboardModel;

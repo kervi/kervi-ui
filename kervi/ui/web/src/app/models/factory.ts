@@ -61,7 +61,7 @@ export class ComponentFactory{
     }
 
     private static linkToDashboards(components:IComponent[], dashboards:DashboardModel[]){
-        //console.log("ltd", components, dashboards);
+        console.log("ltd", components, dashboards);
         
         for(let component of components){
             if (!(component instanceof DashboardModel)){
