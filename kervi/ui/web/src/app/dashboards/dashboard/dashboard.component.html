@@ -66,16 +66,16 @@
 	</div>
 </div>
 <footer class="footer" *ngIf="dashboard">
-		<div class="row">
-			<div class="col-sm-4 text-left" style="text-align: left">
-				<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerLefSection" [defaultSizes]="defaultSizes" [section]="dashboard.footerLeftSection"></kervi-dashboard-section>
-			</div>
-			<div class="col-sm-4 text-center" style="text-align:center">
-				<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerCenterSection" [defaultSizes]="defaultSizes" [section]="dashboard.footerCenterSection"></kervi-dashboard-section>
-			</div>
-			<div class="col-sm-4 text-right" style="text-align: right">
-				<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerRightSection" [defaultSizes]="defaultSizes" [section]="dashboard.footerRightSection"></kervi-dashboard-section>
-				<i class="fa fa-expand" title="Toggle full screen" (mousedown)="toggleFullScreen()"></i>&nbsp;
-			</div>
+	<div class="row">
+		<div class="col-sm-4 text-left" style="text-align: left">
+			<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerLefSection" [defaultSizes]="defaultSizes" [section]="dashboard.footerLeftSection"></kervi-dashboard-section>
 		</div>
-	</footer>
+		<div class="col-sm-4 text-center" style="text-align:center">
+			<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerCenterSection" [defaultSizes]="defaultSizes" [section]="dashboard.footerCenterSection"></kervi-dashboard-section>
+		</div>
+		<div class="col-sm-4 text-right" style="text-align: right">
+			<kervi-dashboard-section [inline]="true" *ngIf="dashboard.footerRightSection" [defaultSizes]="defaultSizes" [section]="dashboard.footerRightSection"></kervi-dashboard-section>
+			<i class="fa fa-expand" title="Toggle full screen" (mousedown)="toggleFullScreen()"></i>&nbsp;
+		</div>
+	</div>
+</footer>

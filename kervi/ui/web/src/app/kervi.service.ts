@@ -101,48 +101,53 @@ export class KerviService {
   private refreshComponents(){
     var self=this;
     self.spine.sendQuery("getComponentInfo",function(message){
-          console.log("refresh component info",message);
-          var components = ComponentFactory.createComponents(message);
-          console.log("refresh components",components);
-          for (var c of components){
-            var found = false;
-            for(var component of self.components){
-              if (component.id == c. id){
-                found=true;
-                component.reload(c);
-                break;
-              }
-            }
-            if (!found){
-              self.components.push(c);
-              console.log("add c", c);
-            }
-          }
-          console.log("delete hanging components")
-          var deleteComponents:IComponent[]=[]
-          for (var component of self.components){
-            var found = false;
-            for(var c of components){
-              if (component.id == c. id){
-                found = true;
-                break;
-              }
-            }
-            if (!found)
-              deleteComponents.push(component);
-          }
-          for(var component of self.components){
-            if(deleteComponents.indexOf(component)==-1){
-              component.removeReferences(deleteComponents);
-            }
-          }
-          console.log("dc", deleteComponents);
-          for(var component of deleteComponents){
-            self.components.splice( self.components.indexOf(component), 1 );
-          }
-          console.log("refresh done");
-          self.components$.next(self.components);
-        });
+    console.log("refresh component info",message);
+    self.components = []
+    self.components$.next([]);
+    self.components = ComponentFactory.createComponents(message);
+    console.log("refresh components",self.components);
+    self.components$.next(self.components);
+    return;
+        //   for (var c of components){
+        //     var found = false;
+        //     for(var component of self.components){
+        //       if (component.id == c. id){
+        //         found=true;
+        //         component.reload(c);
+        //         break;
+        //       }
+        //     }
+        //     if (!found){
+        //       self.components.push(c);
+        //       console.log("add c", c);
+        //     }
+        //   }
+        //   console.log("delete hanging components")
+        //   var deleteComponents:IComponent[]=[]
+        //   for (var component of self.components){
+        //     var found = false;
+        //     for(var c of components){
+        //       if (component.id == c. id){
+        //         found = true;
+        //         break;
+        //       }
+        //     }
+        //     if (!found)
+        //       deleteComponents.push(component);
+        //   }
+        //   console.log("deleted components", deleteComponents)
+        //   for(var component of self.components){
+        //     if(deleteComponents.indexOf(component)==-1){
+        //       component.removeReferences(deleteComponents);
+        //     }
+        //   }
+        //   console.log("dc", deleteComponents);
+        //   for(var component of deleteComponents){
+        //     self.components.splice( self.components.indexOf(component), 1 );
+        //   }
+        //   console.log("refresh done");
+        //   self.components$.next(self.components);
+    });
   }
 
   public getComponents$(){

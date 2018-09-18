@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private rightXValue: DynamicNumberModel = null;
   private rightYValue: DynamicNumberModel = null;
   private inFullScreen:boolean = false;
+  
   constructor(private elementRef:ElementRef, private zone:NgZone, private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
       
    }
@@ -325,7 +326,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     }
-
+      
     //console.log("dbbcx", this.cameraId, this.cameraParameters);
   }
+  
 }

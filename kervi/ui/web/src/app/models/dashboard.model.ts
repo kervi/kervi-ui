@@ -254,10 +254,19 @@ export class DashboardModel implements IComponent{
         }
     }
 
-    removeSectionRef(deleteComponents:IComponent[], section:DashboardSectionModel, removeEmpty:boolean){
+    /*removeSectionRef(deleteComponents:IComponent[], section:DashboardSectionModel, removeEmpty:boolean){
+        var removeComponentSections:DashboardSectionComponentModel[] = [];
         for(var sectionComponent of section.components){
-            if (deleteComponents.indexOf(sectionComponent.component)>-1)
-                section.components.splice(section.components.indexOf(sectionComponent) , 1 );
+            for(var deleteComponent of deleteComponents){
+                if (deleteComponent.id == sectionComponent.component.id){
+                    console.log("dlc", sectionComponent)
+                    removeComponentSections.push(sectionComponent)
+                    
+                }
+            }
+        }
+        for(var component of removeComponentSections){
+            section.components.splice(section.components.indexOf(component))
         }
         var removeSections:DashboardSectionModel[] = [];
         for(var subSection of section.subSections){
@@ -269,14 +278,22 @@ export class DashboardModel implements IComponent{
         for(var subSection of removeSections){
             section.subSections.splice(section.subSections.indexOf(subSection))
         }
-    }
+    }*/
 
     removeReferences(deleteComponents:IComponent[]){
-        for(var section of this.sysSections){
-            this.removeSectionRef(deleteComponents, section, false)
-        }
-        this.removeSectionRef(deleteComponents, section, true)
-        
+        // console.log("remove ref", deleteComponents)
+        // for(var section of this.sysSections){
+        //     this.removeSectionRef(deleteComponents, section, false)
+        // }
+        // var removeSections:DashboardSectionModel[] = [];
+        // for(var section of this.sections){
+        //     this.removeSectionRef(deleteComponents, section, true)
+        //     if (section.components.length == 0)
+        //         removeSections.push(section)
+        // }
+        // for(var section of removeSections){
+        //     this.sections.splice(this.sections.indexOf(section))
+        // }
     };
     updateReferences(){};
     reload(component:IComponent){
