@@ -23,10 +23,11 @@
 import os
 import time
 import base64
+import json
 from socketserver import ThreadingMixIn
 import http.client
 from kervi.spine import Spine
-import kervi.utility.authorization as authorization
+from kervi.core.authentication import  Authorization
 import kervi.utility.encryption as encryption
 
 try:
@@ -90,6 +91,7 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
                             if not chunk:
                                 break
                             self.wfile.write(chunk)
+
                 elif self.path.endswith("global.js"):
                     self.send_response(200)
                     self.send_header('Content-type', 'text/javascript')
@@ -98,6 +100,13 @@ class _HTTPRequestHandler(SimpleHTTPRequestHandler):
                         response = bytes("kerviSocketAddress='" + str(self.server.ip_address) + ":" + str(self.server.ws_port) + "';\n\rsocketProtocol='wss';", 'utf-8')
                     else:
                         response = bytes("kerviSocketAddress='" + str(self.server.ip_address) + ":" + str(self.server.ws_port) + "';\n\rsocketProtocol='ws';", 'utf-8')
+                    self.wfile.write(response)
+                elif self.path.endswith("kervitexts.js"):
+                    self.send_response(200)
+                    self.send_header('Content-type', 'text/javascript')
+                    self.end_headers()
+                    texts = json.dumps(self.server.texts)
+                    response = bytes("kerviUITexts=" + texts , 'utf-8')
                     self.wfile.write(response)
                 else:
                     if self.path.startswith("/dashboard/") or self.path.startswith("/connect"):
@@ -182,7 +191,7 @@ class _HTTPServer(ThreadingMixIn, HTTPServer):
             print(authstr)
             credentials = authstr.split(":")
             print(credentials)
-            return authorization.authorize(credentials[0], credentials[1])
+            return Authorization.authorize(credentials[0], credentials[1])
 
 SERVER = None
 ASSET_PATH = ""
