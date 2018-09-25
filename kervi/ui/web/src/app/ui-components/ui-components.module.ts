@@ -14,6 +14,7 @@ import { DateTimeComponent } from './datetimepicker/datetimepicker.component';
 import { IconsComponent } from './icons/icons.component';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { ColorComponent } from './color/color.component';
+import { KerviPipesModule } from '../pipes/pipes.module'
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { ColorComponent } from './color/color.component';
   ],
   imports: [
     CommonModule,
-    NgxGaugeModule
+    NgxGaugeModule,
+    KerviPipesModule
   ],
   providers: [],
   bootstrap: []

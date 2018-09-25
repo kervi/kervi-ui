@@ -6,7 +6,7 @@ import { KerviService } from "../kervi.service"
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConnectedService} from '../connected.service'
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-
+import { TranslatePipe} from '../pipes/textPipe'
 
 @Component({
   selector: 'app-connect',

@@ -8,19 +8,17 @@
 		<div class="cam-pad-area" style="display:none">
 			<fieldset id="camPad" class="pad" [attr.data-width]="padSize" [attr.data-height]="padSize">
 				<legend></legend>
-				pan : <input id="cam-servo-pan" name="x" value="0"> tilt : <input id="cam-servo-tilt" name="y" value="0">
+				{{( 'pan' | translate)}} : <input id="cam-servo-pan" name="x" value="0"> {{( 'tilt' | translate)}} : <input id="cam-servo-tilt" name="y" value="0">
 			</fieldset>
 		</div>
 		<div style="position:absolute;top:30px;left:0px;width:100%;height:50px">
 			<ng-container  *ngFor="let component of actions">
-				<kervi-action *ngIf="component.visible" [dashboardSection]="dashboardSection" [action]="component" ></kervi-action>
+				<kervi-action title="{{( component.name | translate)}}" *ngIf="component.visible"  [dashboardSection]="dashboardSection" [action]="component" ></kervi-action>
 			</ng-container>
-			<a class="btn btn-primary " [style.width]="width" [style.height]="height" (mousedown)="imageViewer.show()" [attr.title]="browse">
+			<button class="btn btn-primary "   [style.width]="width" [style.height]="height" (mousedown)="imageViewer.show()" title="{{( 'media_folder' | translate)}}">
 				<i  class='fa fa-folder'></i>
-				
-			</a>
+			</button>
 		</div>
-		
 	</div>
 	
 </ng-container>
@@ -35,19 +33,19 @@
 		<div class="cam-pad-area" style="position:absolute">
 			<fieldset id="camPad" style="position:absolute" class="pad" [attr.data-width]="padSize" [attr.data-height]="padSize">
 				<legend></legend>
-				pan : <input id="cam-servo-pan" name="x" value="0"> tilt : <input id="cam-servo-tilt" name="y" value="0">
+				{{( 'pan' | translate)}} : <input id="cam-servo-pan" name="x" value="0"> {{( 'tilt' | translate)}} : <input id="cam-servo-tilt" name="y" value="0">
 			</fieldset>
 		</div>
 		
 	</div>
 	<div style="">
 		<ng-container  *ngFor="let component of actions">
-			<kervi-action *ngIf="component.visible" [dashboardSection]="dashboardSection" [action]="component" ></kervi-action>
+			<kervi-action *ngIf="component.visible" title="{{( component.name | translate)}}" [dashboardSection]="dashboardSection" [action]="component" ></kervi-action>
 		</ng-container>
-		<a class="btn btn-primary " [style.width]="width" [style.height]="height" (mousedown)="imageViewer.show()" [attr.title]="browse">
+		<button class="btn btn-primary" [style.width]="width" [style.height]="height" (mousedown)="imageViewer.show()" title="{{( 'media_folder' | translate)}}">
 			<i  class='fa fa-folder'></i>
 			
-		</a>
+		</button>
 	</div>
 </ng-container>
 <kervi-image-viewer #imageViewer [camComponent]="this" [cameraSource]="(cameraSource$ | async)"></kervi-image-viewer>

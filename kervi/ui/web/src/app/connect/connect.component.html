@@ -10,7 +10,7 @@
       <!--<label class="control-label" for="userNameInput">User name</label>  -->
       <input type="text"  
              id="userNameInput"  
-             placeholder="User name"  
+             placeholder="{{('user_name'| translate)}}"  
              [formControl]="userName"
              class="form-control"
              autofocus>  
@@ -21,13 +21,13 @@
       <!--<label class="control-label" for="passwordInput">Password</label>  -->
       <input type="password"  
              id="passwordInput"  
-             placeholder="Password"  
+             placeholder="{{('password'| translate)}}"  
              [formControl]="password"
              class="form-control">  
     </div>
-    <div *ngIf="invalidUser" class="ui error message"><p>Invalid user name or password</p></div>
+    <div *ngIf="invalidUser" class="ui error message"><p>{{('login_fail'| translate)}}</p></div>
  
-    <button type="submit" class="btn btn-primary">Log on</button>  
+    <button type="submit" class="btn btn-primary">{{('log_on'| translate)}}</button>  
   </form>  
 
 
