@@ -17,6 +17,7 @@ import { KerviService} from "./kervi.service";
 import { ConnectedService} from "./connected.service";
 import { DashboardsService} from "./dashboards/dashboards.service"
 import { TemplateService } from "./template.service"
+import { KerviPipesModule } from './pipes/pipes.module'
 const ROUTES: Routes = [
   {
     path: '',
@@ -27,17 +28,16 @@ const ROUTES: Routes = [
   { path: 'dashboard/:name', component: DashboardComponent },
 ];
 
-
 @NgModule({
   declarations: [
     AppComponent,
     ConnectComponent,
-    //DashboardComponent,
-    //DashboardSectionComponent,
-    //ControllerComponent,
-    //PageHeaderComponent
+  ],
+  exports: [
+    
   ],
   imports: [
+    KerviPipesModule,
     CommonModule,
     DashboardsModule,
     ValuesModule,
