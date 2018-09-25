@@ -18,6 +18,7 @@ export class KerviService {
   spine: KerviSpineBase = null;
   private appInfo=null;
   public  application$: BehaviorSubject<any>;
+  private  texts:{} = null;
   private components : IComponent[] = [];
   private components$: BehaviorSubject<IComponent[]> = new  BehaviorSubject<IComponent[]>([]);
   public doAuthenticate: boolean = false;
@@ -107,48 +108,17 @@ export class KerviService {
     self.components = ComponentFactory.createComponents(message);
     console.log("refresh components",self.components);
     self.components$.next(self.components);
-    return;
-        //   for (var c of components){
-        //     var found = false;
-        //     for(var component of self.components){
-        //       if (component.id == c. id){
-        //         found=true;
-        //         component.reload(c);
-        //         break;
-        //       }
-        //     }
-        //     if (!found){
-        //       self.components.push(c);
-        //       console.log("add c", c);
-        //     }
-        //   }
-        //   console.log("delete hanging components")
-        //   var deleteComponents:IComponent[]=[]
-        //   for (var component of self.components){
-        //     var found = false;
-        //     for(var c of components){
-        //       if (component.id == c. id){
-        //         found = true;
-        //         break;
-        //       }
-        //     }
-        //     if (!found)
-        //       deleteComponents.push(component);
-        //   }
-        //   console.log("deleted components", deleteComponents)
-        //   for(var component of self.components){
-        //     if(deleteComponents.indexOf(component)==-1){
-        //       component.removeReferences(deleteComponents);
-        //     }
-        //   }
-        //   console.log("dc", deleteComponents);
-        //   for(var component of deleteComponents){
-        //     self.components.splice( self.components.indexOf(component), 1 );
-        //   }
-        //   console.log("refresh done");
-        //   self.components$.next(self.components);
     });
   }
+
+  public text(key:string, defaultValue:string=""):string{
+    console.log("t", key, this.texts);
+    if (this.texts && key in this.texts){
+      return this.texts[key];
+    } else
+      return defaultValue
+  }
+
 
   public getComponents$(){
     return this.components$.asObservable();
@@ -282,6 +252,7 @@ export class KerviService {
       this.spine.sendQuery("getComponentInfo",function(message){
         console.log("component info",message);
         self.application$.next(appInfo);
+        self.texts = appInfo.display.texts;
         self.components = ComponentFactory.createComponents(message);
         self.components$.next(self.components);
         self.connected$.next(true);
