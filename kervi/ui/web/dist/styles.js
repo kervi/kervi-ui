@@ -539,7 +539,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\tim privat\github\kervi-ui\kervi\ui\web\src\styles\themes\default\default.scss */"./src/styles/themes/default/default.scss");
+module.exports = __webpack_require__(/*! D:\tim privat\github\kervi-ui\kervi\ui\web\src\styles\themes\default\default.scss */"./src/styles/themes/default/default.scss");
 
 
 /***/ })
