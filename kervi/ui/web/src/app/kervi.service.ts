@@ -9,6 +9,7 @@ import {BehaviorSubject, Subject} from 'rxjs/Rx';
 import {IComponent} from './models/IComponent.model';
 import { ComponentFactory } from './models/factory';
 import { DashboardMessageModel } from './models/dashboard.model';
+import { getComponentViewDefinitionFactory } from '@angular/core/src/view';
 
 declare var kerviSocketAddress : any;
 declare var socketProtocol : any;
@@ -242,11 +243,8 @@ export class KerviService {
     this.connected$.next(false);
   }
 
-  private onOpen(first){
-    console.log("kervice service on open", this.spine.firstOnOpen, first,this);
-    var self=this;
-    
-    this.doAuthenticate = this.spine.doAuthenticate;
+  private getComponentInfo(retryCount){
+    var self = this;
     this.spine.sendQuery("GetApplicationInfo",function(appInfo){
       console.log("appinfo",appInfo);
       this.spine.sendQuery("getComponentInfo",function(message){
@@ -258,8 +256,21 @@ export class KerviService {
         self.connected$.next(true);
         //self.inAuthentication$.next(false);
         console.log("components",self.components); 
+      },
+      function(){
+        console.log("get component info timeout");
+        if (retryCount>0)
+          self.getComponentInfo(retryCount-1)
       });  
 	  });
+  }
+
+  private onOpen(first){
+    console.log("kervice service on open", this.spine.firstOnOpen, first,this);
+    var self=this;
+    
+    this.doAuthenticate = this.spine.doAuthenticate;
+    this.getComponentInfo(2)
     if (self.spine.firstOnOpen){
       this.IPCReady$.next(true);
       this.spine.addEventHandler("moduleStarted","",function(){

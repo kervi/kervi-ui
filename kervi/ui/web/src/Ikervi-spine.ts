@@ -44,9 +44,21 @@ export class  KerviSpineBase{
 		console.log("Kervi base spine init",this.options,constructorOptions);
 		this.options = this.extend(this.options,constructorOptions);
 		this.connect();
+		var self = this;
+		setTimeout(
+			function(){
+				for(let id in self.rpcQueue){
+					var query = self.rpcQueue[id]
+					if (query["callbackTimeout"]){
+						if (Date.now() - query["ts"] > query["timeout"]){
+							delete this.rpcQueue[id];
+							query["callbackTimeout"].call(this.options.targetScope);
+						}
+					}
+				}
+			}
+		,1)
 	}
-
-	
 
 	protected extend(...p:any[])
 	{
@@ -57,14 +69,19 @@ export class  KerviSpineBase{
 		return p[0];
 	}
 
-	protected addRPCCallback(id:string,callback)
+	protected addRPCCallback(id:string, callback, callbackTimeout, timeout)
 	{
 		if (callback)
-			this.rpcQueue[id]=callback;
+			this.rpcQueue[id]={
+				"callback":callback,
+				"callbackTimeout":callbackTimeout,
+				"timeout": timeout,
+				"ts":Date.now,
+			 };
 	}
 
 	protected handleRPCResponse(message){
-		var callback=this.rpcQueue[message.id];
+		var callback=this.rpcQueue[message.id]["callback"];
 		if (callback){
 			delete this.rpcQueue[message.id];
 			callback.call(this.options.targetScope,message.response,message.response);

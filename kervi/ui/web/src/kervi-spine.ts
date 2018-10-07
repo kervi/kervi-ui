@@ -301,16 +301,24 @@ export class  KerviSpine extends KerviSpineBase{
 	public sendQuery(query,...p:any[]){
 		var args=[];
 		var callback=null;
-
+		var callbackTimeout = null
+		var timeout = 10
 		for (var i=0;(i<p.length);i++){
 			if (p[i] instanceof Function)
-				callback=p[i];
-			else
-				args.push(p[i]);
+				if (!callback) 
+					callback=p[i];
+				else
+					callbackTimeout = p[i];
+			else{
+				if (callbackTimeout)
+					timeout = p[i]
+				else
+					args.push(p[i]);
+			}
 		}
 		 
 		var cmd={id:this.messageId++,"messageType":"query","query":query,"args":args};
-		this.addRPCCallback(cmd.id.toString(),callback);
+		this.addRPCCallback(cmd.id.toString(),callback, callbackTimeout, timeout);
 		console.log("sendQuery", callback,cmd);
 		this.websocket.send(JSON.stringify(cmd));
 	};
