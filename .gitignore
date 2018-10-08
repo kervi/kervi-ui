@@ -5,3 +5,4 @@ kervi_ui.egg-info
 /dist/*.js
 kervi/ui/web/dist/*.js
 kervi/ui/web/dist/inline.bundle.js
+/dist/*.gz
