@@ -30,7 +30,7 @@ export class KerviService {
   connected$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   IPCReady$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   authenticationFailed$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
-  
+
 
   constructor() 
   { 
