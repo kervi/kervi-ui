@@ -55,14 +55,7 @@ export class KerviService {
                 var dynamicValue = component as any;
               
                 dynamicValue.valueTS=new Date(this.timestamp + " utc");
-                dynamicValue.value$.next(value.value);
-                if (dynamicValue.sparkline$){
-                  var spl=dynamicValue.sparkline$.value;
-                  spl.push(value.value);
-                  if (spl.length>10)
-                      spl.shift();
-                  dynamicValue.sparkline$.next(spl);  
-                }
+                dynamicValue.setValue(value.value)  
               }
             }
           });
@@ -106,14 +99,14 @@ export class KerviService {
     console.log("refresh component info",message);
     self.components = []
     self.components$.next([]);
-    self.components = ComponentFactory.createComponents(message);
+    self.components = ComponentFactory.createComponents(message, this);
     console.log("refresh components",self.components);
     self.components$.next(self.components);
     });
   }
 
   public text(key:string, defaultValue:string=""):string{
-    console.log("t", key, this.texts);
+    //  console.log("t", key, this.texts);
     if (this.texts && key in this.texts){
       return this.texts[key];
     } else
@@ -251,7 +244,7 @@ export class KerviService {
         console.log("component info",message);
         self.application$.next(appInfo);
         self.texts = appInfo.display.texts;
-        self.components = ComponentFactory.createComponents(message);
+        self.components = ComponentFactory.createComponents(message, self);
         self.components$.next(self.components);
         self.connected$.next(true);
         //self.inAuthentication$.next(false);

@@ -14,6 +14,7 @@
         </div>
         <div class="value-value" [style.min-width.rem]="parameters.valueSize">
             {{(input.value$ | async | number:numberFormat)}}
+            <span *ngIf="parameters.displayUnit">{{input.unit}}</span>
         </div>
     </div>
     
@@ -28,6 +29,7 @@
         <ui-slider [defaultSizes]="defaultSizes" [value]="input" [parameters]="parameters"></ui-slider>
 	</div>
     <span style="display:inline"  [style.max-width.%]="parameters.valueSize"    class="slider-value">{{(input.value$ | async | number:numberFormat)}}</span>
+    <span *ngIf="parameters.displayUnit">{{input.unit}}</span>
 </div>
 
 <span *ngIf="displayType=='value' && inline" class="input-inline input-type-value">

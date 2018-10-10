@@ -3,7 +3,39 @@
 import { IComponent, DashboardLink } from "./IComponent.model"
 import { ComponentRef } from "./ComponentRef"
 import { BehaviorSubject } from 'rxjs/Rx';
+import { KerviService } from '../kervi.service'
 //import { ControllersFactory } from './factory' 
+declare var Qty:any;
+
+export class DynamicValue implements IComponent{
+    public name: string;
+    public componentType = "DynamicValue"
+    public visible: boolean;
+    public ui:any = {}
+    public id: string;
+    public dashboards: DashboardLink[] = [];
+    public isInput:boolean;
+    public command: string;
+    public valueTS:Date;
+
+    constructor(message:any){
+        this.name = message.name;
+        this.isInput = message.isInput;
+        this.ui = message.ui;
+        this.visible = message.visible;
+        this.command = message.command;
+        this.id = message.id;
+    }
+    setValue(v){
+        //this.value$.next(newValue)
+    
+    }
+    updateReferences(){};
+    reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
+}
+
+
 
 export enum DynamicRangeType {normal, warning, error};
 
@@ -103,6 +135,10 @@ export class DynamicEnumModel implements IComponent{
             }
         }
     }
+
+    setValue(v){
+        this.value$.next(v)
+    }
 }
 
 export class DynamicNumberModel implements IComponent {
@@ -114,6 +150,8 @@ export class DynamicNumberModel implements IComponent {
     public dashboards: DashboardLink[] = [];
     public orientation: string;
     public unit: string;
+    public qtyUnitFrom:string;
+    public qtyUnitTo:string = null;
     public valueTS:Date;
     public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     public maxValue: number;
@@ -121,14 +159,17 @@ export class DynamicNumberModel implements IComponent {
     public command: string;
     public sparkline$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
     public ranges: DynamicRange[] = [];
-
+    
     public id: string;
     public ui = {
         type: "",
         orientation: ""
     }
 
-    constructor(message: any) {
+
+    constructor(message: any, kerviService:KerviService) {
+        this.command = message.command;
+        this.id = message.id;
         this.name = message.name;
         this.type = message.componentType;
         this.isInput = message.isInput;
@@ -136,24 +177,75 @@ export class DynamicNumberModel implements IComponent {
         this.orientation = message.orientation;
         this.visible = message.visible;
         this.unit = message.unit;
-        this.value$.next(message.value);
-        this.maxValue = message.maxValue;
-        this.minValue = message.minValue;
-        this.command = message.command;
-        this.id = message.id;
-        this.sparkline$.next(message.sparkline);
+        	
+        this.qtyUnitFrom = message.unit;
+        if (this.unit == "c" && kerviService.application$.value["display"]["unit_system"]["temperature"]=="F"){
+            this.qtyUnitFrom = "tempC";
+            this.qtyUnitTo = "tempF";
+            this.unit = "F"
+        }
+
         
         for (var prop in message.ui) {
             if (this.ui[prop] != undefined)
                 this.ui[prop] = message.ui[prop];
         }
         for (var range of message.ranges){
-            this.ranges.push(new DynamicRange(range));
+            if (this.qtyUnitTo){
+                var q = new Qty(range["start"], this.qtyUnitFrom);
+                range["start"] = q.to(this.qtyUnitTo).scalar
+                var q = new Qty(range["end"], this.qtyUnitFrom);
+                range["end"] = q.to(this.qtyUnitTo).scalar
+                this.ranges.push(new DynamicRange(range));
+            } else
+                this.ranges.push(new DynamicRange(range));
         }
 
         for (let dashboardLink of message.dashboardLinks){
             this.dashboards.push( new DashboardLink(this, dashboardLink)); 
         }
+        
+        if (this.qtyUnitTo && message.maxValue){
+            var q = new Qty(message.maxValue, this.qtyUnitFrom);
+            this.maxValue = q.to(this.qtyUnitTo).scalar;
+        } else
+            this.maxValue = message.maxValue; 
+
+        if (this.qtyUnitTo && message.minValue){
+            var q = new Qty(message.minValue, this.qtyUnitFrom);
+            this.minValue = q.to(this.qtyUnitTo).scalar;
+        } else
+            this.minValue = message.minValue; 
+        
+        
+        var spl = []
+        for(var spv of message.sparkline){
+            if (this.qtyUnitTo){
+                console.log("spv", spv);
+                var q = new Qty(spv.value, this.qtyUnitFrom);
+                //spv.value = q.to(this.qtyUnitTo).scalar;
+            }
+            spl.push(spv)
+        }
+        this.sparkline$.next(spl);
+        this.setValue(message.value);
+    }
+
+    setValue(v){
+        var newValue = v;
+        if (this.qtyUnitTo){
+            var q = new Qty(v, this.qtyUnitFrom);
+            newValue = q.to(this.qtyUnitTo).scalar;
+        } 
+        
+        this.value$.next(newValue)
+
+        var spl=this.sparkline$.value;
+        spl.push(newValue);
+        if (spl.length>10)
+             spl.shift();
+        this.sparkline$.next(spl);  
+        
     }
 
     updateReferences(){};
@@ -204,6 +296,10 @@ export class DynamicStringModel implements IComponent {
         }
     }
 
+    setValue(v){
+        this.value$.next(v)
+    }
+
     updateReferences(){};
     reload(component:IComponent){};
     removeReferences(components:IComponent[]){};
@@ -237,7 +333,9 @@ export class DynamicBooleanModel implements IComponent {
         }
 
     }
-
+    setValue(v){
+        this.value$.next(v)
+    }
     updateReferences(){};
     reload(component:IComponent){};
     removeReferences(components:IComponent[]){};
@@ -301,7 +399,9 @@ export class DynamicDateTimeModel implements IComponent {
             this.dashboards.push( new DashboardLink(this, dashboardLink)); 
         }
     }
-
+    setValue(v){
+        this.value$.next(v)
+    }
     updateReferences(){};
     reload(component:IComponent){};
     removeReferences(components:IComponent[]){};
@@ -335,7 +435,9 @@ export class DynamicColorModel implements IComponent {
             this.dashboards.push( new DashboardLink(this, dashboardLink)); 
         }
     }
-
+    setValue(v){
+        this.value$.next(v)
+    }
     updateReferences(){};
     reload(component:IComponent){};
     removeReferences(components:IComponent[]){};

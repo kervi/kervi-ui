@@ -23,6 +23,7 @@ export class GaugeComponent implements OnInit {
   @Input() size:number;
   @Input() defaultSizes:DashboardSizes = new DashboardSizes();
   private  unitSize:number = 110;
+  private numberFormat = "1.2-2";
   canvasId:string="";
   dataHighlights:any={};
   private gauge:any=null;
@@ -40,7 +41,8 @@ export class GaugeComponent implements OnInit {
     var self = this;  
    
 
-    
+    this.numberFormat = this.parameters.minIntegerDigits + "." + this.parameters.minFractionDigits + "-" + this.parameters.maxFractionDigits
+			
     this.canvasId=this.templateService.makeId();
     
     var warningColor = this.color("color",".sensor-template .sensor-warning");

@@ -1,5 +1,5 @@
 <ngx-gauge class="gauge-width"
-    [value]="(value.value$ | async)" 
+    [value]="(value.value$ | async | number:numberFormat)" 
     [min] = "value.minValue"
     [max] = "value.maxValue"
     [thresholds] = "dataHighlights"
@@ -12,7 +12,7 @@
     <!-- custom prepend text or HTML goes here -->
 </ngx-gauge-prepend>
 <ngx-gauge-value>
-    {{value.value$ | async}}
+    {{value.value$ | async | number:numberFormat}}
     <div class="gauge-unit">{{value.unit}}</div>
 </ngx-gauge-value>
 <ngx-gauge-append>
@@ -22,5 +22,4 @@
     
     <div>{{value.name}}</div>
 </ngx-gauge-label>
-
 </ngx-gauge>
