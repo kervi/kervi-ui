@@ -33,7 +33,7 @@ export class ComponentFactory{
                 component = new DashboardModel(message);
                 dashboards.push(component);
             } else if (message.componentType=="sensor"){
-                component = new SensorModel(message);
+                component = new SensorModel(message, kerviService);
                 subComponents = component.subSensors;
             }else if (message.componentType=="controller")
                 component = new ControllerModel(message);
