@@ -18,6 +18,7 @@ declare var jQuery: any;
 export class DashboardComponent implements OnInit, OnDestroy {
   public dashboards$: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   public dashboardCount:Number = 0;
+  public componentsCount:Number = 0;
   public dashboardId:string;
   public dashboard:DashboardModel;
   public sections: DashboardSectionModel[] = [];
@@ -46,7 +47,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private rightXValue: DynamicNumberModel = null;
   private rightYValue: DynamicNumberModel = null;
-
+  private inFullScreen:boolean = false;
+  
   constructor(private elementRef:ElementRef, private zone:NgZone, private kerviService:KerviService, private dashboardsService:DashboardsService, private router:Router, private activatedRoute:ActivatedRoute) {
       
    }
@@ -88,12 +90,39 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
    }
 
+   toggleFullScreen() {
+    var doc:any;
+    doc = document;
+    if ((doc.fullScreenElement && doc.fullScreenElement !== null) ||    
+     (!doc.mozFullScreen && !document.webkitIsFullScreen)) {
+       this.inFullScreen = true;
+      if (doc.documentElement.requestFullScreen) {  
+        doc.documentElement.requestFullScreen();  
+      } else if (doc.documentElement.mozRequestFullScreen) {  
+        doc.documentElement.mozRequestFullScreen();  
+      } else if (document.documentElement.webkitRequestFullScreen) {  
+        doc.documentElement.webkitRequestFullScreen();  
+      }  
+    } else {  
+      this.inFullScreen=false;
+      if (doc.cancelFullScreen) {  
+        doc.cancelFullScreen();  
+      } else if (doc.mozCancelFullScreen) {  
+        doc.mozCancelFullScreen();  
+      } else if (document.webkitCancelFullScreen) {  
+        doc.webkitCancelFullScreen();  
+      }  
+    }  
+  }
+
 
   ngOnInit() {
     console.log("db init", this);
     var self = this;
     this.dashboardsService.getDashboards$().subscribe(function (v) {
-        self.dashboardCount = v.length 
+        self.dashboardCount = v.length;
+        self.componentsCount = self.dashboardsService.componentsCount;
+        console.log("dc", self.dashboardCount, self.componentsCount);
         self.showMenu = (self.dashboardCount > 1 || self.kerviService.doAuthenticate);
         self.anonymous = self.kerviService.isAnonymous();
         self.dashboards$.next(v);
@@ -297,7 +326,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     }
-
+      
     //console.log("dbbcx", this.cameraId, this.cameraParameters);
   }
+  
 }

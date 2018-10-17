@@ -2,20 +2,24 @@
 // Licensed under MIT
 
 import { Injectable , EventEmitter} from '@angular/core';
+import {KerviSpineBase} from "../ikervi-spine";
 import {KerviSpine} from "../kervi-spine";
+import {KerviIO} from "../kervi_io";
 import {BehaviorSubject, Subject} from 'rxjs/Rx';
 import {IComponent} from './models/IComponent.model';
 import { ComponentFactory } from './models/factory';
 import { DashboardMessageModel } from './models/dashboard.model';
+import { getComponentViewDefinitionFactory } from '@angular/core/src/view';
 
 declare var kerviSocketAddress : any;
 declare var socketProtocol : any;
 
 @Injectable()
 export class KerviService {
-  spine: KerviSpine = null;
+  spine: KerviSpineBase = null;
   private appInfo=null;
   public  application$: BehaviorSubject<any>;
+  private  texts:{} = null;
   private components : IComponent[] = [];
   private components$: BehaviorSubject<IComponent[]> = new  BehaviorSubject<IComponent[]>([]);
   public doAuthenticate: boolean = false;
@@ -26,7 +30,7 @@ export class KerviService {
   connected$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   IPCReady$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
   authenticationFailed$: BehaviorSubject<Boolean> = new  BehaviorSubject<Boolean>(false);
-  
+
 
   constructor() 
   { 
@@ -48,22 +52,10 @@ export class KerviService {
           self.spine.addEventHandler("valueChanged","",function(id, value){
             for (let component of self.components){
               if (component.id==value.id){
-                if (component.componentType == "sensor"){
-                  var dynamicValue = component as any;
-                
-                  dynamicValue.value.valueTS=new Date(this.timestamp + " utc");
-                  dynamicValue.value.value$.next(value.value);
-                  var spl=dynamicValue.value.sparkline$.value;
-                  spl.push(value.value);
-                  if (spl.length>10)
-                      spl.shift();
-                  dynamicValue.value.sparkline$.next(spl);  
-                } else {
-                  var dynamicValue = component as any;
-                  
-                  dynamicValue.valueTS=new Date(this.timestamp + " utc");
-                  dynamicValue.value$.next(value.value);
-                }
+                var dynamicValue = component as any;
+              
+                dynamicValue.valueTS=new Date(this.timestamp + " utc");
+                dynamicValue.setValue(value.value)  
               }
             }
           });
@@ -104,44 +96,23 @@ export class KerviService {
   private refreshComponents(){
     var self=this;
     self.spine.sendQuery("getComponentInfo",function(message){
-          console.log("refresh component info",message);
-          var components = ComponentFactory.createComponents(message);
-          console.log("refresh components",components);
-          for (var c of components){
-            var found = false;
-            for(var component of self.components){
-              if (component.id == c. id){
-                found=true;
-                component.reload(c);
-                break;
-              }
-            }
-            if (!found){
-              self.components.push(c);
-              console.log("add c", c);
-            }
-          }
-          console.log("delete hanging components")
-          var deleteComponents:IComponent[]=[]
-          for (var component of self.components){
-            var found = false;
-            for(var c of components){
-              if (component.id == c. id){
-                found = true;
-                break;
-              }
-            }
-            if (!found)
-              deleteComponents.push(component);
-          }
-          console.log("dc", deleteComponents);
-          for(var component of deleteComponents){
-            self.components.splice( self.components.indexOf(component), 1 );
-          }
-          console.log("refresh done");
-          self.components$.next(self.components);
-        });
+    console.log("refresh component info",message);
+    self.components = []
+    self.components$.next([]);
+    self.components = ComponentFactory.createComponents(message, this);
+    console.log("refresh components",self.components);
+    self.components$.next(self.components);
+    });
   }
+
+  public text(key:string, defaultValue:string=""):string{
+    //  console.log("t", key, this.texts);
+    if (this.texts && key in this.texts){
+      return this.texts[key];
+    } else
+      return defaultValue
+  }
+
 
   public getComponents$(){
     return this.components$.asObservable();
@@ -188,18 +159,32 @@ export class KerviService {
       var httpHost = window.location.hostname;
       address = httpHost + ":9000";
     }
-    console.log("ks", address);
-    this.spine = new KerviSpine({
-      address: address,
-      protocol: protocol,
-      onOpen: this.onOpen,
-      onClose:this.onClose,
-      onAuthenticate:this.onAuthenticate,
-      onAuthenticateFailed:this.onAuthenticateFailed,
-      onLogOff: this.onLogoff,
-      onAuthenticateStart: this.onAuthenticateStart,
-      targetScope:this,
-     });
+    console.log("ks", address, sessionStorage.getItem("mqc"));
+    
+    if (sessionStorage.getItem("mqc")){
+      
+      this.spine = new KerviIO({
+        onOpen: this.onOpen,
+        onClose:this.onClose,
+        onAuthenticate:this.onAuthenticate,
+        onAuthenticateFailed:this.onAuthenticateFailed,
+        onLogOff: this.onLogoff,
+        onAuthenticateStart: this.onAuthenticateStart,
+        targetScope:this,
+        apiToken: JSON.parse(sessionStorage.getItem("mqc"))
+      });
+    } else
+      this.spine = new KerviSpine({
+        address: address,
+        protocol: protocol,
+        onOpen: this.onOpen,
+        onClose:this.onClose,
+        onAuthenticate:this.onAuthenticate,
+        onAuthenticateFailed:this.onAuthenticateFailed,
+        onLogOff: this.onLogoff,
+        onAuthenticateStart: this.onAuthenticateStart,
+        targetScope:this
+      });
   }
 
   isAnonymous(){
@@ -251,23 +236,34 @@ export class KerviService {
     this.connected$.next(false);
   }
 
-  private onOpen(first){
-    console.log("kervice service on open", this.spine.firstOnOpen, first,this);
-    var self=this;
-    
-    this.doAuthenticate = this.spine.doAuthenticate;
+  private getComponentInfo(retryCount){
+    var self = this;
     this.spine.sendQuery("GetApplicationInfo",function(appInfo){
       console.log("appinfo",appInfo);
       this.spine.sendQuery("getComponentInfo",function(message){
         console.log("component info",message);
         self.application$.next(appInfo);
-        self.components = ComponentFactory.createComponents(message);
+        self.texts = appInfo.display.texts;
+        self.components = ComponentFactory.createComponents(message, self);
         self.components$.next(self.components);
         self.connected$.next(true);
         //self.inAuthentication$.next(false);
         console.log("components",self.components); 
+      },
+      function(){
+        console.log("get component info timeout");
+        if (retryCount>0)
+          self.getComponentInfo(retryCount-1)
       });  
 	  });
+  }
+
+  private onOpen(first){
+    console.log("kervice service on open", this.spine.firstOnOpen, first,this);
+    var self=this;
+    
+    this.doAuthenticate = this.spine.doAuthenticate;
+    this.getComponentInfo(2)
     if (self.spine.firstOnOpen){
       this.IPCReady$.next(true);
       this.spine.addEventHandler("moduleStarted","",function(){

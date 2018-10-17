@@ -14,7 +14,7 @@ import {BehaviorSubject, Observable} from 'rxjs/Rx';
   templateUrl: './dashboard-section.component.html',
   styleUrls: ['./dashboard-section.component.css'],
   //encapsulation: ViewEncapsulation.None
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardSectionComponent implements OnInit, OnDestroy {
     @Input() section:DashboardSectionModel;

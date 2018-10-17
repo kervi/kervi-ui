@@ -26,7 +26,7 @@ def start(address):
     #cwd = os.getcwd()
     os.chdir(docpath)
     SERVER = HTTPServer(address, SimpleHTTPRequestHandler)
-    thread = threading.Thread(target=SERVER.serve_forever)
+    thread = threading.Thread(target=SERVER.serve_forever, name="webserver")
     thread.daemon = True
     thread.start()
     time.sleep(2)

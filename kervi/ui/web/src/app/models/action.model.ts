@@ -10,7 +10,7 @@ export class ActionModel implements IComponent {
     public name: string = null;
     public componentType = "action";
     public runCommand:string = "";
-    public interuptCommand:string = "";
+    public interruptCommand:string = "";
     public ui:any = {}
     public type: string = null;
     public visible: boolean = true;
@@ -19,6 +19,7 @@ export class ActionModel implements IComponent {
     
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
     
     constructor(message: any){
         this.id=message.id;
@@ -27,7 +28,7 @@ export class ActionModel implements IComponent {
         this.visible=message.visible;
         this.type=message.type;
         this.runCommand = message.runCommand;
-        this.interuptCommand = message.interuptCommand;
+        this.interruptCommand = message.interruptCommand;
         this.running$.next(message.running);
 
         for (let dashboardLink of message.dashboardLinks){

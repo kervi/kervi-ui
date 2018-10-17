@@ -12,7 +12,7 @@ import { PageHeaderComponent} from './page-header/page-header.component'
 import { DashboardSectionComponent } from './dashboard-section/dashboard-section.component';
 import { RouterModule } from '@angular/router';
 import { UIComponentsModule} from '../ui-components/ui-components.module'
-
+import { KerviPipesModule } from '../pipes/pipes.module'
 @NgModule({
   imports: [
     CommonModule,
@@ -20,7 +20,8 @@ import { UIComponentsModule} from '../ui-components/ui-components.module'
     SensorsModule,
     ControllersModule,
     ValuesModule,
-    UIComponentsModule
+    UIComponentsModule,
+    KerviPipesModule
   ],
   exports:[
     DashboardComponent,

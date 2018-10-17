@@ -3,7 +3,61 @@
 import { IComponent, DashboardLink } from "./IComponent.model"
 import { ComponentRef } from "./ComponentRef"
 import { BehaviorSubject } from 'rxjs/Rx';
+import { KerviService } from '../kervi.service'
 //import { ControllersFactory } from './factory' 
+declare var Qty:any;
+
+abstract class DynamicValue<valueType> implements IComponent{
+    public name: string;
+    public componentType = "DynamicValue"
+    public type:any;
+    public orientation:any;
+        
+    public visible: boolean;
+    public id: string;
+    public dashboards: DashboardLink[] = [];
+    public isInput:boolean;
+    public command: string;
+    public valueTS:Date;
+    public value$: BehaviorSubject<valueType>;
+    public ui = {
+        type: "",
+        orientation: ""
+    }
+
+    constructor(message:any){
+        this.value$= new BehaviorSubject<valueType>(message.value);
+        this.name = message.name;
+        this.isInput = message.isInput;
+        this.ui = message.ui;
+        this.visible = message.visible;
+        this.command = message.command;
+        this.id = message.id;
+        this.type = message.componentType;
+        this.orientation = message.orientation;
+        
+        for (var prop in message.ui) {
+            if (this.ui[prop] != undefined)
+                this.ui[prop] = message.ui[prop];
+        }
+
+        for (let dashboardLink of message.dashboardLinks){
+            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
+        }
+    }
+
+    protected abstract getDefaultValue():valueType;
+
+
+    protected setValue(v){
+        this.value$.next(v)
+    }
+    updateReferences(){};
+    reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
+}
+
+
 
 export enum DynamicRangeType {normal, warning, error};
 
@@ -39,48 +93,33 @@ export class DynamicEnumOptionModel{
     }
     updateReferences(){};
     reload(component:IComponent){};
+    removeReferences(components:IComponent[]){};
 }
 
-export class DynamicEnumModel implements IComponent{
-    public name: string;
-    public componentType = "DynamicValue"
-    public visible: boolean;
-    public ui:any = {}
-    public id: string;
-    public dashboards: DashboardLink[] = [];
-    public type:string;
-    public command:string;
+export class DynamicEnumModel extends DynamicValue<string[]>{
     public options:DynamicEnumOptionModel[] = [];
     public lastSelected$:BehaviorSubject<DynamicEnumOptionModel> = new BehaviorSubject<DynamicEnumOptionModel>(null); 
-    public value$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
     
     constructor (message:any){
+        super(message);
         var self = this;
-        this.name =message.name;
-        this.id = message.id;
-        this.visible = message.visible;
-        this.ui = message.ui;
-        this.type = message.componentType;
-        this.command = message.command;
         this.options = []
-        this.value$.next(message.value);
-       
+        
         for (let option of message.options){
             this.options.push( new DynamicEnumOptionModel(option) );
         }
 
-        for (let dashboardLink of message.dashboardLinks){
-            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
-        }
         this.selectOptions(this.value$.value);
         this.value$.subscribe(function(v){
             self.selectOptions(v);
         });
     }
 
-    updateReferences(){};
-    reload(component:IComponent){};
+    protected getDefaultValue():string[]{
+        return [];
+    }
 
+    
     public selectOptions(selectedOptions:any){
         console.log("soc");
         if (!selectedOptions)
@@ -101,202 +140,134 @@ export class DynamicEnumModel implements IComponent{
             }
         }
     }
+
+    setValue(v){
+        this.value$.next(v)
+    }
 }
 
-export class DynamicNumberModel implements IComponent {
-    public name: string;
-    public componentType = "DynamicValue";
-    public isInput:boolean;
-    public type: string;
-    public visible: boolean;
-    public dashboards: DashboardLink[] = [];
-    public orientation: string;
+export class DynamicNumberModel extends DynamicValue<number> {
     public unit: string;
-    public valueTS:Date;
-    public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    public qtyUnitFrom:string;
+    public qtyUnitTo:string = null;
     public maxValue: number;
     public minValue: number;
-    public command: string;
     public sparkline$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
     public ranges: DynamicRange[] = [];
 
-    public id: string;
-    public ui = {
-        type: "",
-        orientation: ""
+    protected getDefaultValue():number{
+        return 0;
     }
 
-    constructor(message: any) {
-        this.name = message.name;
-        this.type = message.componentType;
-        this.isInput = message.isInput;
-        this.ui = message.ui;
-        this.orientation = message.orientation;
-        this.visible = message.visible;
+    constructor(message: any, kerviService:KerviService) {
+        super(message);
         this.unit = message.unit;
-        this.value$.next(message.value);
-        this.maxValue = message.maxValue;
-        this.minValue = message.minValue;
-        this.command = message.command;
-        this.id = message.id;
-        this.sparkline$.next(message.sparkline);
-        
-        for (var prop in message.ui) {
-            if (this.ui[prop] != undefined)
-                this.ui[prop] = message.ui[prop];
+        	
+        this.qtyUnitFrom = message.unit;
+        if (this.unit == "c" && kerviService.application$.value["display"]["unit_system"]["temperature"]=="F"){
+            this.qtyUnitFrom = "tempC";
+            this.qtyUnitTo = "tempF";
+            this.unit = "F"
         }
+
         for (var range of message.ranges){
-            this.ranges.push(new DynamicRange(range));
+            if (this.qtyUnitTo){
+                var q = new Qty(range["start"], this.qtyUnitFrom);
+                range["start"] = q.to(this.qtyUnitTo).scalar
+                var q = new Qty(range["end"], this.qtyUnitFrom);
+                range["end"] = q.to(this.qtyUnitTo).scalar
+                this.ranges.push(new DynamicRange(range));
+            } else
+                this.ranges.push(new DynamicRange(range));
         }
+        
+        if (this.qtyUnitTo && message.maxValue){
+            var q = new Qty(message.maxValue, this.qtyUnitFrom);
+            this.maxValue = q.to(this.qtyUnitTo).scalar;
+        } else
+            this.maxValue = message.maxValue; 
 
-        for (let dashboardLink of message.dashboardLinks){
-            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
+        if (this.qtyUnitTo && message.minValue){
+            var q = new Qty(message.minValue, this.qtyUnitFrom);
+            this.minValue = q.to(this.qtyUnitTo).scalar;
+        } else
+            this.minValue = message.minValue; 
+        
+        
+        var spl = []
+        for(var spv of message.sparkline){
+            if (this.qtyUnitTo){
+                console.log("spv", spv);
+                var q = new Qty(spv.value, this.qtyUnitFrom);
+                //spv.value = q.to(this.qtyUnitTo).scalar;
+            }
+            spl.push(spv)
         }
+        this.sparkline$.next(spl);
+        this.setValue(message.value);
     }
 
-    updateReferences(){};
-    reload(component:IComponent){};
+    setValue(v){
+        var newValue = v;
+        if (this.qtyUnitTo){
+            var q = new Qty(v, this.qtyUnitFrom);
+            newValue = q.to(this.qtyUnitTo).scalar;
+        } 
+        
+        this.value$.next(newValue)
+
+        var spl=this.sparkline$.value;
+        spl.push(newValue);
+        if (spl.length>10)
+             spl.shift();
+        this.sparkline$.next(spl);  
+        
+    }
 }
 
-export class DynamicStringModel implements IComponent {
-    public name: string;
-    public componentType = "DynamicValue"
-    public type: string;
-    public isInput:boolean;
-    public visible: boolean;
-    public dashboards: DashboardLink[] = [];
-    public orientation: string;
-    public unit: string;
-    public value$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-    public maxValue: number;
-    public minValue: number;
-    public command: string;
-    public id: string;
-    public ui = {
-        type: "",
-        orientation: ""
+export class DynamicStringModel extends DynamicValue<string> {
+    
+    protected getDefaultValue():string{
+        return "";
     }
 
     constructor(message: any) {
-        this.name = message.name;
-        this.type = message.componentType;
-        this.isInput = message.isInput;
-        this.ui = message.ui;
-        this.orientation = message.orientation;
-        this.visible = message.visible;
-        this.unit = message.unit;
-        this.value$.next(message.value);
-        this.maxValue = message.maxValue;
-        this.minValue = message.minValue;
-        this.command = message.command;
-        this.id = message.id;
-
-        for (var prop in message.ui) {
-            if (this.ui[prop] != undefined)
-                this.ui[prop] = message.ui[prop];
-        }
-
-        for (let dashboardLink of message.dashboardLinks){
-            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
-        }
+        super(message)
     }
-
-    updateReferences(){};
-    reload(component:IComponent){};
+    
 }
 
-export class DynamicBooleanModel implements IComponent {
-    public id: string;
-    public name: string;
-    public isInput:boolean;
-    public componentType = "DynamicValue"
-    public ui:any = {}
-    public type: string;
-    public visible: boolean;
-    public dashboards: DashboardLink[] = [];
-    public command: string;
-    public valueTS:Date;
-    public value$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+export class DynamicBooleanModel extends DynamicValue<boolean> {
     constructor(message) {
-        this.id = message.id;
-        this.name = message.name;
-        this.type = message.componentType;
-        this.ui = message.ui;
-        this.isInput = message.isInput;
-        this.visible = message.visible;
-        this.command = message.command;
-        this.value$.next(message.value);
-
-        for (let dashboardLink of message.dashboardLinks){
-            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
-        }
-
+        super(message)
     }
 
-    updateReferences(){};
-    reload(component:IComponent){};
+    protected getDefaultValue():boolean{
+        return false;
+    }
 }
 
-/*export class ControllerButtonModel implements IComponent {
-    public id: string;
-    public name: string;
-    public componentType = "DynamicValue"
-    public ui:any = {}
-    public dashboards: string[] = [];
-    public type: string;
-    public visible: boolean;
-    public pressCommand: string;
-    public releaseCommand: string;
-    public clickCommand: string;
-    public state$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-    constructor(message) {
-        this.id = message.id;
-        this.name = message.name;
-        this.visible = message.visible;
-        this.type = message.componentType;
-        this.ui = message.ui;
-        this.clickCommand = message.onClick;
-        this.pressCommand = message.onPress;
-        this.releaseCommand = message.onRelease;
-        this.state$.next(message.state);
-
-    }
-
-    updateReferences(){};
-    reload(component:IComponent){};
-}*/
-
-export class DynamicDateTimeModel implements IComponent {
-    public id: string;
-    public name: string;
-    public componentType = "DynamicValue";
-    public isInput:boolean;
-    public ui:any = {}
-    public dashboards: DashboardLink[] = [];
-    public type: string;
-    public visible: boolean;
+export class DynamicDateTimeModel extends DynamicValue<Date> {
     public subType: string;
-    public command: string;
-    public value$: BehaviorSubject<Date> = new BehaviorSubject<Date>(null);
-
+    
     constructor(message) {
-        this.id = message.id;
-        this.name = message.name;
-        this.type = message.componentType;
-        this.ui = message.ui;
-        this.isInput = message.isInput;
-        this.visible = message.visible;
+        super(message)
         this.subType = message.inputType;
-        this.value$.next(message.value);
-        this.command = message.command;
-
-        for (let dashboardLink of message.dashboardLinks){
-            this.dashboards.push( new DashboardLink(this, dashboardLink)); 
-        }
     }
 
-    updateReferences(){};
-    reload(component:IComponent){};
+    protected getDefaultValue():Date{
+        return new Date();
+    }
+    
+}
+
+export class DynamicColorModel extends DynamicValue<string> {
+    
+    constructor(message) {
+        super(message)
+    }
+
+    protected getDefaultValue():string{
+        return "#ffffff";
+    }    
 }

@@ -96,6 +96,9 @@ $body-bg:    #011001 !default;
 $body-color: #67b16b !default;
 $border-radius-base: .15rem;
 
+html:fullscreen{
+  background-color:#011001 !important;
+}
 .form-group{
   margin-bottom:0 !important;
 }
@@ -103,7 +106,8 @@ $border-radius-base: .15rem;
 .btn{
   overflow:hidden;
   font-size:.7rem !important;
-  padding: 0.2rem 0.3rem !important; 
+  padding: 0.2rem 0.3rem !important;
+  border:0;
 }
 
 .dropdown-menu{
@@ -145,11 +149,13 @@ $border-radius-base: .15rem;
   
 
 	.sensor-warning{
-		color:rgba(255, 166, 24, .5);
+    //color:rgba(255, 166, 24, .5);
+    color:#ffc107; 
 	}
 
 	.sensor-fatal{
-		color:rgba(255, 35, 46, .5);
+    //color:rgba(255, 35, 46, .5);
+    color:#dc3545;
 	}
 
 	.sensor-major-ticks{
@@ -256,10 +262,14 @@ kervi-sensor:last-child .block-component{
 .value-label{
   display: block;
   white-space: nowrap;
+  padding-right:4px;
 }
 
 .value-section{
-  display: block;
+  display: inline-block;
+  width:93%;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .label-section{
@@ -268,13 +278,13 @@ kervi-sensor:last-child .block-component{
 }
 .value-input{
   display: inline-block;
-  float:left;
+  //float:right;
   width:75%
 }
 
 .value-value{
   display: inline-block;
-  float:right;
+  //float:right;
   width:25%;
   text-align: right;
 }
@@ -331,10 +341,16 @@ kervi-sensor:last-child .block-component{
 }
 @import "../../core/core.scss";
 
+
 @media only screen {
     @import "./components/switch/toggle.scss";
-  @import "./components/slider/slider.scss";
- 
+    @import "./components/slider/slider.scss";
+    $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+    @import "../../../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss";
+    @import "../../../../node_modules/@fortawesome/fontawesome-free/scss/fa-brands.scss";
+    @import "../../../../node_modules/@fortawesome/fontawesome-free/scss/fa-regular.scss";
+    @import "../../../../node_modules/@fortawesome/fontawesome-free/scss/fa-solid.scss";
+
  //   @import "./components/switch/candy";
   
 }
@@ -431,6 +447,11 @@ th{
   .reading-block{
     line-height: unset !important;
     font-size:3.5vw !important;
+    margin-top:1vw;
+  }
+  .gauge-unit{
+    font-size:2vw !important;
+    margin-top:-12px;
   }
   .reading-label {
     width: 80% !important;
@@ -442,6 +463,20 @@ th{
 }
 
 @include media-breakpoint-down(sm) {
+
+  .gauge-width{
+    .reading-block{
+      line-height: unset !important;
+      font-size:15vw !important;
+      margin-top:8vw;
+    }
+    .gauge-unit{
+      font-size:12vw !important;
+      margin-top:-30px;
+    } 
+  }
+
+
   .card-section{
     width:100% !important;
     margin-bottom:10px;

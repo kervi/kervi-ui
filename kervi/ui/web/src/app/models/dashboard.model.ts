@@ -6,10 +6,10 @@ import { IComponent, DashboardLink } from './IComponent.model'
 
 export class DashboardSizes{
     public valueWidth:string ="3rem";
-    public buttonWidth:string = "";
+    public buttonWidth:string = "25px";
     public buttonHeight:string = "";
-    public switchWidth:string = "";
-    public switchHeight:string = "20px";
+    public switchWidth:string = "25px";
+    public switchHeight:string = "25px";
     public gaugeWidth:string = "100px";
     public gaugeHeight:string = "200px";
 }
@@ -254,6 +254,47 @@ export class DashboardModel implements IComponent{
         }
     }
 
+    /*removeSectionRef(deleteComponents:IComponent[], section:DashboardSectionModel, removeEmpty:boolean){
+        var removeComponentSections:DashboardSectionComponentModel[] = [];
+        for(var sectionComponent of section.components){
+            for(var deleteComponent of deleteComponents){
+                if (deleteComponent.id == sectionComponent.component.id){
+                    console.log("dlc", sectionComponent)
+                    removeComponentSections.push(sectionComponent)
+                    
+                }
+            }
+        }
+        for(var component of removeComponentSections){
+            section.components.splice(section.components.indexOf(component))
+        }
+        var removeSections:DashboardSectionModel[] = [];
+        for(var subSection of section.subSections){
+            this.removeSectionRef(deleteComponents, subSection, removeEmpty)
+            if (subSection.components.length == 0){
+                removeSections.push(subSection)
+            }
+        }
+        for(var subSection of removeSections){
+            section.subSections.splice(section.subSections.indexOf(subSection))
+        }
+    }*/
+
+    removeReferences(deleteComponents:IComponent[]){
+        // console.log("remove ref", deleteComponents)
+        // for(var section of this.sysSections){
+        //     this.removeSectionRef(deleteComponents, section, false)
+        // }
+        // var removeSections:DashboardSectionModel[] = [];
+        // for(var section of this.sections){
+        //     this.removeSectionRef(deleteComponents, section, true)
+        //     if (section.components.length == 0)
+        //         removeSections.push(section)
+        // }
+        // for(var section of removeSections){
+        //     this.sections.splice(this.sections.indexOf(section))
+        // }
+    };
     updateReferences(){};
     reload(component:IComponent){
         var source = component as DashboardModel;

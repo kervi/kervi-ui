@@ -24,7 +24,8 @@ export class ButtonComponent implements OnInit {
   @Input() size:number;
   @Input() inline:boolean = false;
   @Input() defaultSizes:DashboardSizes = new DashboardSizes();
-  @Input() parent:any; 
+  @Input() parent:any;
+  @Input() title:string;
   private width:string;
   private height:string;
   //private  unitSize:number = 150;

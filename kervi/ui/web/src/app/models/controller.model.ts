@@ -48,5 +48,6 @@ export class ControllerModel implements IComponent {
     }
 
     updateReferences(){};
+    removeReferences(components:IComponent[]){};
     reload(component:IComponent){};
 }

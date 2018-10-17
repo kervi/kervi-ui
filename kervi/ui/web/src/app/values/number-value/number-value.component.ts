@@ -7,6 +7,8 @@ import { KerviService } from '../../kervi.service'
 import { TemplateService } from '../../template.service'
 import { DashboardSectionModel, DashboardSizes } from '../../models/dashboard.model'
 
+declare var Qty: any;
+
 @Component({
 	selector: 'dynamic-value-number',
 	templateUrl: './number-value.component.html',
@@ -24,7 +26,9 @@ export class DynamicNumberComponent implements OnInit {
 	private inSlide:boolean=false;
 	private numberFormat = "1.2-2"
 	@Input() defaultSizes:DashboardSizes = new DashboardSizes();
-
+	displayValue:number = 0;
+	displayUnit:string = "";
+	//convert = require("convert");
 	displayType:string="";
 	gaugeType:string;
 	currentIcon:string=null;

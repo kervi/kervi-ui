@@ -32,4 +32,5 @@ export interface IComponent {
 
     updateReferences(kerviService:KerviService);
     reload(component:IComponent);
+    removeReferences(components:IComponent[]);
 }

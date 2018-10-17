@@ -8,7 +8,7 @@
         </div>
         <div class="value-value">
             <kervi-switchbutton [parent]="this" [defaultSizes]="defaultSizes" [inline]="inline" [value]="state" [parameters]="parameters" *ngIf="displayType!='button'"></kervi-switchbutton>
-            <kervi-button [parent]="this" [defaultSizes]="defaultSizes" [value]="state" [inline]="inline" [parameters]="parameters" *ngIf="displayType=='button'"></kervi-button>
+            <kervi-button [title]="action.name" [parent]="this" [defaultSizes]="defaultSizes" [value]="state" [inline]="inline" [parameters]="parameters" *ngIf="displayType=='button'"></kervi-button>
         </div>
     </div>
 </div>
@@ -16,7 +16,7 @@
     <span  *ngIf="parameters.labelIcon" class="fa fa-{{parameters.labelIcon}}"></span>
     <span *ngIf="parameters.label" >{{parameters.label}}</span>
     <kervi-switchbutton [parent]="this" [defaultSizes]="defaultSizes" [inline]="inline" [value]="state" [parameters]="parameters" *ngIf="displayType!='button'"></kervi-switchbutton>
-    <kervi-button [parent]="this" [defaultSizes]="defaultSizes" [value]="state" [inline]="inline" [parameters]="parameters" *ngIf="displayType=='button'"></kervi-button>
+    <kervi-button [title]="action.name" [parent]="this" [defaultSizes]="defaultSizes" [value]="state" [inline]="inline" [parameters]="parameters" *ngIf="displayType=='button'"></kervi-button>
 </div>
 
 

@@ -4,14 +4,17 @@ import { SliderComponent } from './slider/slider.component';
 import { GaugeComponent } from './gauge/gauge.component';
 import { ChartComponent } from './chart/chart.component'
 import { CommonModule } from '@angular/common';
-import { SwitchButtonComponent} from './switch-button/switch-button.component'
-import { ButtonComponent} from './button/button.component'
-import { CamViewerComponent } from './cam-viewer/cam-viewer.component'
-import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component' 
-import { ImageViewerComponent } from './image-viewer/image-viewer.component' 
-import { ActionComponent } from './action/action.component' 
-import { DateTimeComponent } from './datetimepicker/datetimepicker.component' 
+import { SwitchButtonComponent} from './switch-button/switch-button.component';
+import { ButtonComponent} from './button/button.component';
+import { CamViewerComponent } from './cam-viewer/cam-viewer.component';
+import { MPEGViewerComponent } from './mpeg-viewer/mpeg-viewer.component';
+import { ImageViewerComponent } from './image-viewer/image-viewer.component'; 
+import { ActionComponent } from './action/action.component';
+import { DateTimeComponent } from './datetimepicker/datetimepicker.component';
+import { IconsComponent } from './icons/icons.component';
 import { NgxGaugeModule } from 'ngx-gauge';
+import { ColorComponent } from './color/color.component';
+import { KerviPipesModule } from '../pipes/pipes.module'
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import { NgxGaugeModule } from 'ngx-gauge';
     MPEGViewerComponent,
     ImageViewerComponent,
     ActionComponent,
-    DateTimeComponent
+    DateTimeComponent,
+    IconsComponent,
+    ColorComponent
   ],
   exports:[
       SparklineComponent,
@@ -36,11 +41,13 @@ import { NgxGaugeModule } from 'ngx-gauge';
       ButtonComponent,
       CamViewerComponent,
       ActionComponent,
-      DateTimeComponent
+      DateTimeComponent,
+      ColorComponent
   ],
   imports: [
     CommonModule,
-    NgxGaugeModule
+    NgxGaugeModule,
+    KerviPipesModule
   ],
   providers: [],
   bootstrap: []

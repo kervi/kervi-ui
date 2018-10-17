@@ -13,14 +13,14 @@
 
 .btn-on{
   color: #fff;
-    background-color: $card-cap-bg;
-    border-color: #357ebd;
+    background-color: #116611;
+    //border-color: #357ebd;
 }
 
 .btn-off{
     color: #ffffff;
-    background-color: #297d29;
-    border-color: #adadad;
+    background-color: #afe0af;
+    //border-color: #adadad;
 	padding:0;
 }
 
@@ -93,6 +93,7 @@
 	width: 0px;
 	border-width: 0 1px;
 	margin-top:4px;
+	display:none;
 }
 
 .toggle.btn { min-width: 59px; min-height: 34px; padding:0; }
